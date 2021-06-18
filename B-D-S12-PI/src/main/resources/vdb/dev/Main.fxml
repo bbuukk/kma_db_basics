@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.LoginPageController">
+    <children>
+        <AnchorPane layoutX="-33.0" layoutY="-45.0" prefHeight="86.0" prefWidth="490.0" rotate="4.5" style="-fx-background-color: #F4D03F;" />
+        <AnchorPane layoutX="440.0" layoutY="-8.0" prefHeight="44.0" prefWidth="377.0" style="-fx-background-color: #E74C3C;" />
+        <Group accessibleRole="TEXT" disable="true" focusTraversable="true" layoutX="407.0" layoutY="102.0" mouseTransparent="true" pickOnBounds="true">
+         <cursor>
+            <Cursor fx:constant="NONE" />
+         </cursor>
+        </Group>
+    </children>
+</AnchorPane>
