@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import vdb.dev.Controllers.Controller;
 
 import java.io.IOException;
 
@@ -13,23 +14,42 @@ import java.io.IOException;
  */
 public class App extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
+    public static Stage stage;
+    public static Controller controllerForTransferData;
+
+    public static Stage getStage()
+    {
+        return stage;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 816, 509);
-        setRoot("login");
-        stage.setScene(scene);
-        stage.show();
+        App.stage = stage;
+        stage.setTitle("B-D-S12-PI");
+        scene = new Scene(loadFxml("LogIn"), 816, 509);
+        setRoot("LogIn");
+        App.stage.setScene(scene);
+        App.stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    static public void exit()
+    {
+        stage = (Stage) scene.getWindow();
+        stage.close();
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    static public void setRoot(String fxml) throws IOException
+    {
+        scene.setRoot(loadFxml(fxml));
+    }
+
+    static public Parent loadFxml(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        Parent root = fxmlLoader.load();
+
+        controllerForTransferData = fxmlLoader.getController();
+        return root;
     }
 
     public static void main(String[] args) {
