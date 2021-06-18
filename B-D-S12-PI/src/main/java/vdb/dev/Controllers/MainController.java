@@ -40,7 +40,7 @@ public class MainController extends Controller {
     public void add(MouseEvent event) throws IOException
     {
         Stage adminStage = new Stage();
-        adminStage.setTitle("AdminTools");
+        adminStage.setTitle("B-D-S12-PI Admin Tools");
         Scene adminToolsScene = new Scene(App.loadFxml("AdminTools"), 666, 459);
         adminStage.setScene(adminToolsScene);
         adminStage.show();
