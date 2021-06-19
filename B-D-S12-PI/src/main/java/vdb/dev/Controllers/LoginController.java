@@ -54,10 +54,6 @@ public class LoginController extends Controller
 
 
     }
-    ////
-    ////
-    //login button function
-    // login and button checkers
 
     public void logIn(MouseEvent event) throws IOException
     {
