@@ -1,2 +1,5 @@
-vdb\dev\App.class
-vdb\dev\Controllers\LoginPageController.class
+vdb/dev/Controllers/SignUpController.class
+vdb/dev/Controllers/LoginController.class
+vdb/dev/Controllers/MainController.class
+vdb/dev/Controllers/Controller.class
+vdb/dev/App.class
