@@ -17,7 +17,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="277.0" layoutX="146.0" layoutY="116.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: #EBF5FB;" width="524.0" />
       <ImageView fitHeight="509.0" fitWidth="851.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
+            <Image url="@../../../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
          </image>
       </ImageView>
       <Pane prefHeight="23.0" prefWidth="816.0" style="-fx-background-color: #F2F3F4;">

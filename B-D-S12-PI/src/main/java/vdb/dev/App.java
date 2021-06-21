@@ -32,14 +32,9 @@ public class App extends Application {
         App.stage.getIcons().add(new Image("file:assets/pictures/png/iconOfProgramSelFDev.png"));
         stage.setResizable(false);
 
-//        String stylesheet = App.class.getResource("vdb/dev/Css/LogIn.css").toExternalForm();
-//        scene.getStylesheets().add(stylesheet);
-
-        Parent root = loadFxml("LogIn");
-//        root.getStylesheets().add(getClass().getResource("LogIn.css").toString());
+        Parent root = loadFxml("Fxmls/Authorization/LogIn");
 
         scene = new Scene(root, 816, 509);
-//        scene.getStylesheets().add("LogIn.css");
         setRoot(root);
 
         App.stage.setScene(scene);

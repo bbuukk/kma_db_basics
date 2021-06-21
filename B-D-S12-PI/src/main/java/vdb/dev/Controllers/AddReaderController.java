@@ -3,11 +3,7 @@ package vdb.dev.Controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class AddReaderController {
 
@@ -52,6 +48,9 @@ public class AddReaderController {
 
     @FXML
     private Label showLabel;
+
+    @FXML
+    private Button createNewReader;
 
     @FXML
     void initialize() {

@@ -55,7 +55,18 @@ public class AddNewBookController {
     private Label belongsToLable;
 
     @FXML
+    private Button createNewBookButton;
+
+    @FXML
     void initialize() {
 
+
     }
+
+    //todo method for creating a new book
+
+    public void createNewBook(){
+
+    }
+
 }

@@ -66,6 +66,11 @@
                         <Font name="Lucida Sans Italic" size="15.0" />
                     </font>
                 </Label>
+            <Button fx:id="createNewBookButton" layoutX="345.0" layoutY="420.0" prefHeight="19.0" prefWidth="196.0" style="-fx-background-color: #5DADE2;" text="Create New Book">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </Button>
             </children>
         </Pane>
     </children>
