@@ -3,6 +3,8 @@ package vdb.dev.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import db.entities.Reader;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,7 +18,7 @@ import vdb.dev.Controllers.addMenu.AddMenuController;
 public class MainController
 {
 
-    public static AddMenuController addMenuController;
+    private static db.entities.Reader currentAuthorizedReader;
 
     public static final String PATH = "Fxmls/Main/Main";
 
@@ -58,8 +60,18 @@ public class MainController
 
     public void addMenu(MouseEvent event) throws IOException
     {
-        addMenuController = new AddMenuController();
+        AddMenuController addMenuController = new AddMenuController();
         addMenuController.openAddMenu();
+    }
+
+    public static Reader getCurrentAuthorizedReader()
+    {
+        return currentAuthorizedReader;
+    }
+
+    public static void setCurrentAuthorizedReader(Reader currentAuthorizedReader)
+    {
+        MainController.currentAuthorizedReader = currentAuthorizedReader;
     }
 }
 //
