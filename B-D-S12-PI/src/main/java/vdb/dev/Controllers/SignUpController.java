@@ -74,6 +74,9 @@ public class SignUpController {
     private ToggleButton adminRightsTogButton;
 
     @FXML
+    private TextField streetField;
+
+    @FXML
     void initialize() {
 
     }

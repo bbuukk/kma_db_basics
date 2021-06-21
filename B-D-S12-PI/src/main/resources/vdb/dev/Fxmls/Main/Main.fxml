@@ -22,7 +22,7 @@
         </ImageView>
       <VBox layoutX="717.0" layoutY="65.0" prefHeight="281.0" prefWidth="100.0" style="-fx-background-color: #E5E7E9;">
          <children>
-            <Button fx:id="addMenuButton" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #F4D03F;" text="Add ">
+            <Button fx:id="addMenuButton" onMouseClicked="#addMenu" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #F4D03F;" text="Add ">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>

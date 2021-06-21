@@ -16,7 +16,7 @@ import vdb.dev.Controllers.addMenu.AddMenuController;
 public class MainController
 {
 
-    Object activeController;
+    public static AddMenuController addMenuController;
 
     public static final String PATH = "Fxmls/Main/Main";
 
@@ -58,11 +58,8 @@ public class MainController
 
     public void addMenu(MouseEvent event) throws IOException
     {
-        Stage adminStage = new Stage();
-        adminStage.setTitle("B-D-S12-PI Add Menu");
-        Scene adminToolsScene = new Scene(App.loadFxml(AddMenuController.PATH), 666, 459);
-        adminStage.setScene(adminToolsScene);
-        adminStage.show();
+        addMenuController = new AddMenuController();
+        addMenuController.openAddMenu();
     }
 }
 //

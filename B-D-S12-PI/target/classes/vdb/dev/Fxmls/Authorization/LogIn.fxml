@@ -39,7 +39,7 @@
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="logInButton" layoutX="193.0" layoutY="311.0" prefHeight="46.0" prefWidth="215.0" style="-fx-background-color: #5DADE2;" text="Log In">
+      <Button fx:id="logInButton" layoutX="193.0" layoutY="311.0" onMouseClicked="#logIn" prefHeight="46.0" prefWidth="215.0" style="-fx-background-color: #5DADE2;" text="Log In">
          <font>
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>
