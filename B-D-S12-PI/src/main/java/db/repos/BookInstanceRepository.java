@@ -40,22 +40,13 @@ public class BookInstanceRepository {
 
     public boolean update(BookInstance bookInstance) {
         if (bookInstance.getId() == null || bookInstance.getISBN() == null) throw new IllegalArgumentException();
-        String dateReturn = bookInstance.getDateReturn() == null ? "" : ", date_return=?";
+
         try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE mydb.BookInstance SET shelf = ?, ISBN = ?, date_out=?, date_exp=? "
-                        + dateReturn +
-                        " WHERE id_a=?")) {
+                "UPDATE mydb.BookInstance SET shelf = ?, ISBN = ?" +
+                        " WHERE id_i=?")) {
 
             statement.setInt(1, bookInstance.getShelf());
             statement.setInt(2, bookInstance.getISBN());
-            statement.setDate(3, Date.valueOf(bookInstance.getDateOut()));
-            statement.setDate(4, Date.valueOf(bookInstance.getDateExp()));
-            if (!dateReturn.isEmpty()) {
-                statement.setDate(5, Date.valueOf(bookInstance.getDateReturn()));
-                statement.setInt(6, bookInstance.getId());
-            } else {
-                statement.setInt(5, bookInstance.getId());
-            }
 
             statement.executeUpdate();
             return true;
@@ -86,14 +77,11 @@ public class BookInstanceRepository {
     public boolean insert(BookInstance bookInstance) {
         if (bookInstance.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO mydb.BookInstance(shelf, date_out, date_exp, date_return, ISBN) " +
-                        "values (?,?,?,?,?)")) {
+                "INSERT INTO mydb.BookInstance(shelf, ISBN) " +
+                        "values (?,?)")) {
 
             statement.setInt(1, bookInstance.getShelf());
-            statement.setDate(2, Date.valueOf(bookInstance.getDateOut()));
-            statement.setDate(3, Date.valueOf(bookInstance.getDateExp()));
-            statement.setDate(4, Date.valueOf(bookInstance.getDateReturn()));
-            statement.setInt(5, bookInstance.getISBN());
+            statement.setInt(2, bookInstance.getISBN());
 
             statement.executeUpdate();
             return true;
