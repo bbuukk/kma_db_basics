@@ -9,6 +9,8 @@ import javafx.scene.control.TableView;
 
 public class MainController {
 
+    public static final String PATH = "Fxmls/Main/Main";
+
     @FXML
     private ResourceBundle resources;
 

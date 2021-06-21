@@ -1,4 +1,4 @@
-package vdb.dev.Controllers;
+package vdb.dev.Controllers.addMenu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -8,6 +8,8 @@ import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextField;
 
 public class AddCatalogController {
+
+    public static final String PATH = "Fxmls/Main/AddCatalog";
 
     @FXML
     private ResourceBundle resources;

@@ -1,4 +1,4 @@
-package vdb.dev.Controllers;
+package vdb.dev.Controllers.addMenu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class AddReaderController {
+
+    public static final String PATH = "Fxmls/Main/AddReader";
 
     @FXML
     private ResourceBundle resources;

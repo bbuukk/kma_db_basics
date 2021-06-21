@@ -8,7 +8,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+
 public class LogInController {
+
+    public static final String PATH = "Fxmls/Authorization/LogIn";
 
     @FXML
     private ResourceBundle resources;

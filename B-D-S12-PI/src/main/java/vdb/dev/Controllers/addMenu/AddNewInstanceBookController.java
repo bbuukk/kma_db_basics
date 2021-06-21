@@ -1,4 +1,4 @@
-package vdb.dev.Controllers;
+package vdb.dev.Controllers.addMenu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 public class AddNewInstanceBookController {
+
+    public static final String PATH = "Fxmls/Main/AddBookInstance";
 
     @FXML
     private ResourceBundle resources;

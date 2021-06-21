@@ -14,6 +14,8 @@ import javafx.scene.text.Text;
 
 public class SignUpController {
 
+    public static final String PATH = "Fxmls/Authorization/SignUp";
+
     @FXML
     private ResourceBundle resources;
 

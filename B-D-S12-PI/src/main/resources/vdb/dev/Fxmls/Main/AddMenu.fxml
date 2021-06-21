@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="vdb.dev.AddMenu"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="293.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.addMenu.AddMenuController">
+    <children>
+      <Pane layoutX="26.0" layoutY="17.0" opacity="0.14" prefHeight="258.0" prefWidth="560.0" style="-fx-background-color: #5DADE2;" />
+        <Button fx:id="createNewBookButton" layoutX="53.0" layoutY="37.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #F4D03F;" text="Create New Book">
+            <font>
+                <Font name="Lucida Sans Regular" size="16.0" />
+            </font>
+        </Button>
+      <Button fx:id="createNewReaderButton" layoutX="333.0" layoutY="37.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #5DADE2;" text="Create New Reader">
+         <font>
+            <Font name="Lucida Sans Regular" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="createNewInstanceBookButton" layoutX="53.0" layoutY="167.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #5DADE2;" text="Create New Instance of a Book">
+         <font>
+            <Font name="Lucida Sans Regular" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="createNewCatalog" layoutX="333.0" layoutY="167.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #F4D03F;" text="Create New Catalog">
+         <font>
+            <Font name="Lucida Sans Regular" size="16.0" />
+         </font>
+      </Button>
+    </children>
 </AnchorPane>
