@@ -87,7 +87,7 @@ public final class PasswordAuthentication {
      *
      * @return true if the password and token match
      */
-    static public boolean authenticate(char[] password, String token) {
+    public static boolean authenticate(char[] password, String token) {
         Matcher m = layout.matcher(token);
         if (!m.matches())
             throw new IllegalArgumentException("Invalid token format");
