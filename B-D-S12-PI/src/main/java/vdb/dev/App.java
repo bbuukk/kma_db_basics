@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import vdb.dev.Controllers.Controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +18,6 @@ public class App extends Application {
 
     public static Scene scene;
     public static Stage stage;
-    public static Controller controllerForTransferData;
 
     public static Stage getStage()
     {
@@ -68,7 +66,7 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         Parent root = fxmlLoader.load();
 
-        controllerForTransferData = fxmlLoader.getController();
+
         return root;
     }
 

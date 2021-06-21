@@ -3,31 +3,19 @@ package vdb.dev.Controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.text.Text;
 
-public class SignUpController {
+public class AddReaderController {
 
     @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private Button signUpButton;
-
-    @FXML
-    private Text userGreetingText;
 
     @FXML
     private TextField pibField;
@@ -42,10 +30,10 @@ public class SignUpController {
     private TextField workplaceField;
 
     @FXML
-    private TextField buildField;
+    private TextField BuildField;
 
     @FXML
-    private TextField apartamentField;
+    private TextField ApartamentField;
 
     @FXML
     private TextField phoneField;
@@ -57,7 +45,7 @@ public class SignUpController {
     private PasswordField passwordField;
 
     @FXML
-    private PasswordField confirmPasswrodField;
+    private PasswordField confirmPassField;
 
     @FXML
     private RadioButton showRadioButton;
@@ -66,26 +54,7 @@ public class SignUpController {
     private Label showLabel;
 
     @FXML
-    private PasswordField adminCodeField;
-
-    @FXML
-    private ToggleButton adminRightsTogButton;
-
-    @FXML
     void initialize() {
 
     }
 }
-
-
-//    public void activeAdminPasswordField()
-//    {
-//        if (adminCheckBox.isSelected())
-//            adminPasswordField.setVisible(true);
-//        else
-//            adminPasswordField.setVisible(false);
-//
-//    }
-//
-
-

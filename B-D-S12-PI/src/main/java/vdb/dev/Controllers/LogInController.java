@@ -1,19 +1,12 @@
 package vdb.dev.Controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import vdb.dev.App;
 
 public class LogInController {
 
@@ -24,51 +17,56 @@ public class LogInController {
     private URL location;
 
     @FXML
-    private JFXButton aboutButton;
+    private Button aboutButton;
 
     @FXML
-    private JFXButton exitButton;
+    private Button exitButton;
 
     @FXML
-    private JFXButton signUpButton;
+    private Button signUpButton;
 
     @FXML
-    private JFXButton logInButton;
+    private Button logInButton;
 
     @FXML
-    private JFXTextField logInTextField;
+    private TextField logInTextField;
 
     @FXML
-    private JFXPasswordField passwordTextField;
+    private PasswordField passwordTextField;
 
     @FXML
     private Text userGreetingText;
 
     @FXML
     void initialize() {
-    }
 
-    public void logIn(MouseEvent event) throws IOException
-    {
-        String userName = logInTextField.getText();
-        String password = passwordTextField.getText();
-        if (!userName.equals("") && !password.equals(""))
-        {
-            App.setRoot("Main");
-            MainController mainController = (MainController) App.controllerForTransferData;
-            mainController.displayText(userName);
-        }
-    }
 
-    //fuction that handels signUpButton event
-    public void signUp(ActionEvent event) throws IOException
-    {
-        App.setRoot("SignUp");
-    }
-
-    public void askForExit(MouseEvent event)
-    {
-        Platform.exit();
     }
 }
+
+
+//    public void logIn(MouseEvent event) throws IOException
+//    {
+//        String userName = logInTextField.getText();
+//        String password = passwordField.getText();
+//        if (!userName.equals("") && !password.equals(""))
+//        {
+//            App.setRoot("Main");
+//            MainController mainController = (MainController) App.controllerForTransferData;
+//            mainController.displayText(userName);
+//        }
+//    }
+//
+//    //fuction that handels signUpButton event
+//    public void signUp(ActionEvent event) throws IOException
+//    {
+//        App.setRoot("SignUp");
+//    }
+//
+//    public void askForExit(MouseEvent event)
+//    {
+//        Platform.exit();
+//    }
+
+
 

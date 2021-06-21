@@ -1,48 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.SignUpController">
    <children>
-      <ImageView fitHeight="509.0" fitWidth="822.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
-         </image></ImageView>
-      <AnchorPane prefHeight="44.0" prefWidth="454.0" style="-fx-background-color: #F4D03F;">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="405.0" layoutX="89.0" layoutY="61.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: #EBF5FB;" width="639.0" />
+      <Pane prefHeight="23.0" prefWidth="816.0" style="-fx-background-color: #F2F3F4;">
          <children>
-            <ToolBar layoutX="27.0" layoutY="-6.0" prefHeight="40.0" prefWidth="200.0" />
+            <Button fx:id="exitButton" layoutX="723.0" layoutY="-2.0" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #EC7063;" text="Exit">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </Button>
          </children>
-      </AnchorPane>
-      <AnchorPane layoutX="440.0" layoutY="-8.0" prefHeight="44.0" prefWidth="377.0" style="-fx-background-color: #E74C3C;" />
-      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="218.0" layoutY="248.0" prefHeight="26.0" prefWidth="378.0" promptText="password" style="-fx-background-color: #B5EEFF;">
+      </Pane>
+      <Button fx:id="signUpButton" ellipsisString="" layoutX="518.0" layoutY="411.0" prefHeight="46.0" prefWidth="196.0" style="-fx-background-color: #AED6F1;" text="Sign Up">
          <font>
-            <Font name="Century Gothic Bold Italic" size="12.0" />
-         </font>
-      </PasswordField>
-      <TextField fx:id="logInTextField" alignment="CENTER" layoutX="218.0" layoutY="201.0" prefHeight="34.0" prefWidth="378.0" promptText="login" style="-fx-background-color: #B5EEFF;">
-         <font>
-            <Font name="Century" size="12.0" />
-         </font>
-      </TextField>
-      <Button fx:id="signUpButton" layoutX="295.0" layoutY="417.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="224.0" text="Sign Up">
-         <font>
-            <Font size="7.0" />
+            <Font name="Lucida Sans Regular" size="16.0" />
          </font>
       </Button>
-      <TextField fx:id="logInTextField1" alignment="CENTER" layoutX="218.0" layoutY="153.0" prefHeight="34.0" prefWidth="378.0" promptText="name" style="-fx-background-color: #B5EEFF;">
+      <Label layoutY="495.0" text="B-D-S12-PI 1.0">
          <font>
-            <Font name="Century" size="12.0" />
+            <Font size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="321.0" layoutY="68.0" text="Sign up please">
+         <font>
+            <Font name="Lucida Fax Regular" size="24.0" />
+         </font>
+      </Label>
+      <Text fx:id="userGreetingText" layoutX="365.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registration">
+         <font>
+            <Font name="Lucida Fax Regular" size="14.0" />
+         </font>
+      </Text>
+      <TextField fx:id="pibField" layoutX="108.0" layoutY="105.0" prefHeight="31.0" prefWidth="475.0" promptText="PIB">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <CheckBox fx:id="adminCheckBox" layoutX="340.0" layoutY="282.0" mnemonicParsing="false" onMouseClicked="#activeAdminPasswordField" prefHeight="26.0" prefWidth="147.0" text="I am an admin" />
-      <PasswordField fx:id="adminPasswordField" layoutX="273.0" layoutY="318.0" prefHeight="26.0" prefWidth="269.0" visible="false" />
+      <TextField fx:id="loginField" layoutX="108.0" layoutY="146.0" prefHeight="31.0" prefWidth="345.0" promptText="Login">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="cityField" layoutX="108.0" layoutY="271.0" prefHeight="31.0" prefWidth="150.0" promptText="City">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="workplaceField" layoutX="108.0" layoutY="317.0" prefHeight="31.0" prefWidth="284.0" promptText="Workplace">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="buildField" layoutX="286.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Build">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="apartamentField" layoutX="441.0" layoutY="271.0" prefHeight="31.0" prefWidth="105.0" promptText="Apartment">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="phoneField" layoutX="423.0" layoutY="317.0" prefHeight="31.0" prefWidth="265.0" promptText="Phone">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
+      <DatePicker fx:id="dateOfBirthDatePicker" layoutX="470.0" layoutY="146.0" prefHeight="31.0" prefWidth="132.0" promptText="Date of birth" />
+      <PasswordField fx:id="passwordField" layoutX="108.0" layoutY="192.0" prefHeight="31.0" prefWidth="439.0" promptText="Password">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="confirmPasswrodField" layoutX="108.0" layoutY="232.0" prefHeight="31.0" prefWidth="439.0" promptText="Confirm password">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </PasswordField>
+      <RadioButton fx:id="showRadioButton" layoutX="583.0" layoutY="221.0" prefHeight="21.0" prefWidth="56.0" text="." />
+      <Label fx:id="showLabel" layoutX="574.0" layoutY="197.0" prefHeight="21.0" prefWidth="44.0" text="Show" />
+      <PasswordField fx:id="adminCodeField" layoutX="108.0" layoutY="363.0" prefHeight="31.0" prefWidth="409.0" promptText="Admin code">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </PasswordField>
+      <ToggleButton fx:id="adminRightsTogButton" layoutX="566.0" layoutY="366.0" mnemonicParsing="false" text="Admin rights" />
    </children>
 </AnchorPane>

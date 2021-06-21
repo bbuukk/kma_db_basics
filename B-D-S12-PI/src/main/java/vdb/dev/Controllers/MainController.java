@@ -1,20 +1,13 @@
 package vdb.dev.Controllers;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import vdb.dev.App;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
 
-public class MainController extends Controller {
-
-    //stylesheets="@../../../java/vdb/dev/Css/Main.css"
+public class MainController {
 
     @FXML
     private ResourceBundle resources;
@@ -23,33 +16,47 @@ public class MainController extends Controller {
     private URL location;
 
     @FXML
-    private Text userGreetingText;
+    private Button addMenuButton;
 
     @FXML
-    private Button addButton;
+    private Button showMenuButton;
 
     @FXML
-    private Button changeButton;
+    private Button ChangeMenuButton;
 
     @FXML
-    private Button deleteButton;
+    private Button DefaultMenuButton;
+
+    @FXML
+    private Button exitButton;
+
+    @FXML
+    private Button logOutButton;
+
+    @FXML
+    private ComboBox<?> chooseTableComboBox;
+
+    @FXML
+    private TableView<?> mainTableView;
 
     @FXML
     void initialize() {
 
     }
-
-    public void add(MouseEvent event) throws IOException
-    {
-        Stage adminStage = new Stage();
-        adminStage.setTitle("B-D-S12-PI Admin Tools");
-        Scene adminToolsScene = new Scene(App.loadFxml("AdminTools"), 666, 459);
-        adminStage.setScene(adminToolsScene);
-        adminStage.show();
-    }
-
-    public void displayText(String userName)
-    {
-        userGreetingText.setText("Hello!!! " +  userName);
-    }
 }
+
+
+//    public void add(MouseEvent event) throws IOException
+//    {
+//        Stage adminStage = new Stage();
+//        adminStage.setTitle("B-D-S12-PI Admin Tools");
+//        Scene adminToolsScene = new Scene(App.loadFxml("AdminTools"), 666, 459);
+//        adminStage.setScene(adminToolsScene);
+//        adminStage.show();
+//    }
+//
+//    public void displayText(String userName)
+//    {
+//        userGreetingText.setText("Hello!!! " +  userName);
+//    }
+
