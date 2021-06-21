@@ -2,10 +2,7 @@ package db.repos;
 
 import db.entities.Belongs;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +37,46 @@ public class BelongsRepository {
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
+    }
+
+    public boolean delete(Belongs belongs) {
+        if (belongs.getIdCatalog() == null || belongs.getIsbn() == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM mydb.Belongs WHERE id_c=? AND  ISBN = ?")) {
+
+            statement.setInt(1, belongs.getIdCatalog());
+            statement.setInt(2, belongs.getIsbn());
+
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на delete");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insert(Belongs belongs) {
+        if (belongs.getIdCatalog() == null || belongs.getIsbn() == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO mydb.Belongs(id_c, ISBN) " +
+                        "values (?, ?)")) {
+
+            statement.setInt(1, belongs.getIdCatalog());
+            statement.setInt(2, belongs.getIsbn());
+
+            statement.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на update");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean update(Belongs old, Belongs updated) {
+        return delete(old) && insert(updated);
     }
 
     public List<Belongs> getAllBelongs() {

@@ -2,10 +2,7 @@ package db.repos;
 
 import db.entities.Authorship;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +37,46 @@ public class AuthorshipRepository {
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
+    }
+
+    public boolean delete(Authorship authorship) {
+        if (authorship.getId() == null || authorship.getISBN() == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM mydb.Authorship WHERE id_a=? AND  ISBN = ?")) {
+
+            statement.setInt(1, authorship.getId());
+            statement.setInt(2, authorship.getISBN());
+
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на delete");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insert(Authorship authorship) {
+        if (authorship.getId() == null || authorship.getISBN() == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO mydb.Authorship(id_a, ISBN) " +
+                        "values (?, ?)")) {
+
+            statement.setInt(1, authorship.getId());
+            statement.setInt(1, authorship.getISBN());
+
+            statement.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на update");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean update(Authorship old, Authorship updated) {
+        return delete(old) && insert(updated);
     }
 
     public List<Authorship> getAllAuthorships() {

@@ -23,7 +23,7 @@ public class SqlOps {
 
 
     public SqlOps() {
-
+        init();
     }
 
     private static MysqlDataSource getMySQLDataSource() {
