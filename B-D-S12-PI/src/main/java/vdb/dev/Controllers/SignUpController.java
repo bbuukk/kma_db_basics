@@ -1,20 +1,23 @@
 package vdb.dev.Controllers;
 
+import db.PasswordAuthentication;
+import db.SqlOps;
+import db.entities.Reader;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.text.Text;
+
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.text.Text;
 
 public class SignUpController {
 
     public static final String PATH = "Fxmls/Authorization/SignUp";
+    public static final String ADMIN_CODE = "Secret";
+    private SqlOps sqlOps;
+    private PasswordAuthentication passwordAuthentication;
 
     @FXML
     private ResourceBundle resources;
@@ -78,7 +81,48 @@ public class SignUpController {
 
     @FXML
     void initialize() {
+        sqlOps = new SqlOps();
+        passwordAuthentication = new PasswordAuthentication();
+    }
 
+    public void sighUp(MouseEvent event) throws IOException {
+        if (!pibField.getText().isEmpty()
+                && !loginField.getText().isEmpty()
+                && !cityField.getText().isEmpty()
+                && !buildField.getText().isEmpty()
+                && !apartamentField.getText().isEmpty()
+                && !streetField.getText().isEmpty()
+                && !passwordField.getText().isEmpty()
+                && !confirmPasswrodField.getText().isEmpty()
+                && dateOfBirthDatePicker.getValue() != null) {
+            Reader reader;
+            if (!adminCodeField.getText().equals(ADMIN_CODE)) {
+                reader = new Reader(pibField.getText(),
+                        passwordAuthentication.hash(passwordField.getText().toCharArray()),
+                        loginField.getText(),
+                        Integer.valueOf(0),
+                        cityField.getText(),
+                        streetField.getText(),
+                        buildField.getText(),
+                        apartamentField.getText(),
+                        workplaceField.getText().isEmpty() ? null : workplaceField.getText(),
+                        dateOfBirthDatePicker.getValue(),
+                        phoneField.getText().isEmpty() ? null : phoneField.getText());
+            } else {
+                reader = new Reader(pibField.getText(),
+                        passwordAuthentication.hash(passwordField.getText().toCharArray()),
+                        loginField.getText(),
+                        1,
+                        cityField.getText(),
+                        streetField.getText(),
+                        buildField.getText(),
+                        apartamentField.getText(),
+                        workplaceField.getText().isEmpty() ? null : workplaceField.getText(),
+                        dateOfBirthDatePicker.getValue(),
+                        phoneField.getText().isEmpty() ? null : phoneField.getText());
+            }
+            sqlOps.getReaderRepository().insert(reader);
+        }
     }
 }
 
