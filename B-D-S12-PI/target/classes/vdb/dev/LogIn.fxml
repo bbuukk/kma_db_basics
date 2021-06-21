@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="816.0" stylesheets="@Css/LogIn.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.LoginController">
+   <children>
+      <ImageView fitHeight="509.0" fitWidth="822.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
+         </image></ImageView>
+      <AnchorPane prefHeight="44.0" prefWidth="454.0" style="-fx-background-color: #F4D03F;" />
+      <AnchorPane layoutX="440.0" layoutY="-8.0" prefHeight="44.0" prefWidth="377.0" style="-fx-background-color: #E74C3C;" />
+      <Label fx:id="tellUsText" layoutX="269.0" layoutY="115.0" prefHeight="35.0" prefWidth="222.0" text="Tell us who you are:" textFill="#0a0a0a">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXButton buttonType="RAISED" layoutX="269.0" layoutY="291.0" prefHeight="44.0" prefWidth="246.0" text="Log In" />
+   </children>
+</AnchorPane>

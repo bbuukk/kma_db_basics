@@ -1,71 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="509.0" prefWidth="816.0" stylesheets="@Css/LogIn.css"
-            xmlns="http://javafx.com/javafx/16" fx:controller="vdb.dev.Controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="816.0" stylesheets="@Css/Main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LogInController">
    <children>
-      <ImageView fitHeight="509.0" fitWidth="822.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="277.0" layoutX="146.0" layoutY="116.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: #EBF5FB;" width="524.0" />
+      <ImageView fitHeight="509.0" fitWidth="851.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
-         </image></ImageView>
-      <AnchorPane prefHeight="44.0" prefWidth="454.0" style="-fx-background-color: #F4D03F;">
+         </image>
+      </ImageView>
+      <Pane prefHeight="23.0" prefWidth="816.0" style="-fx-background-color: #F2F3F4;">
          <children>
-            <ToolBar layoutX="27.0" layoutY="-6.0" prefHeight="40.0" prefWidth="200.0" />
+            <JFXButton fx:id="aboutButton" layoutX="692.0" layoutY="-2.0" prefHeight="28.0" prefWidth="31.0" ripplerFill="WHITE" style="-fx-background-color: #F4D03F;" text="?">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="exitButton" layoutX="723.0" layoutY="-2.0" prefHeight="31.0" prefWidth="93.0" ripplerFill="WHITE" style="-fx-background-color: #EC7063;" text="Exit">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </JFXButton>
          </children>
-      </AnchorPane>
-      <AnchorPane layoutX="440.0" layoutY="-8.0" prefHeight="44.0" prefWidth="377.0" style="-fx-background-color: #E74C3C;">
-         <children>
-            <Button fx:id="exitButton" layoutX="293.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#askForExit" text="ExitButton">
-               <cursor>
-                  <Cursor fx:constant="CLOSED_HAND" />
-               </cursor></Button>
-         </children></AnchorPane>
-      <Button fx:id="logInButton" layoutX="159.0" layoutY="177.0" mnemonicParsing="false" onMouseClicked="#logIn"
-              opacity="0.66" prefHeight="154.0" prefWidth="496.0">
+      </Pane>
+      <JFXButton fx:id="signUpButton" buttonType="RAISED" ellipsisString="" layoutX="437.0" layoutY="311.0" prefHeight="46.0" prefWidth="196.0" ripplerFill="WHITE" style="-fx-background-color: #AED6F1;" text="Sign Up">
          <font>
-            <Font size="7.0" />
+            <Font name="Lucida Sans Regular" size="16.0" />
          </font>
-      </Button>
-      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="218.0" layoutY="266.0" prefHeight="26.0"
-                     prefWidth="378.0" promptText="password" style="-fx-background-color: #B5EEFF;">
+      </JFXButton>
+      <JFXButton fx:id="logInButton" buttonType="RAISED" layoutX="193.0" layoutY="311.0" prefHeight="46.0" prefWidth="215.0" ripplerFill="WHITE" style="-fx-background-color: #5DADE2;" text="Log In">
          <font>
-            <Font name="Century Gothic Bold Italic" size="12.0" />
+            <Font name="Lucida Sans Regular" size="16.0" />
          </font>
-      </PasswordField>
-      <TextField fx:id="logInTextField" alignment="CENTER" layoutX="219.0" layoutY="220.0" prefHeight="34.0"
-                 prefWidth="378.0" promptText="login" style="-fx-background-color: #B5EEFF;">
+      </JFXButton>
+      <JFXTextField fx:id="logInTextField" alignment="CENTER" focusColor="#5adb72" layoutX="281.0" layoutY="187.0" prefHeight="31.0" prefWidth="254.0" promptText="Login">
          <font>
-            <Font name="Century" size="12.0" />
+            <Font name="Lucida Sans Italic" size="15.0" />
          </font>
-         <effect>
-            <Lighting bumpInput="$null">
-               <light>
-
-               </light>
-            </Lighting>
-         </effect>
-      </TextField>
-      <Label fx:id="tellUsText" layoutX="296.0" layoutY="130.0" prefHeight="35.0" prefWidth="222.0" text="Tell us who you are:" textFill="#0a0a0a">
+      </JFXTextField>
+      <JFXPasswordField fx:id="passwordTextField" alignment="CENTER" focusColor="#e13131" layoutX="281.0" layoutY="239.0" prefHeight="31.0" prefWidth="254.0" promptText="Password">
          <font>
-            <Font size="24.0" />
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </JFXPasswordField>
+      <Label layoutY="495.0" text="B-D-S12-PI 1.0">
+         <font>
+            <Font size="12.0" />
          </font>
       </Label>
-      <Button fx:id="signUpButton" layoutX="295.0" layoutY="382.0" mnemonicParsing="false" onAction="#signUp" prefHeight="26.0" prefWidth="224.0" text="Sign Up">
+      <Label layoutX="328.0" layoutY="139.0" text="Log in please">
          <font>
-            <Font size="7.0" />
+            <Font name="Lucida Fax Regular" size="24.0" />
          </font>
-      </Button>
+      </Label>
+      <Text fx:id="userGreetingText" layoutX="359.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Authorization">
+         <font>
+            <Font name="Lucida Fax Regular" size="14.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

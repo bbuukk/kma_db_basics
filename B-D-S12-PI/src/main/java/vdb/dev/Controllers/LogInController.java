@@ -1,5 +1,9 @@
 package vdb.dev.Controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -7,58 +11,47 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import vdb.dev.App;
 
-public class LoginController extends Controller
-{
-
+public class LogInController {
 
     @FXML
     private ResourceBundle resources;
 
     @FXML
-    private AnchorPane scenePane;
-
-    @FXML
     private URL location;
 
     @FXML
-    private Button logInButton;
+    private JFXButton aboutButton;
 
     @FXML
-    private PasswordField passwordField;
+    private JFXButton exitButton;
 
     @FXML
-    private TextField logInTextField;
+    private JFXButton signUpButton;
 
     @FXML
-    private Button signUpButton;
+    private JFXButton logInButton;
 
     @FXML
-    private Label tellUsText;
+    private JFXTextField logInTextField;
 
     @FXML
-    private  Button exitButton;
+    private JFXPasswordField passwordTextField;
+
+    @FXML
+    private Text userGreetingText;
 
     @FXML
     void initialize() {
-
-
     }
 
     public void logIn(MouseEvent event) throws IOException
     {
         String userName = logInTextField.getText();
-        String password = passwordField.getText();
+        String password = passwordTextField.getText();
         if (!userName.equals("") && !password.equals(""))
         {
             App.setRoot("Main");
@@ -77,6 +70,5 @@ public class LoginController extends Controller
     {
         Platform.exit();
     }
-
-
 }
+
