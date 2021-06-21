@@ -1,5 +1,6 @@
 package vdb.dev;
 
+import db.entities.Reader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.locks.ReadWriteLock;
 import java.util.prefs.Preferences;
 
 /**
@@ -18,6 +20,8 @@ public class App extends Application {
 
     public static Scene scene;
     public static Stage stage;
+
+    private Reader currentReader;
 
     public static Stage getStage()
     {

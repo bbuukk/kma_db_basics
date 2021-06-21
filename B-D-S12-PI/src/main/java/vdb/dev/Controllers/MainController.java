@@ -1,13 +1,22 @@
 package vdb.dev.Controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import vdb.dev.App;
+import vdb.dev.Controllers.addMenu.AddMenuController;
 
-public class MainController {
+public class MainController
+{
+
+    Object activeController;
 
     public static final String PATH = "Fxmls/Main/Main";
 
@@ -42,11 +51,21 @@ public class MainController {
     private TableView<?> mainTableView;
 
     @FXML
-    void initialize() {
+    void initialize()
+    {
 
     }
-}
 
+    public void addMenu(MouseEvent event) throws IOException
+    {
+        Stage adminStage = new Stage();
+        adminStage.setTitle("B-D-S12-PI Add Menu");
+        Scene adminToolsScene = new Scene(App.loadFxml(AddMenuController.PATH), 666, 459);
+        adminStage.setScene(adminToolsScene);
+        adminStage.show();
+    }
+}
+//
 
 //    public void add(MouseEvent event) throws IOException
 //    {

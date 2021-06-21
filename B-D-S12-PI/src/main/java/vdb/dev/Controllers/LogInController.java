@@ -1,15 +1,26 @@
 package vdb.dev.Controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import db.PasswordAuthentication;
+import db.SqlOps;
+import db.entities.Reader;
+import db.repos.ReaderRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import vdb.dev.App;
 
 
-public class LogInController {
+public class LogInController
+{
+ private SqlOps sqlOps;
 
     public static final String PATH = "Fxmls/Authorization/LogIn";
 
@@ -41,24 +52,45 @@ public class LogInController {
     private Text userGreetingText;
 
     @FXML
-    void initialize() {
+    void initialize()
+    {
+        sqlOps = new SqlOps();
+    }
 
+    public void logIn(MouseEvent event) throws IOException
+    {
+        String login = logInTextField.getText();
+        String password = passwordTextField.getText();
+        //todo authorization
 
+        if (!login.equals("") && !password.equals(""))
+        {
+
+            try
+            {
+               List<Reader> readers =  sqlOps.getReaderRepository().getReader(login);
+
+               Reader authorizedReader;
+                for (Reader reader: readers)
+                {
+                   if (PasswordAuthentication.authenticate(password.toCharArray(), reader.getPassword())){
+                       authorizedReader = reader;
+                       App.setRoot("Main");
+                       break;
+                   }
+                }
+
+            } catch (IOException ioException)
+            {
+                ioException.printStackTrace();
+            }
+        }
+//    }
     }
 }
 
 
-//    public void logIn(MouseEvent event) throws IOException
-//    {
-//        String userName = logInTextField.getText();
-//        String password = passwordField.getText();
-//        if (!userName.equals("") && !password.equals(""))
-//        {
-//            App.setRoot("Main");
-//            MainController mainController = (MainController) App.controllerForTransferData;
-//            mainController.displayText(userName);
-//        }
-//    }
+//
 //
 //    //fuction that handels signUpButton event
 //    public void signUp(ActionEvent event) throws IOException
