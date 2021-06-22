@@ -9,6 +9,7 @@ import db.PasswordAuthentication;
 import db.SqlOps;
 import db.entities.Reader;
 import db.repos.ReaderRepository;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -55,6 +56,10 @@ public class LogInController
     void initialize()
     {
         sqlOps = new SqlOps();
+    }
+
+    public void exit(MouseEvent event){
+        Platform.exit();
     }
 
     public void logIn(MouseEvent event) throws IOException

@@ -8,22 +8,22 @@
 <AnchorPane prefHeight="293.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.addMenu.AddMenuController">
     <children>
       <Pane layoutX="26.0" layoutY="17.0" opacity="0.14" prefHeight="258.0" prefWidth="560.0" style="-fx-background-color: #5DADE2;" />
-        <Button fx:id="createNewBookButton" layoutX="53.0" layoutY="37.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #F4D03F;" text="Create New Book">
+        <Button fx:id="createNewBookButton" layoutX="53.0" layoutY="37.0" onMouseClicked="#CreateNewBook" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #F4D03F;" text="Create New Book">
             <font>
                 <Font name="Lucida Sans Regular" size="16.0" />
             </font>
         </Button>
-      <Button fx:id="createNewReaderButton" layoutX="333.0" layoutY="37.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #5DADE2;" text="Create New Reader">
+      <Button fx:id="createNewReaderButton" layoutX="333.0" layoutY="37.0" onMouseClicked="#CreateNewReader" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #5DADE2;" text="Create New Reader">
          <font>
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="createNewInstanceBookButton" layoutX="53.0" layoutY="167.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #5DADE2;" text="Create New Instance of a Book">
+      <Button fx:id="createNewInstanceBookButton" layoutX="53.0" layoutY="167.0" onMouseClicked="#CreateNewBookInstance" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #5DADE2;" text="Create New Instance of a Book">
          <font>
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="createNewCatalog" layoutX="333.0" layoutY="167.0" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #F4D03F;" text="Create New Catalog">
+      <Button fx:id="createNewCatalog" layoutX="333.0" layoutY="167.0" onMouseClicked="#CreateNewCatalog" prefHeight="86.0" prefWidth="239.0" style="-fx-background-color: #F4D03F;" text="Create New Catalog">
          <font>
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>

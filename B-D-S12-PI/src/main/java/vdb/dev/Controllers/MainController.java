@@ -2,9 +2,12 @@ package vdb.dev.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.entities.Reader;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -55,13 +58,23 @@ public class MainController
     @FXML
     void initialize()
     {
+        List<String> tableNames = new ArrayList<>();
+        //todo get names of all tables
+    }
 
+    public void logOut(MouseEvent event) throws IOException
+    {
+        App.setRoot(LogInController.PATH);
     }
 
     public void addMenu(MouseEvent event) throws IOException
     {
         AddMenuController addMenuController = new AddMenuController();
         addMenuController.openAddMenu();
+    }
+
+    public void exit(MouseEvent event){
+        Platform.exit();
     }
 
     public static Reader getCurrentAuthorizedReader()
