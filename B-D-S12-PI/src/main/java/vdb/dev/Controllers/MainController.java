@@ -2,19 +2,18 @@ package vdb.dev.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import db.entities.Reader;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import vdb.dev.App;
 import vdb.dev.Controllers.addMenu.AddMenuController;
 
@@ -50,7 +49,7 @@ public class MainController
     private Button logOutButton;
 
     @FXML
-    private ComboBox<?> chooseTableComboBox;
+    private ComboBox<String> chooseTableComboBox;
 
     @FXML
     private TableView<?> mainTableView;
@@ -58,8 +57,14 @@ public class MainController
     @FXML
     void initialize()
     {
-        List<String> tableNames = new ArrayList<>();
+
+        ObservableList<String> tableNames = FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book","BookInstance",
+                "BookReader","Catalog", "Reader");
+        chooseTableComboBox.setItems(tableNames);
+
+
         //todo get names of all tables
+
     }
 
     public void logOut(MouseEvent event) throws IOException
@@ -86,20 +91,31 @@ public class MainController
     {
         MainController.currentAuthorizedReader = currentAuthorizedReader;
     }
-}
-//
 
-//    public void add(MouseEvent event) throws IOException
-//    {
-//        Stage adminStage = new Stage();
-//        adminStage.setTitle("B-D-S12-PI Admin Tools");
-//        Scene adminToolsScene = new Scene(App.loadFxml("AdminTools"), 666, 459);
-//        adminStage.setScene(adminToolsScene);
-//        adminStage.show();
-//    }
-//
-//    public void displayText(String userName)
-//    {
-//        userGreetingText.setText("Hello!!! " +  userName);
-//    }
+    @FXML
+    private TableColumn<?, ?> col_1;
+
+    @FXML
+    private TableColumn<?, ?> col_2;
+
+    @FXML
+    private TableColumn<?, ?> col_3;
+
+    @FXML
+    private TableColumn<?, ?> col_4;
+
+    @FXML
+    private TableColumn<?, ?> col_5;
+
+    @FXML
+    private TableColumn<?, ?> col_6;
+
+    @FXML
+    public void chooseTable()
+    {
+        String s = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+
+    }
+
+}
 

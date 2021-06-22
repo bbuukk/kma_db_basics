@@ -7,6 +7,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class SqlOps {
@@ -20,6 +23,11 @@ public class SqlOps {
     private BookRepository bookRepository;
     private CatalogRepository catalogRepository;
     private ReaderRepository readerRepository;
+
+//    public static List<String> tableNames = Arrays.asList("Author", "Authorship","Belongs", "Book","BookInstance",
+//            "BookReader","Catalog", "Reader");
+
+
 
 
     public SqlOps() {
