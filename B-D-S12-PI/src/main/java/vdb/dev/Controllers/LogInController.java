@@ -9,6 +9,7 @@ import db.PasswordAuthentication;
 import db.SqlOps;
 import db.entities.Reader;
 import db.repos.ReaderRepository;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -57,6 +58,10 @@ public class LogInController
         sqlOps = new SqlOps();
     }
 
+    public void exit(MouseEvent event){
+        Platform.exit();
+    }
+
     public void logIn(MouseEvent event) throws IOException
     {
         String login = logInTextField.getText();
@@ -76,6 +81,7 @@ public class LogInController
                    if (PasswordAuthentication.authenticate(password.toCharArray(), reader.getPassword())){
                        authorizedReader = reader;
                        App.setRoot(MainController.PATH);
+                       MainController.setCurrentAuthorizedReader(authorizedReader);
                        break;
                    }
                 }

@@ -3,6 +3,7 @@ package vdb.dev.Controllers;
 import db.PasswordAuthentication;
 import db.SqlOps;
 import db.entities.Reader;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -83,6 +84,10 @@ public class SignUpController {
     void initialize() {
         sqlOps = new SqlOps();
         passwordAuthentication = new PasswordAuthentication();
+    }
+
+    public void exit(javafx.scene.input.MouseEvent event){
+        Platform.exit();
     }
 
     public void sighUp(MouseEvent event) throws IOException {

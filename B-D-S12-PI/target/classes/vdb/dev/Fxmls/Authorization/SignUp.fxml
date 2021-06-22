@@ -65,12 +65,12 @@
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="buildField" layoutX="286.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Build">
+      <TextField fx:id="buildField" layoutX="423.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Build">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="apartamentField" layoutX="441.0" layoutY="271.0" prefHeight="31.0" prefWidth="105.0" promptText="Apartment">
+      <TextField fx:id="apartamentField" layoutX="565.0" layoutY="271.0" prefHeight="31.0" prefWidth="105.0" promptText="Apartment">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
@@ -99,5 +99,10 @@
          </font>
       </PasswordField>
       <ToggleButton fx:id="adminRightsTogButton" layoutX="566.0" layoutY="366.0" mnemonicParsing="false" text="Admin rights" />
+      <TextField fx:id="streetField" layoutX="276.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Street">
+         <font>
+            <Font name="Lucida Sans Italic" size="15.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>
