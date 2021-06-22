@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import vdb.dev.Controllers.LogInController;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class App extends Application {
         App.stage.getIcons().add(new Image("file:assets/pictures/png/iconOfProgramSelFDev.png"));
         stage.setResizable(false);
 
-        Parent root = loadFxml("Fxmls/Authorization/LogIn");
+        Parent root = loadFxml(LogInController.PATH);
 
         scene = new Scene(root, 816, 509);
         setRoot(root);
@@ -64,8 +65,6 @@ public class App extends Application {
     static public Parent loadFxml(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         Parent root = fxmlLoader.load();
-
-
         return root;
     }
 

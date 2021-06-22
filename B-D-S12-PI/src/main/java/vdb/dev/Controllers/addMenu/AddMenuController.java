@@ -4,19 +4,27 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 import vdb.dev.App;
 
+
 import static vdb.dev.App.loadFxml;
-import static vdb.dev.App.scene;
+
 
 public class AddMenuController {
 
     public static final String PATH = "Fxmls/Main/AddMenu";
     static Scene adminToolsScene;
+    static Stage adminStage;
 
     @FXML
     private ResourceBundle resources;
@@ -42,36 +50,57 @@ public class AddMenuController {
 
     public void openAddMenu() throws IOException
     {
-        Stage adminStage = new Stage();
+        adminStage = new Stage();
         adminStage.setTitle("B-D-S12-PI Add Menu");
-        adminToolsScene = new Scene(loadFxml(PATH));
+        adminToolsScene = new Scene(App.loadFxml(PATH));
         adminStage.setScene(adminToolsScene);
         adminStage.show();
     }
 
     static public void setRoot(String fxml) throws IOException
     {
-        adminToolsScene.setRoot(App.loadFxml(fxml));
+        adminToolsScene.setRoot(loadFxml(fxml));
     }
 
-    public void CreateNewBook(MouseEvent event) throws IOException
+    static public Parent loadFxml(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+//        switch (fxml){
+//            case AddReaderController.PATH:
+//                fxmlLoader.setController(new AddReaderController());
+//                break;
+//            case AddNewBookController.PATH:
+//                fxmlLoader.setController(new AddNewBookController());
+//                break;
+//            case AddNewInstanceBookController.PATH:
+//                fxmlLoader.setController(new AddNewInstanceBookController());
+//                break;
+//            case AddCatalogController.PATH:
+//                fxmlLoader.setController(new AddCatalogController());
+//                break;
+//            case AddMenuController.PATH:
+//                fxmlLoader.setController(new AddMenuController());
+//                break;
+//        }
+
+        return fxmlLoader.load();
+    }
+
+    public void createNewBook() throws IOException
     {
         setRoot(AddNewBookController.PATH);
     }
-    public void CreateNewReader(MouseEvent event) throws IOException
+    public void createNewReader() throws IOException
     {
         setRoot(AddReaderController.PATH);
     }
-    public void CreateNewCatalog(MouseEvent event) throws IOException
-    {
-        setRoot(AddCatalogController.PATH);
-    }
-    public void CreateNewBookInstance(MouseEvent event) throws IOException
+    public void createNewBookInstance() throws IOException
     {
         setRoot(AddNewInstanceBookController.PATH);
     }
-
-
+    public void createNewCatalog() throws IOException
+    {
+        setRoot(AddCatalogController.PATH);
+    }
 
 
 
