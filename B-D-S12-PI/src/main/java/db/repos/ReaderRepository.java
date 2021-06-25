@@ -156,36 +156,40 @@ public class ReaderRepository
         }
     }
 
-//    public Iterable<Reader> getAllProducts(){
-//        var initialQuery = "SELECT * FROM 'Products'";
+//   public boolean updateTable(ObservableList<Entity> entity)
+//    {
+//        if (reader.getId() == null) throw new IllegalArgumentException();
+//        try (PreparedStatement statement = connection.prepareStatement(
+//                "UPDATE mydb.Reader SET PIB=?, password=?, login=?," +
+//                        " type_rights=?, city_r=?, street_r=?, build_r=?," +
+//                        " apartment_r=?, workplace=?, birth_date_r=?, phone_num_r=?" +
+//                        " WHERE id_r=?"))
+//        {
+//            //statement.setInt(1, 1);
+//            statement.setString(1, reader.getPib());
+//            statement.setString(2, reader.getPassword());
+//            statement.setString(3, reader.getLogin());
+//            statement.setInt(4, reader.getTypeRights());
+//            statement.setString(5, reader.getCity());
+//            statement.setString(6, reader.getStreet());
+//            statement.setString(7, reader.getBuild());
+//            statement.setString(8, reader.getApartment());
+//            statement.setString(9, reader.getWorkplace());
+//            statement.setDate(10, Date.valueOf(reader.getBirthDate()));
+//            statement.setString(11, reader.getPhoneNum());
+//            statement.setInt(12, reader.getId());
 //
-//        try {
-//            var st = connection.prepareStatement(initialQuery);
-//            var result = st.executeQuery();
+//            statement.executeUpdate();
+//            return true;
 //
-//            var list = new LinkedList<Product>();
-//
-//            while (result.next())
-//            {
-//                list.add(new Product(
-//                                result.getInt(1),
-//                                result.getString(2),
-//                                result.getString(3),
-//                                result.getString(4),
-//                                result.getInt(5),
-//                                result.getDouble(6)
-//                        )
-//                );
-//            }
-//
-//            return list;
-//        } catch (SQLException e) {
+//        } catch (SQLException e)
+//        {
+//            System.out.println("Не вірний SQL запит на update");
 //            e.printStackTrace();
-//            throw new ServerException("Error getting all products", e);
+//            return false;
 //        }
+//
 //    }
-
-
 
     public boolean update(Reader reader)
     {

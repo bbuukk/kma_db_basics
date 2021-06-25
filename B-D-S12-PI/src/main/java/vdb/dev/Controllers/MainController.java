@@ -15,6 +15,7 @@ import db.entities.Reader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -38,6 +39,12 @@ public class MainController
 
     @FXML
     private URL location;
+
+    @FXML
+    private Button changeButton;
+
+    @FXML
+    private Button updateButton;
 
     @FXML
     private Button addMenuButton;
@@ -123,6 +130,10 @@ public class MainController
         tableNames = FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book",
                                                    "BookInstance", "BookReader","Catalog", "Reader");
         chooseTableComboBox.setItems(tableNames);
+    }
+
+    @FXML
+    void editItem(javafx.event.ActionEvent event) {
 
     }
 
@@ -216,30 +227,20 @@ public class MainController
 
                 break;
         }
+    }
+
+    @FXML
+    public void changeCurrentTable(javafx.scene.input.MouseEvent event)
+    {
+
+    }
 
 
-//        ObservableList<Reader> listOfReaders = FXCollections.observableArrayList();
-
-//        c1 = new TableColumn<Reader, Integer>();c2 = new TableColumn<Reader, String>();c3 = new TableColumn<Reader, String>();
-//        с4 = new TableColumn<Reader, Integer>();с5 = new TableColumn<Reader, String>();с6 = new TableColumn<Reader, String>();
-//        с7 = new TableColumn<Reader, String>();с8 = new TableColumn<Reader, String>();с9 = new TableColumn<Reader, String>();
-//        с10 = new TableColumn<Reader, String>();с11 = new TableColumn<Reader, Date>();
-
-        LocalDate localDateBirth;
-
-//        for (Reader r: readers)
-//        {
-//            var id = r.getId(); var pib = r.getPib();
-//            var password = r.getPassword(); var login = r.getLogin();
-//            var typeRights = r.getTypeRights(); var city = r.getCity();
-//            var street = r.getStreet(); var build = r.getBuild();
-//            var apartament   = r.getApartment(); var workplace = r.getWorkplace();
-//            Date dateOfBirth = Date.valueOf(r.getBirthDate()); var phone = r.getPhoneNum();
-//
-//            localDateBirth = dateOfBirth.toLocalDate();
-//            listOfReaders.add(new Reader(id,pib,password,login,typeRights,city,street,
-//                    build,apartament,workplace,localDateBirth,phone));
-//        }
+    @FXML
+    void updateTable(javafx.scene.input.MouseEvent event) throws SQLException
+    {
+        String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+        displayReaderTable(nameOfSelectedTable);
     }
 
     @FXML
@@ -251,11 +252,6 @@ public class MainController
 
     @FXML
     public void showMenu(javafx.scene.input.MouseEvent event) throws IOException
-    {
-    }
-
-    @FXML
-    public void changeMenu(javafx.scene.input.MouseEvent event) throws IOException
     {
     }
 
