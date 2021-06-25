@@ -84,9 +84,13 @@
       <TableView fx:id="mainTableView" editable="true" layoutX="48.0" layoutY="84.0" prefHeight="386.0" prefWidth="636.0">
         <columns>
           <TableColumn fx:id="cOne" prefWidth="42.39999771118164" text="1" />
+            <TableColumn fx:id="cOneInt" prefWidth="42.39999771118164" text="1" />
           <TableColumn fx:id="cTwo" prefWidth="54.4000244140625" text="2" />
+            <TableColumn fx:id="cTwoInt" prefWidth="42.39999771118164" text="2" />
             <TableColumn fx:id="cThree" minWidth="8.000030517578125" prefWidth="60.000030517578125" text="3" />
+            <TableColumn fx:id="cThreeInt" minWidth="8.000030517578125" prefWidth="42.39999771118164" text="3" />
             <TableColumn fx:id="cFour" minWidth="1.5999755859375" prefWidth="59.19993591308594" text="4" />
+            <TableColumn fx:id="cFourInt" minWidth="8.000030517578125" prefWidth="42.39999771118164" text="4" />
             <TableColumn fx:id="cFive" minWidth="0.0" prefWidth="56.800048828125" text="5" />
             <TableColumn fx:id="cSix" prefWidth="51.20001220703125" text="6" />
             <TableColumn fx:id="cSeven" minWidth="0.0" prefWidth="48.79998779296875" text="7" />

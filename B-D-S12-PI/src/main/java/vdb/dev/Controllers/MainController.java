@@ -22,6 +22,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import vdb.dev.App;
 import vdb.dev.Controllers.addMenu.AddMenuController;
 
@@ -75,16 +76,32 @@ public class MainController
     private TableColumn<Entity, String> cOne;
 
     @FXML
+    //id
+    private TableColumn<Entity, Integer> cOneInt;
+
+    @FXML
     //pib
     private TableColumn<Entity, String > cTwo;
+
+    @FXML
+    //pib
+    private TableColumn<Entity, Integer> cTwoInt;
 
     @FXML
     //password
     private TableColumn<Entity, String> cThree;
 
     @FXML
+    //password
+    private TableColumn<Entity, Integer> cThreeInt;
+
+    @FXML
     //login
     private TableColumn<Entity, String> cFour;
+
+    @FXML
+    //password
+    private TableColumn<Entity, Integer> cFourInt;
 
     @FXML
     //typeRights
@@ -116,7 +133,7 @@ public class MainController
 
 
     @FXML
-    private TableColumn<?, ?> cTwelve;
+    private TableColumn<Entity, String> cTwelve;
 
 //    c1 = new TableColumn<Reader, Integer>();c2 = new TableColumn<Reader, String>();c3 = new TableColumn<Reader, String>();
 //    с4 = new TableColumn<Reader, Integer>();с5 = new TableColumn<Reader, String>();с6 = new TableColumn<Reader, String>();
@@ -130,12 +147,28 @@ public class MainController
         tableNames = FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book",
                                                    "BookInstance", "BookReader","Catalog", "Reader");
         chooseTableComboBox.setItems(tableNames);
-    }
-
-    @FXML
-    void editItem(javafx.event.ActionEvent event) {
+//                editableColumns();
 
     }
+
+    private void editableColumns()
+    {
+
+        cTwo.setCellFactory(TextFieldTableCell.forTableColumn());
+        cThree.setCellFactory(TextFieldTableCell.forTableColumn());
+        cFour.setCellFactory(TextFieldTableCell.forTableColumn());
+        cFive.setCellFactory(TextFieldTableCell.forTableColumn());
+        cSix.setCellFactory(TextFieldTableCell.forTableColumn());
+        cSeven.setCellFactory(TextFieldTableCell.forTableColumn());
+        cEight.setCellFactory(TextFieldTableCell.forTableColumn());;
+        cNine.setCellFactory(TextFieldTableCell.forTableColumn());
+        cTen.setCellFactory(TextFieldTableCell.forTableColumn());
+        cEleven.setCellFactory(TextFieldTableCell.forTableColumn());
+        cTwelve.setCellFactory(TextFieldTableCell.forTableColumn());
+    }
+
+
+
 
     @FXML
     public void selectTabel(javafx.event.ActionEvent event) throws SQLException
@@ -143,16 +176,70 @@ public class MainController
         String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
         displayReaderTable(nameOfSelectedTable);
 
+
     }
 
     private void setCellValuesSettings(String cc1, String cc2,String cc3,String cc4,String cc5,
                                        String cc6,String cc7,String cc8,String cc9,String cc10,
                                        String cc11, String cc12){
 
-        cOne.setCellValueFactory(new PropertyValueFactory<>(cc1));
-        cTwo.setCellValueFactory(new PropertyValueFactory<>(cc2));
-        cThree.setCellValueFactory(new PropertyValueFactory<>(cc3));
-        cFour.setCellValueFactory(new PropertyValueFactory<>(cc4));
+        if(!isDigit(cc1))
+        {
+            cOne.setVisible(true);
+            cOneInt.setVisible(false);
+            cOne.setCellValueFactory(new PropertyValueFactory<>(cc1));
+            cOne.setText(cc1);
+        }
+        else
+        {
+            cOne.setVisible(false);
+            cOneInt.setVisible(true);
+            cOneInt.setCellValueFactory(new PropertyValueFactory<>(cc1));
+            cOneInt.setText(cc1);
+        }
+        if(!isDigit(cc2))
+        {
+            cTwo.setVisible(true);
+            cTwoInt.setVisible(false);
+            cTwo.setText(cc2);
+            cTwo.setCellValueFactory(new PropertyValueFactory<>(cc2));
+        }
+        else
+        {
+            cTwo.setVisible(false);
+            cTwoInt.setVisible(true);
+            cTwoInt.setText(cc2);
+            cTwoInt.setCellValueFactory(new PropertyValueFactory<>(cc2));
+        }
+        if(!isDigit(cc3))
+        {
+            cThree.setVisible(true);
+            cThreeInt.setVisible(false);
+            cThree.setText(cc3);
+            cThree.setCellValueFactory(new PropertyValueFactory<>(cc3));
+        }
+        else
+        {
+            cThree.setVisible(false);
+            cThreeInt.setVisible(true);
+            cThreeInt.setText(cc3);
+            cThreeInt.setCellValueFactory(new PropertyValueFactory<>(cc3));
+        }
+
+        if(!isDigit(cc4))
+        {
+            cFour.setVisible(true);
+            cFourInt.setVisible(false);
+            cFour.setText(cc4);
+            cFour.setCellValueFactory(new PropertyValueFactory<>(cc4));
+        }
+        else{
+            cFour.setVisible(false);
+            cFourInt.setVisible(true);
+            cFourInt.setText(cc4);
+            cFourInt.setCellValueFactory(new PropertyValueFactory<>(cc4));
+        }
+
         cFive.setCellValueFactory(new PropertyValueFactory<>(cc5));
         cSix.setCellValueFactory(new PropertyValueFactory<>(cc6));
         cSeven.setCellValueFactory(new PropertyValueFactory<>(cc7));
@@ -162,10 +249,10 @@ public class MainController
         cEleven.setCellValueFactory(new PropertyValueFactory<>(cc11));
         cTwelve.setCellValueFactory(new PropertyValueFactory<>(cc12));
 
-        cOne.setText(cc1);cTwo.setText(cc2);cThree.setText(cc3);
-        cFour.setText(cc4);cFive.setText(cc5);cSix.setText(cc6);
+        cFive.setText(cc5);cSix.setText(cc6);
         cSeven.setText(cc7);cEight.setText(cc8);cNine.setText(cc9);
         cTen.setText(cc10);cEleven.setText(cc11);cTwelve.setText(cc12);
+
     }
 
 
@@ -173,53 +260,56 @@ public class MainController
     {
         switch (name){
             case "Reader":
+//                cFive.setVisible(true);
                 setCellValuesSettings("id","pib", "password","login","typeRights", "city","street",
                                         "build", "apartment","workplace", "birthDate", "phoneNum");
                 var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
                 mainTableView.setItems(listOfReaders);
                 break;
             case "Authorship":
+//                cFive.setVisible(false);
                 setCellValuesSettings("id","ISBN", "","","", "","",
                         "", "","", "", "");
                 var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
                 mainTableView.setItems(listAuthorships);
                 break;
             case "Belongs":
+//                cFive.setVisible(false);
                 setCellValuesSettings("isbn","idCatalog", "","","", "","",
                         "", "","", "", "");
                 var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
                 mainTableView.setItems(listBelongs);
                 break;
             case "Book":
+//                cFive.setVisible(false);
                 setCellValuesSettings("ISBN","name", "publisher","pubCity","pubYear", "pageNum","price",
                         "", "","", "", "");
                 var listBooks = App.sqlOps.getBookRepository().getAllBooks();
                 mainTableView.setItems(listBooks);
                 break;
             case "BookInstance":
+//                cFive.setVisible(false);
                 setCellValuesSettings("id","shelf", "ISBN","","", "","",
                         "", "","", "", "");
                 var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
                 mainTableView.setItems(listBooksInstances);
                 break;
             case "BookReader":
-//                private Integer idReader;
-//                private Integer idInstance;
-//                private LocalDate dateOut;
-//                private LocalDate dateExp;
-//                private LocalDate dateReturn;
+//                cFive.setVisible(false);
                 setCellValuesSettings("idReader","idInstance", "dateOut","dateExp","dateReturn", "","",
                         "", "","", "", "");
                 var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
                 mainTableView.setItems(listBookReaders);
                 break;
             case "Catalog":
+//                cFive.setVisible(false);
                 setCellValuesSettings("id","name", "","","", "","",
                         "", "","", "", "");
                 var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
                 mainTableView.setItems(listCatalogs);
                 break;
             case "Author":
+//                cFive.setVisible(false);
                 setCellValuesSettings("id","name", "","","", "","",
                         "", "","", "", "");
                 var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
@@ -281,6 +371,15 @@ public class MainController
     public static void setCurrentAuthorizedReader(Reader currentAuthorizedReader)
     {
         MainController.currentAuthorizedReader = currentAuthorizedReader;
+    }
+
+    private static boolean isDigit(String s) throws NumberFormatException {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
 

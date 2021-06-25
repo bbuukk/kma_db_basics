@@ -83,18 +83,22 @@
         </Label>
       <TableView fx:id="mainTableView" editable="true" layoutX="48.0" layoutY="84.0" prefHeight="386.0" prefWidth="636.0">
         <columns>
-          <TableColumn fx:id="cOne" onEditCommit="#editItem" prefWidth="42.39999771118164" text="1" />
-          <TableColumn fx:id="cTwo" onEditCommit="#editItem" prefWidth="54.4000244140625" text="2" />
-            <TableColumn fx:id="cThree" minWidth="8.000030517578125" onEditCommit="#editItem" prefWidth="60.000030517578125" text="3" />
-            <TableColumn fx:id="cFour" minWidth="1.5999755859375" onEditCommit="#editItem" prefWidth="59.19993591308594" text="4" />
-            <TableColumn fx:id="cFive" minWidth="0.0" onEditCommit="#editItem" prefWidth="56.800048828125" text="5" />
-            <TableColumn fx:id="cSix" onEditCommit="#editItem" prefWidth="51.20001220703125" text="6" />
-            <TableColumn fx:id="cSeven" minWidth="0.0" onEditCommit="#editItem" prefWidth="48.79998779296875" text="7" />
-            <TableColumn fx:id="cEight" minWidth="0.0" onEditCommit="#editItem" prefWidth="46.4000244140625" text="8" />
-            <TableColumn fx:id="cNine" onEditCommit="#editItem" prefWidth="49.5999755859375" text="9" />
-            <TableColumn fx:id="cTen" maxWidth="217.60003662109375" minWidth="-1.0" onEditCommit="#editItem" prefWidth="42.4000244140625" text="10" />
-            <TableColumn fx:id="cEleven" onEditCommit="#editItem" prefWidth="62.4000244140625" text="11" />
-            <TableColumn fx:id="cTwelve" onEditCommit="#editItem" prefWidth="52.800048828125" text="12" />
+          <TableColumn fx:id="cOne" prefWidth="42.39999771118164" text="1" />
+            <TableColumn fx:id="cOneInt" prefWidth="42.39999771118164" text="1" />
+          <TableColumn fx:id="cTwo" prefWidth="54.4000244140625" text="2" />
+            <TableColumn fx:id="cTwoInt" prefWidth="42.39999771118164" text="2" />
+            <TableColumn fx:id="cThree" minWidth="8.000030517578125" prefWidth="60.000030517578125" text="3" />
+            <TableColumn fx:id="cThreeInt" minWidth="8.000030517578125" prefWidth="42.39999771118164" text="3" />
+            <TableColumn fx:id="cFour" minWidth="1.5999755859375" prefWidth="59.19993591308594" text="4" />
+            <TableColumn fx:id="cFourInt" minWidth="8.000030517578125" prefWidth="42.39999771118164" text="4" />
+            <TableColumn fx:id="cFive" minWidth="0.0" prefWidth="56.800048828125" text="5" />
+            <TableColumn fx:id="cSix" prefWidth="51.20001220703125" text="6" />
+            <TableColumn fx:id="cSeven" minWidth="0.0" prefWidth="48.79998779296875" text="7" />
+            <TableColumn fx:id="cEight" minWidth="0.0" prefWidth="46.4000244140625" text="8" />
+            <TableColumn fx:id="cNine" prefWidth="49.5999755859375" text="9" />
+            <TableColumn fx:id="cTen" maxWidth="217.60003662109375" minWidth="-1.0" prefWidth="42.4000244140625" text="10" />
+            <TableColumn fx:id="cEleven" prefWidth="62.4000244140625" text="11" />
+            <TableColumn fx:id="cTwelve" prefWidth="52.800048828125" text="12" />
         </columns>
       </TableView>
     </children>
