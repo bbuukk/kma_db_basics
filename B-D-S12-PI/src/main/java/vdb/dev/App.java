@@ -1,6 +1,8 @@
 package vdb.dev;
 
+import db.SqlOps;
 import db.entities.Reader;
+import io.jsonwebtoken.SignatureAlgorithm;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +11,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import vdb.dev.Controllers.LogInController;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.prefs.Preferences;
 
@@ -18,6 +23,10 @@ import java.util.prefs.Preferences;
  * JavaFX App
  */
 public class App extends Application {
+
+    private static final byte[] apiKeySecretBytes = "my-token-secret-key-aefsfdgsafghjmgfrdsefsgthjmgfdsghjmgbfvdcbgfhbfvdccfvbg".getBytes(StandardCharsets.UTF_8);
+    public static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    public static final Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
     public static Scene scene;
     public static Stage stage;
@@ -28,6 +37,7 @@ public class App extends Application {
     {
         return stage;
     }
+    static public SqlOps sqlOps;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -41,6 +51,8 @@ public class App extends Application {
 
         scene = new Scene(root, 816, 509);
         setRoot(root);
+
+         sqlOps = new SqlOps();
 
         App.stage.setScene(scene);
         App.stage.show();

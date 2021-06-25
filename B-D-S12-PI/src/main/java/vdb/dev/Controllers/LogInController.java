@@ -11,6 +11,7 @@ import db.entities.Reader;
 import db.repos.ReaderRepository;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -21,7 +22,6 @@ import vdb.dev.App;
 
 public class LogInController
 {
- private SqlOps sqlOps;
 
     public static final String PATH = "Fxmls/Authorization/LogIn";
 
@@ -55,11 +55,7 @@ public class LogInController
     @FXML
     void initialize()
     {
-        sqlOps = new SqlOps();
-    }
 
-    public void exit(MouseEvent event){
-        Platform.exit();
     }
 
     public void logIn(MouseEvent event) throws IOException
@@ -73,7 +69,7 @@ public class LogInController
 
             try
             {
-               List<Reader> readers =  sqlOps.getReaderRepository().getReader(login);
+               List<Reader> readers =  App.sqlOps.getReaderRepository().getReader(login);
 
                Reader authorizedReader;
                 for (Reader reader: readers)
@@ -93,21 +89,29 @@ public class LogInController
         }
 //    }
     }
+
+    public void signUp(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        App.setRoot(SignUpController.PATH);
+    }
+
+    @FXML
+    void about(javafx.scene.input.MouseEvent event) {
+        String aboutProgram = "B-D-S12-PI is a unique program developed by several experts";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "");
+        alert.setTitle("About B-D-S12-PI");
+        alert.setHeaderText(aboutProgram);
+        alert.showAndWait();
+    }
+
+    @FXML
+    void exit(javafx.scene.input.MouseEvent event) {
+        Platform.exit();
+    }
 }
 
 
-//
-//
-//    //fuction that handels signUpButton event
-//    public void signUp(ActionEvent event) throws IOException
-//    {
-//        App.setRoot("SignUp");
-//    }
-//
-//    public void askForExit(MouseEvent event)
-//    {
-//        Platform.exit();
-//    }
+
 
 
 

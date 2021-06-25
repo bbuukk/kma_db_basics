@@ -1,9 +1,18 @@
 package vdb.dev.Controllers.addMenu;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.ResourceBundle;
+
+import db.PasswordAuthentication;
+import db.SqlOps;
+import db.entities.Reader;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import vdb.dev.App;
 
 public class AddReaderController {
 
@@ -28,10 +37,10 @@ public class AddReaderController {
     private TextField workplaceField;
 
     @FXML
-    private TextField BuildField;
+    private TextField buildField;
 
     @FXML
-    private TextField ApartamentField;
+    private TextField apartamentField;
 
     @FXML
     private TextField phoneField;
@@ -52,10 +61,50 @@ public class AddReaderController {
     private Label showLabel;
 
     @FXML
-    private Button createNewReader;
+    private TextField streetField;
+
+    @FXML
+    private Button createReader;
+
 
     @FXML
     void initialize() {
 
     }
+//    Reader reader = new Reader(
+//            pibField.getText(),
+//            confirmPassField.getText(),
+//            loginField.getText(),
+//            0,
+//            cityField.getText(),
+//            StreetField.getText(),
+//            BuildField.getText(),
+//            ApartamentField.getText(),
+//            workplaceField.getText(),
+//            dateOfBirthDatePicker.getValue(),
+//            phoneField.getText()
+//    );
+    public void createNewReader(javafx.scene.input.MouseEvent event) throws IOException {
+
+            String pib = pibField.getText(), login = loginField.getText(),
+                    city = cityField.getText(), build = buildField.getText(),
+                    apartament = apartamentField.getText(), street = streetField.getText(),
+                    password = passwordField.getText(), confirmationPass = confirmPassField.getText();
+            Date dateOfBirth = Date.valueOf(dateOfBirthDatePicker.getValue());
+
+            if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
+                    !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
+                    !confirmationPass.isEmpty() && dateOfBirth != null)
+            {
+                    password = new PasswordAuthentication().hash(password.toCharArray());
+
+                    App.sqlOps.getReaderRepository().createReader(pib, password, login, false,
+                            city, street, build, apartament, dateOfBirth);
+            }else{
+                new Alert(Alert.AlertType.INFORMATION, "Not all data fields are entered!").showAndWait();
+        }
+    }
 }
+
+
+

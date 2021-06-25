@@ -18,14 +18,19 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="405.0" layoutX="89.0" layoutY="61.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: #EBF5FB;" width="639.0" />
       <Pane prefHeight="23.0" prefWidth="816.0" style="-fx-background-color: #F2F3F4;">
          <children>
-            <Button fx:id="exitButton" layoutX="723.0" layoutY="-2.0" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #EC7063;" text="Exit">
+            <Button fx:id="exitButton" layoutX="723.0" layoutY="-2.0" onMouseClicked="#exit" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #EC7063;" text="Exit">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="backButton" layoutX="679.0" layoutY="-2.0" onMouseClicked="#goBack" prefHeight="36.0" prefWidth="44.0" style="-fx-background-color: #F4D03F;" text="☚">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
             </Button>
          </children>
       </Pane>
-      <Button fx:id="signUpButton" ellipsisString="" layoutX="518.0" layoutY="411.0" prefHeight="46.0" prefWidth="196.0" style="-fx-background-color: #AED6F1;" text="Sign Up">
+      <Button fx:id="signUpButton" ellipsisString="" layoutX="518.0" layoutY="411.0" onMouseClicked="#signUp" prefHeight="46.0" prefWidth="196.0" style="-fx-background-color: #AED6F1;" text="Sign Up">
          <font>
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>
@@ -91,8 +96,8 @@
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </PasswordField>
-      <RadioButton fx:id="showRadioButton" layoutX="583.0" layoutY="221.0" prefHeight="21.0" prefWidth="56.0" text="." />
-      <Label fx:id="showLabel" layoutX="574.0" layoutY="197.0" prefHeight="21.0" prefWidth="44.0" text="Show" />
+      <RadioButton fx:id="adminRadioButton" layoutX="583.0" layoutY="221.0" prefHeight="21.0" prefWidth="56.0" text="." />
+      <Label fx:id="showLable" layoutX="574.0" layoutY="197.0" prefHeight="21.0" prefWidth="44.0" text="Show" />
       <PasswordField fx:id="adminCodeField" layoutX="108.0" layoutY="363.0" prefHeight="31.0" prefWidth="409.0" promptText="Admin code">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />

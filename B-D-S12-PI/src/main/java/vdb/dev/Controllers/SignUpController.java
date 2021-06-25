@@ -7,17 +7,20 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import vdb.dev.App;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class SignUpController {
+public class SignUpController
+{
 
     public static final String PATH = "Fxmls/Authorization/SignUp";
     public static final String ADMIN_CODE = "Secret";
-    private SqlOps sqlOps;
     private PasswordAuthentication passwordAuthentication;
 
     @FXML
@@ -81,65 +84,47 @@ public class SignUpController {
     private TextField streetField;
 
     @FXML
-    void initialize() {
-        sqlOps = new SqlOps();
+    void initialize()
+    {
         passwordAuthentication = new PasswordAuthentication();
     }
-
-    public void exit(javafx.scene.input.MouseEvent event){
+    @FXML
+    public void exit(javafx.scene.input.MouseEvent event)
+    {
         Platform.exit();
     }
+    @FXML
+    public void goBack(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        App.setRoot(LogInController.PATH);
+    }
+    public void signUp(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        String pib = pibField.getText(), login = loginField.getText(),
+                city = cityField.getText(), build = buildField.getText(),
+                apartament = apartamentField.getText(), street = streetField.getText(),
+                password = passwordField.getText(), confirmationPass = confirmPasswrodField.getText();
+        Date dateOfBirth = Date.valueOf(dateOfBirthDatePicker.getValue());
 
-    public void sighUp(MouseEvent event) throws IOException {
-        if (!pibField.getText().isEmpty()
-                && !loginField.getText().isEmpty()
-                && !cityField.getText().isEmpty()
-                && !buildField.getText().isEmpty()
-                && !apartamentField.getText().isEmpty()
-                && !streetField.getText().isEmpty()
-                && !passwordField.getText().isEmpty()
-                && !confirmPasswrodField.getText().isEmpty()
-                && dateOfBirthDatePicker.getValue() != null) {
-            Reader reader;
-            if (!adminCodeField.getText().equals(ADMIN_CODE)) {
-                reader = new Reader(pibField.getText(),
-                        passwordAuthentication.hash(passwordField.getText().toCharArray()),
-                        loginField.getText(),
-                        Integer.valueOf(0),
-                        cityField.getText(),
-                        streetField.getText(),
-                        buildField.getText(),
-                        apartamentField.getText(),
-                        workplaceField.getText().isEmpty() ? null : workplaceField.getText(),
-                        dateOfBirthDatePicker.getValue(),
-                        phoneField.getText().isEmpty() ? null : phoneField.getText());
-            } else {
-                reader = new Reader(pibField.getText(),
-                        passwordAuthentication.hash(passwordField.getText().toCharArray()),
-                        loginField.getText(),
-                        1,
-                        cityField.getText(),
-                        streetField.getText(),
-                        buildField.getText(),
-                        apartamentField.getText(),
-                        workplaceField.getText().isEmpty() ? null : workplaceField.getText(),
-                        dateOfBirthDatePicker.getValue(),
-                        phoneField.getText().isEmpty() ? null : phoneField.getText());
+        if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
+                !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
+                !confirmationPass.isEmpty() && dateOfBirth != null)
+        {
+            password = new PasswordAuthentication().hash(password.toCharArray());
+            if (adminCodeField.getText().equals(ADMIN_CODE))
+            {
+                App.sqlOps.getReaderRepository().createReader(pib, password, login, true,
+                        city, street, build, apartament, dateOfBirth);
+            } else
+            {
+                App.sqlOps.getReaderRepository().createReader(pib, password, login, false,
+                        city, street, build, apartament, dateOfBirth);
             }
-            sqlOps.getReaderRepository().insert(reader);
         }
+        App.setRoot(MainController.PATH);
     }
 }
 
 
-//    public void activeAdminPasswordField()
-//    {
-//        if (adminCheckBox.isSelected())
-//            adminPasswordField.setVisible(true);
-//        else
-//            adminPasswordField.setVisible(false);
-//
-//    }
-//
 
 

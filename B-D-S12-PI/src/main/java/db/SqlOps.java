@@ -29,9 +29,6 @@ public class SqlOps {
 //    public static List<String> tableNames = Arrays.asList("Author", "Authorship","Belongs", "Book","BookInstance",
 //            "BookReader","Catalog", "Reader");
 
-
-
-
     public SqlOps() {
         init();
     }

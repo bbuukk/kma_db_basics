@@ -6,80 +6,161 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReaderRepository {
+public class ReaderRepository
+{
     Connection connection;
 
-    public ReaderRepository(Connection connection) {
+    public ReaderRepository(Connection connection)
+    {
         this.connection = connection;
     }
 
-    public Connection getConnection() {
+    public Connection getConnection()
+    {
         return connection;
     }
 
-    public void setConnection(Connection connection) {
+    public void setConnection(Connection connection)
+    {
         this.connection = connection;
     }
 
-    public Reader getReader(Integer id) {
+    public Reader getReader(Integer id)
+    {
         if (id == null) throw new IllegalArgumentException();
         String sql = "SELECT * FROM mydb.Reader WHERE id_r = " + id;
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery(sql)
-        ) {
-            if (res.next()) {
+        )
+        {
+            if (res.next())
+            {
                 return new Reader(res);
             }
             return null;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }
 
-    public List<Reader> getReader(String login) {
+    public List<Reader> getReader(String login)
+    {
         if (login == null) throw new IllegalArgumentException();
         String sql = "SELECT * FROM mydb.Reader WHERE login = '" + login + "'";
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery(sql)
-        ) {
+        )
+        {
             List<Reader> list = new ArrayList<>();
-            while (res.next()) {
+            while (res.next())
+            {
                 list.add(new Reader(res));
             }
             return list;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }
 
+    public boolean doCredentialsMatch(String login, String password)
+    {
+        var query = "SELECT * FROM 'Reader' WHERE login = ? AND password = ?";
+        if (login == null || password == null) throw new IllegalArgumentException();
+        try
+        {
+            var st = connection.prepareStatement(query);
+            st.setString(1, login);
+            st.setString(2, password);
+            var result = st.executeQuery();
 
-    public List<Reader> getAllReaders() {
+            return result.next();
+        } catch (SQLException e)
+        {
+            return false;
+        }
+    }
+
+    public boolean isAdmin(String login)
+    {
+        var query = "SELECT type_rights FROM 'Reader' WHERE login = ? AND password = ?";
+        if (login == null) throw new IllegalArgumentException();
+        try
+        {
+            var st = connection.prepareStatement(query);
+            st.setString(1, login);
+            var result = st.executeQuery();
+
+            return result.next();
+        } catch (SQLException e)
+        {
+            return false;
+        }
+    }
+
+    public boolean createReader(String PIB, String password, String login,
+                                boolean type_rights, String city_r, String stree_r,
+                                String build_r, String apartament_r, Date birth_date_r) {
+
+        var query = "INSERT INTO 'Reader' (PIB, password, login, type_rights, city_r," +
+                " stree_r,build_r,apartament_r, birth_date_r) VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
+        if (login == null) throw new IllegalArgumentException();
+        try
+        {
+            var st = connection.prepareStatement(query);
+            st.setString(1, PIB);
+            st.setString(2, password);
+            st.setString(3, login);
+            st.setBoolean(4, type_rights);
+            st.setString(5, city_r);
+            st.setString(6, stree_r);
+            st.setString(7, build_r);
+            st.setString(8, apartament_r);
+            st.setDate(9, birth_date_r);
+
+            var result = st.executeQuery();
+
+            return result.next();
+        } catch (SQLException e)
+        {
+            return false;
+        }
+    }
+
+    public Iterable<Reader> getAllReaders()
+    {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Reader")
-        ) {
+        )
+        {
             List<Reader> list = new ArrayList<>();
-            while (res.next()) {
+            while (res.next())
+            {
                 list.add(new Reader(res));
             }
             return list;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }
 
-    public boolean update(Reader reader) {
+    public boolean update(Reader reader)
+    {
         if (reader.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "UPDATE mydb.Reader SET PIB=?, password=?, login=?," +
                         " type_rights=?, city_r=?, street_r=?, build_r=?," +
                         " apartment_r=?, workplace=?, birth_date_r=?, phone_num_r=?" +
-                        " WHERE id_r=?")) {
+                        " WHERE id_r=?"))
+        {
             //statement.setInt(1, 1);
             statement.setString(1, reader.getPib());
             statement.setString(2, reader.getPassword());
@@ -97,7 +178,8 @@ public class ReaderRepository {
             statement.executeUpdate();
             return true;
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Не вірний SQL запит на update");
             e.printStackTrace();
             return false;
@@ -105,26 +187,31 @@ public class ReaderRepository {
 
     }
 
-    public boolean delete(Reader reader) {
+    public boolean delete(Reader reader)
+    {
         if (reader.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM mydb.Reader WHERE id_r=?")) {
+                "DELETE FROM mydb.Reader WHERE id_r=?"))
+        {
             //statement.setInt(1, 1);
             statement.setInt(1, reader.getId());
 
             statement.executeUpdate();
             return true;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Не вірний SQL запит на delete");
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean insert(Reader reader) {
+    public boolean insert(Reader reader)
+    {
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO mydb.Reader(PIB, password, login, city_r, street_r, build_r, apartment_r, workplace, birth_date_r, phone_num_r) " +
-                        "values (?,?,?,?,?,?,?,?,?,?)")) {
+                        "values (?,?,?,?,?,?,?,?,?,?)"))
+        {
             //statement.setInt(1, 1);
             statement.setString(1, reader.getPib());
             statement.setString(2, reader.getPassword());
@@ -139,7 +226,8 @@ public class ReaderRepository {
 
             statement.executeUpdate();
             return true;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Не вірний SQL запит на delete");
             e.printStackTrace();
             return false;

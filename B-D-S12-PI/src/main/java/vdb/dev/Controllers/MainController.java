@@ -58,8 +58,9 @@ public class MainController
     void initialize()
     {
 
-        ObservableList<String> tableNames = FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book","BookInstance",
-                "BookReader","Catalog", "Reader");
+        ObservableList<String> tableNames =
+                FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book",
+                                                  "BookInstance", "BookReader","Catalog", "Reader");
         chooseTableComboBox.setItems(tableNames);
 
 
@@ -67,29 +68,11 @@ public class MainController
 
     }
 
-    public void logOut(MouseEvent event) throws IOException
-    {
-        App.setRoot(LogInController.PATH);
-    }
-
-    public void addMenu(MouseEvent event) throws IOException
+    @FXML
+    public void addMenu(javafx.scene.input.MouseEvent event) throws IOException
     {
         AddMenuController addMenuController = new AddMenuController();
         addMenuController.openAddMenu();
-    }
-
-    public void exit(MouseEvent event){
-        Platform.exit();
-    }
-
-    public static Reader getCurrentAuthorizedReader()
-    {
-        return currentAuthorizedReader;
-    }
-
-    public static void setCurrentAuthorizedReader(Reader currentAuthorizedReader)
-    {
-        MainController.currentAuthorizedReader = currentAuthorizedReader;
     }
 
     @FXML
@@ -114,8 +97,46 @@ public class MainController
     public void chooseTable()
     {
         String s = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+    }
+
+    @FXML
+    public void showMenu(javafx.scene.input.MouseEvent event) throws IOException
+    {
+    }
+
+    @FXML
+    public void changeMenu(javafx.scene.input.MouseEvent event) throws IOException
+    {
+    }
+
+    @FXML
+    public void defaultQueriesMenu(javafx.scene.input.MouseEvent event) throws IOException
+    {
 
     }
+
+    @FXML
+    public void logOut(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        MainController.currentAuthorizedReader = null;
+        App.setRoot(LogInController.PATH);
+    }
+
+    @FXML
+    public void exit(javafx.scene.input.MouseEvent event){
+        Platform.exit();
+    }
+
+    public static Reader getCurrentAuthorizedReader()
+    {
+        return currentAuthorizedReader;
+    }
+
+    public static void setCurrentAuthorizedReader(Reader currentAuthorizedReader)
+    {
+        MainController.currentAuthorizedReader = currentAuthorizedReader;
+    }
+
 
 }
 
