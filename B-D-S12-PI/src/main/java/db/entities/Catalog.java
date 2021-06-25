@@ -19,6 +19,10 @@ public class Catalog implements Entity{
         this.name = name;
     }
 
+    public Catalog() {
+    }
+
+
     public Catalog(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id_c");
         this.name = resultSet.getString("name_c");

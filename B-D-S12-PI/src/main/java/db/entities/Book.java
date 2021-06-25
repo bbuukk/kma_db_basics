@@ -43,6 +43,8 @@ public class Book implements Entity{
         this.pageNum = resultSet.getInt("page_num");
         this.price = resultSet.getString("price");
     }
+    public Book() {
+    }
 
     public Integer getISBN() {
         return ISBN;

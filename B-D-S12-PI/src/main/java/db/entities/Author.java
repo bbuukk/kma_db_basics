@@ -15,6 +15,10 @@ public class Author implements Entity {
         this.name = name;
     }
 
+    public Author() {
+
+    }
+
     public Author(String name) {
         this.name = name;
     }

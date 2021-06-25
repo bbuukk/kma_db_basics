@@ -16,6 +16,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -80,7 +81,6 @@ public class MainController
         tableNames = FXCollections.observableArrayList("Author", "Authorship", "Belongs", "Book",
                 "BookInstance", "BookReader", "Catalog", "Reader");
         chooseTableComboBox.setItems(tableNames);
-
     }
 
     @FXML
@@ -116,7 +116,45 @@ public class MainController
             }
             column.setText(columnsToCreate[i]);
             column.setCellValueFactory(new PropertyValueFactory<>(columnsToCreate[i]));
+
+            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>()
+            {
+                @Override
+                public void handle(TableColumn.CellEditEvent event)
+                {
+                    String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+                    Entity entity = getEntityByName(nameOfCurrentSelectedEntity);
+
+
+
+                }
+            });
+
             mainTableView.getColumns().add(column);
+        }
+    }
+
+    private Entity getEntityByName(String name){
+        switch (name)
+        {
+            case "Reader":
+                return new Reader();
+            case "Authorship":
+                return new Authorship();
+            case "Belongs":
+                return new Belongs();
+            case "Book":
+                return new Authorship();
+            case "BookInstance":
+                return new BookInstance();
+            case "BookReader":
+                return new BookReader();
+            case "Catalog":
+                return new Catalog();
+            case "Author":
+                return new Author();
+            default:
+                return null;
         }
     }
 
@@ -245,18 +283,6 @@ public class MainController
     public static void setCurrentAuthorizedReader(Reader currentAuthorizedReader)
     {
         MainController.currentAuthorizedReader = currentAuthorizedReader;
-    }
-
-    private static boolean isDigit(String s) throws NumberFormatException
-    {
-        try
-        {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e)
-        {
-            return false;
-        }
     }
 }
 

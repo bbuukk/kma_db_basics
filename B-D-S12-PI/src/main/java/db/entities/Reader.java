@@ -48,6 +48,7 @@ public class Reader implements Entity{
         this.birthDate = birthDate;
         this.phoneNum = phoneNum;
     }
+    public Reader() { }
 
     public Reader(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id_r");

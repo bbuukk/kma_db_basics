@@ -21,7 +21,6 @@ public class BookReader implements Entity {
         this.dateReturn = dateReturn;
     }
 
-
     public BookReader(ResultSet resultSet) throws SQLException {
         this.idReader = resultSet.getInt("id_r");
         this.idInstance = resultSet.getInt("id_i");

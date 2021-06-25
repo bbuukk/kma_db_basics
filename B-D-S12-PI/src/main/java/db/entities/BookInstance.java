@@ -18,6 +18,9 @@ public class BookInstance implements Entity {
         this.ISBN = ISBN;
     }
 
+    public BookInstance() {
+    }
+
     public BookInstance(Integer shelf, Integer ISBN) {
         this.shelf = shelf;
         this.ISBN = ISBN;
