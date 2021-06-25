@@ -1,6 +1,9 @@
 package db.repos;
 
 import db.entities.BookReader;
+import db.entities.Entity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -103,18 +106,18 @@ public class BookReaderRepository {
         }
     }
 
-    public List<BookReader> getAllBookReaders() {
+    public ObservableList<Entity> getAllBookReaders() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.BookReader")
         ) {
-            List<BookReader> list = new ArrayList<>();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new BookReader(res));
             }
             return list;
         } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }

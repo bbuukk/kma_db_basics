@@ -1,6 +1,9 @@
 package db.repos;
 
 import db.entities.Belongs;
+import db.entities.Entity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -79,11 +82,11 @@ public class BelongsRepository {
         return delete(old) && insert(updated);
     }
 
-    public List<Belongs> getAllBelongs() {
+    public ObservableList<Entity> getAllBelongs() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Belongs")
         ) {
-            List<Belongs> list = new ArrayList<>();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new Belongs(res));
             }

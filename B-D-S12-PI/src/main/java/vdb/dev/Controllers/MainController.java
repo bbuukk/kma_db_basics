@@ -61,51 +61,51 @@ public class MainController
     private ComboBox<String> chooseTableComboBox;
 
     @FXML
-    private TableView<?> mainTableView;
+    private TableView<Entity> mainTableView;
 
     @FXML
     //id
-    private TableColumn<Reader, String> cOne;
+    private TableColumn<Entity, String> cOne;
 
     @FXML
     //pib
-    private TableColumn<Reader, String > cTwo;
+    private TableColumn<Entity, String > cTwo;
 
     @FXML
     //password
-    private TableColumn<Reader, String> cThree;
+    private TableColumn<Entity, String> cThree;
 
     @FXML
     //login
-    private TableColumn<Reader, String> cFour;
+    private TableColumn<Entity, String> cFour;
 
     @FXML
     //typeRights
-    private TableColumn<Reader, String> cFive;
+    private TableColumn<Entity, String> cFive;
 
     @FXML
     //city
-    private TableColumn<Reader, String> cSix;
+    private TableColumn<Entity, String> cSix;
 
     @FXML
     //street
-    private TableColumn<Reader, String> cSeven;
+    private TableColumn<Entity, String> cSeven;
 
     @FXML
     //build
-    private TableColumn<Reader, String> cEight;
+    private TableColumn<Entity, String> cEight;
 
     @FXML
     //apartament
-    private TableColumn<Reader, String> cNine;
+    private TableColumn<Entity, String> cNine;
 
     @FXML
     //birth Date
-    private TableColumn<Reader, String> cTen;
+    private TableColumn<Entity, String> cTen;
 
     @FXML
     //phoneNum
-    private TableColumn<Reader, String> cEleven;
+    private TableColumn<Entity, String> cEleven;
 
 
     @FXML
@@ -165,39 +165,54 @@ public class MainController
                 setCellValuesSettings("id","pib", "password","login","typeRights", "city","street",
                                         "build", "apartment","workplace", "birthDate", "phoneNum");
                 var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
-                TableView<Reader> readerTableView = new TableView<>();
-//                readerTableView.getColumns().addAll(cOne, cTwo, cThree,cFour,cFive,cSix,cSeven,cEight,cNine,cTen,cEleven,cTwelve);
-                readerTableView.setItems(listOfReaders);
+                mainTableView.setItems(listOfReaders);
                 break;
             case "Authorship":
                 setCellValuesSettings("id","ISBN", "","","", "","",
                         "", "","", "", "");
-                var listOfAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
-//                mainTableView.setItems(listOfAuthorships);
+                var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
+                mainTableView.setItems(listAuthorships);
                 break;
             case "Belongs":
                 setCellValuesSettings("isbn","idCatalog", "","","", "","",
                         "", "","", "", "");
+                var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
+                mainTableView.setItems(listBelongs);
                 break;
             case "Book":
                 setCellValuesSettings("ISBN","name", "publisher","pubCity","pubYear", "pageNum","price",
                         "", "","", "", "");
+                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
+                mainTableView.setItems(listBooks);
                 break;
             case "BookInstance":
-                setCellValuesSettings("id","shelf", "isb","","", "","",
+                setCellValuesSettings("id","shelf", "ISBN","","", "","",
                         "", "","", "", "");
+                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
+                mainTableView.setItems(listBooksInstances);
                 break;
             case "BookReader":
+//                private Integer idReader;
+//                private Integer idInstance;
+//                private LocalDate dateOut;
+//                private LocalDate dateExp;
+//                private LocalDate dateReturn;
                 setCellValuesSettings("idReader","idInstance", "dateOut","dateExp","dateReturn", "","",
                         "", "","", "", "");
+                var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
+                mainTableView.setItems(listBookReaders);
                 break;
             case "Catalog":
                 setCellValuesSettings("id","name", "","","", "","",
                         "", "","", "", "");
+                var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
+                mainTableView.setItems(listCatalogs);
                 break;
             case "Author":
                 setCellValuesSettings("id","name", "","","", "","",
                         "", "","", "", "");
+                var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
+                mainTableView.setItems(listAuthors);
 
                 break;
         }

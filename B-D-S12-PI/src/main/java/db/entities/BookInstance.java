@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class BookInstance {
+public class BookInstance implements Entity {
     private Integer id;
     private Integer shelf;
     private Integer ISBN;

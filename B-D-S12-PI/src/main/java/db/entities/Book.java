@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class Book {
+public class Book implements Entity{
     private Integer ISBN;
     private String name;
     private String publisher;

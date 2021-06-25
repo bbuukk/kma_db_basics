@@ -1,6 +1,9 @@
 package db.repos;
 
 import db.entities.BookInstance;
+import db.entities.Entity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -94,11 +97,11 @@ public class BookInstanceRepository {
     }
 
 
-    public List<BookInstance> getAllBookInstances() {
+    public ObservableList<Entity> getAllBookInstances() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.BookInstance")
         ) {
-            List<BookInstance> list = new ArrayList<>();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new BookInstance(res));
             }

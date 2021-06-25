@@ -3,7 +3,7 @@ package db.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Catalog {
+public class Catalog implements Entity{
     private Integer id;
     private String name;
 

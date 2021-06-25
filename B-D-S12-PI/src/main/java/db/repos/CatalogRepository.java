@@ -1,6 +1,9 @@
 package db.repos;
 
 import db.entities.Catalog;
+import db.entities.Entity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -109,11 +112,11 @@ public class CatalogRepository {
         }
     }
 
-    public List<Catalog> getAllCatalogs() {
+    public ObservableList<Entity> getAllCatalogs() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Catalog")
         ) {
-            List<Catalog> list = new ArrayList<>();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new Catalog(res));
             }

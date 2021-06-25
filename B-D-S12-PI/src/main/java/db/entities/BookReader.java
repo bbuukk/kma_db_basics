@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class BookReader {
+public class BookReader implements Entity {
     private Integer idReader;
     private Integer idInstance;
     private LocalDate dateOut;

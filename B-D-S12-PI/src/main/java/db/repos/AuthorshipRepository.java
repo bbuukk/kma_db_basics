@@ -1,6 +1,7 @@
 package db.repos;
 
 import db.entities.Authorship;
+import db.entities.Entity;
 import db.entities.Reader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -82,11 +83,11 @@ public class AuthorshipRepository {
         return delete(old) && insert(updated);
     }
 
-    public ObservableList<Authorship> getAllAuthorships() {
+    public ObservableList<Entity> getAllAuthorships() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Authorship")
         ) {
-            ObservableList<Authorship> list = FXCollections.observableArrayList();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new Authorship(res));
             }

@@ -1,5 +1,6 @@
 package db.repos;
 
+import db.entities.Entity;
 import db.entities.Reader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -135,13 +136,13 @@ public class ReaderRepository
         }
     }
 
-    public ObservableList<Reader> getAllReaders()
+    public ObservableList<Entity> getAllReaders()
     {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Reader")
         )
         {
-            ObservableList<Reader> list = FXCollections.observableArrayList();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next())
             {
                 list.add(new Reader(res));

@@ -1,6 +1,9 @@
 package db.repos;
 
 import db.entities.Author;
+import db.entities.Entity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -109,11 +112,11 @@ public class AuthorRepository {
         }
     }
 
-    public List<Author> getAllAuthors() {
+    public ObservableList<Entity> getAllAuthors() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Author")
         ) {
-            List<Author> list = new ArrayList<>();
+            ObservableList<Entity> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new Author(res));
             }

@@ -3,7 +3,7 @@ package db.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Author {
+public class Author implements Entity {
 
     private Integer id;
     private String name;

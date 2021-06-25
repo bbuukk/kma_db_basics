@@ -3,7 +3,7 @@ package db.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Belongs {
+public class Belongs implements Entity {
     private Integer isbn;
     private Integer idCatalog;
 
