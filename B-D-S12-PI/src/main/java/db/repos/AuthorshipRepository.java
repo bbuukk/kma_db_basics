@@ -1,6 +1,9 @@
 package db.repos;
 
 import db.entities.Authorship;
+import db.entities.Reader;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -79,11 +82,11 @@ public class AuthorshipRepository {
         return delete(old) && insert(updated);
     }
 
-    public List<Authorship> getAllAuthorships() {
+    public ObservableList<Authorship> getAllAuthorships() {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Authorship")
         ) {
-            List<Authorship> list = new ArrayList<>();
+            ObservableList<Authorship> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new Authorship(res));
             }
@@ -94,6 +97,4 @@ public class AuthorshipRepository {
             throw new RuntimeException("Can`t select anything", e);
         }
     }
-
-
 }

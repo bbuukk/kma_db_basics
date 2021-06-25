@@ -65,7 +65,7 @@
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
             </Button>
-            <ComboBox fx:id="chooseTableComboBox" layoutY="-3.0" prefHeight="31.0" prefWidth="251.0" promptText="Choose a table" style="-fx-background-color: #F4D03F;" />
+            <ComboBox fx:id="chooseTableComboBox" layoutY="-3.0" onAction="#selectTabel" prefHeight="31.0" prefWidth="251.0" promptText="Choose a table" style="-fx-background-color: #F4D03F;" />
             </children>
         </Pane>
         <Label layoutY="495.0" text="B-D-S12-PI 1.0">
@@ -73,10 +73,20 @@
                 <Font size="12.0" />
             </font>
         </Label>
-      <TableView fx:id="mainTableView" layoutX="48.0" layoutY="84.0" prefHeight="342.0" prefWidth="549.0">
+      <TableView fx:id="mainTableView" layoutX="48.0" layoutY="84.0" prefHeight="386.0" prefWidth="636.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="cOne" prefWidth="28.000003814697266" text="1" />
+          <TableColumn fx:id="cTwo" prefWidth="70.39999389648438" text="2" />
+            <TableColumn fx:id="cThree" prefWidth="19.20001220703125" text="3" />
+            <TableColumn fx:id="cFour" minWidth="1.5999755859375" prefWidth="60.79998779296875" text="4" />
+            <TableColumn fx:id="cFive" minWidth="0.0" prefWidth="50.40000915527344" text="5" />
+            <TableColumn fx:id="cSix" prefWidth="45.60003662109375" text="6" />
+            <TableColumn fx:id="cSeven" minWidth="0.0" prefWidth="29.60003662109375" text="7" />
+            <TableColumn fx:id="cEight" minWidth="0.0" prefWidth="44.0" text="8" />
+            <TableColumn fx:id="cNine" prefWidth="75.199951171875" text="9" />
+            <TableColumn fx:id="cTen" maxWidth="217.60003662109375" minWidth="-1.0" prefWidth="54.39996337890625" text="10" />
+            <TableColumn fx:id="cEleven" prefWidth="60.79998779296875" text="11" />
+            <TableColumn fx:id="cTwelve" prefWidth="71.99993896484375" text="12" />
         </columns>
       </TableView>
     </children>

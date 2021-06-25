@@ -1,9 +1,12 @@
 package db.repos;
 
 import db.entities.Reader;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ReaderRepository
@@ -132,13 +135,13 @@ public class ReaderRepository
         }
     }
 
-    public Iterable<Reader> getAllReaders()
+    public ObservableList<Reader> getAllReaders()
     {
         try (Statement st = connection.createStatement();
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Reader")
         )
         {
-            List<Reader> list = new ArrayList<>();
+            ObservableList<Reader> list = FXCollections.observableArrayList();
             while (res.next())
             {
                 list.add(new Reader(res));
@@ -151,6 +154,37 @@ public class ReaderRepository
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
+//    public Iterable<Reader> getAllProducts(){
+//        var initialQuery = "SELECT * FROM 'Products'";
+//
+//        try {
+//            var st = connection.prepareStatement(initialQuery);
+//            var result = st.executeQuery();
+//
+//            var list = new LinkedList<Product>();
+//
+//            while (result.next())
+//            {
+//                list.add(new Product(
+//                                result.getInt(1),
+//                                result.getString(2),
+//                                result.getString(3),
+//                                result.getString(4),
+//                                result.getInt(5),
+//                                result.getDouble(6)
+//                        )
+//                );
+//            }
+//
+//            return list;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw new ServerException("Error getting all products", e);
+//        }
+//    }
+
+
 
     public boolean update(Reader reader)
     {

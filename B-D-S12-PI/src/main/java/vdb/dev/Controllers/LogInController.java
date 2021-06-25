@@ -58,7 +58,7 @@ public class LogInController
 
     }
 
-    public void logIn(MouseEvent event) throws IOException
+    public void logIn(javafx.scene.input.MouseEvent event) throws IOException
     {
         String login = logInTextField.getText();
         String password = passwordTextField.getText();

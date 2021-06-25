@@ -3,7 +3,7 @@ package db.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Authorship {
+public class Authorship implements Entity {
     private Integer id;
     private Integer ISBN;
 

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class Reader {
+public class Reader implements Entity{
     private Integer id;
     private String pib;
     private String password;
