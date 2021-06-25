@@ -6,12 +6,12 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import db.entities.Authorship;
-import db.entities.Entity;
-import db.entities.Reader;
+import com.sun.javafx.scene.control.IntegerField;
+import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +23,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.DateStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateStringConverter;
 import vdb.dev.App;
 import vdb.dev.Controllers.addMenu.AddMenuController;
 
@@ -72,246 +75,116 @@ public class MainController
     private TableView<Entity> mainTableView;
 
     @FXML
-    //id
-    private TableColumn<Entity, String> cOne;
-
-    @FXML
-    //id
-    private TableColumn<Entity, Integer> cOneInt;
-
-    @FXML
-    //pib
-    private TableColumn<Entity, String > cTwo;
-
-    @FXML
-    //pib
-    private TableColumn<Entity, Integer> cTwoInt;
-
-    @FXML
-    //password
-    private TableColumn<Entity, String> cThree;
-
-    @FXML
-    //password
-    private TableColumn<Entity, Integer> cThreeInt;
-
-    @FXML
-    //login
-    private TableColumn<Entity, String> cFour;
-
-    @FXML
-    //password
-    private TableColumn<Entity, Integer> cFourInt;
-
-    @FXML
-    //typeRights
-    private TableColumn<Entity, String> cFive;
-
-    @FXML
-    //city
-    private TableColumn<Entity, String> cSix;
-
-    @FXML
-    //street
-    private TableColumn<Entity, String> cSeven;
-
-    @FXML
-    //build
-    private TableColumn<Entity, String> cEight;
-
-    @FXML
-    //apartament
-    private TableColumn<Entity, String> cNine;
-
-    @FXML
-    //birth Date
-    private TableColumn<Entity, String> cTen;
-
-    @FXML
-    //phoneNum
-    private TableColumn<Entity, String> cEleven;
-
-
-    @FXML
-    private TableColumn<Entity, String> cTwelve;
-
-//    c1 = new TableColumn<Reader, Integer>();c2 = new TableColumn<Reader, String>();c3 = new TableColumn<Reader, String>();
-//    с4 = new TableColumn<Reader, Integer>();с5 = new TableColumn<Reader, String>();с6 = new TableColumn<Reader, String>();
-//    с7 = new TableColumn<Reader, String>();с8 = new TableColumn<Reader, String>();с9 = new TableColumn<Reader, String>();
-//    с10 = new TableColumn<Reader, String>();с11 = new TableColumn<Reader, Date>(); c2 =
-
-
-    @FXML
     void initialize()
     {
-        tableNames = FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book",
-                                                   "BookInstance", "BookReader","Catalog", "Reader");
+        tableNames = FXCollections.observableArrayList("Author", "Authorship", "Belongs", "Book",
+                "BookInstance", "BookReader", "Catalog", "Reader");
         chooseTableComboBox.setItems(tableNames);
-//                editableColumns();
 
     }
-
-    private void editableColumns()
-    {
-
-        cTwo.setCellFactory(TextFieldTableCell.forTableColumn());
-        cThree.setCellFactory(TextFieldTableCell.forTableColumn());
-        cFour.setCellFactory(TextFieldTableCell.forTableColumn());
-        cFive.setCellFactory(TextFieldTableCell.forTableColumn());
-        cSix.setCellFactory(TextFieldTableCell.forTableColumn());
-        cSeven.setCellFactory(TextFieldTableCell.forTableColumn());
-        cEight.setCellFactory(TextFieldTableCell.forTableColumn());;
-        cNine.setCellFactory(TextFieldTableCell.forTableColumn());
-        cTen.setCellFactory(TextFieldTableCell.forTableColumn());
-        cEleven.setCellFactory(TextFieldTableCell.forTableColumn());
-        cTwelve.setCellFactory(TextFieldTableCell.forTableColumn());
-    }
-
-
-
 
     @FXML
     public void selectTabel(javafx.event.ActionEvent event) throws SQLException
     {
         String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
         displayReaderTable(nameOfSelectedTable);
-
-
     }
 
-    private void setCellValuesSettings(String cc1, String cc2,String cc3,String cc4,String cc5,
-                                       String cc6,String cc7,String cc8,String cc9,String cc10,
-                                       String cc11, String cc12){
+    private void createNewTableColumns(String[] columnsToCreate, String patterInt)
+    {
+        mainTableView.getColumns().clear();
+        TableColumn column = null;
+        char dataType;
 
-        if(!isDigit(cc1))
+        for (int i = 0; i < columnsToCreate.length; i++)
         {
-            cOne.setVisible(true);
-            cOneInt.setVisible(false);
-            cOne.setCellValueFactory(new PropertyValueFactory<>(cc1));
-            cOne.setText(cc1);
+            dataType = patterInt.charAt(i);
+            switch (dataType)
+            {
+                case '0':
+                    column = new TableColumn<Entity, String>();
+                    column.setCellFactory(TextFieldTableCell.forTableColumn());
+                    break;
+                case '1':
+                    column = new TableColumn<Entity, Integer>();
+                    column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+                    break;
+                case '2':
+                    column = new TableColumn<Entity, Date>();
+                    column.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
+                    break;
+            }
+            column.setText(columnsToCreate[i]);
+            column.setCellValueFactory(new PropertyValueFactory<>(columnsToCreate[i]));
+            mainTableView.getColumns().add(column);
         }
-        else
-        {
-            cOne.setVisible(false);
-            cOneInt.setVisible(true);
-            cOneInt.setCellValueFactory(new PropertyValueFactory<>(cc1));
-            cOneInt.setText(cc1);
-        }
-        if(!isDigit(cc2))
-        {
-            cTwo.setVisible(true);
-            cTwoInt.setVisible(false);
-            cTwo.setText(cc2);
-            cTwo.setCellValueFactory(new PropertyValueFactory<>(cc2));
-        }
-        else
-        {
-            cTwo.setVisible(false);
-            cTwoInt.setVisible(true);
-            cTwoInt.setText(cc2);
-            cTwoInt.setCellValueFactory(new PropertyValueFactory<>(cc2));
-        }
-        if(!isDigit(cc3))
-        {
-            cThree.setVisible(true);
-            cThreeInt.setVisible(false);
-            cThree.setText(cc3);
-            cThree.setCellValueFactory(new PropertyValueFactory<>(cc3));
-        }
-        else
-        {
-            cThree.setVisible(false);
-            cThreeInt.setVisible(true);
-            cThreeInt.setText(cc3);
-            cThreeInt.setCellValueFactory(new PropertyValueFactory<>(cc3));
-        }
-
-        if(!isDigit(cc4))
-        {
-            cFour.setVisible(true);
-            cFourInt.setVisible(false);
-            cFour.setText(cc4);
-            cFour.setCellValueFactory(new PropertyValueFactory<>(cc4));
-        }
-        else{
-            cFour.setVisible(false);
-            cFourInt.setVisible(true);
-            cFourInt.setText(cc4);
-            cFourInt.setCellValueFactory(new PropertyValueFactory<>(cc4));
-        }
-
-        cFive.setCellValueFactory(new PropertyValueFactory<>(cc5));
-        cSix.setCellValueFactory(new PropertyValueFactory<>(cc6));
-        cSeven.setCellValueFactory(new PropertyValueFactory<>(cc7));
-        cEight.setCellValueFactory(new PropertyValueFactory<>(cc8));
-        cNine.setCellValueFactory(new PropertyValueFactory<>(cc9));
-        cTen.setCellValueFactory(new PropertyValueFactory<>(cc10));
-        cEleven.setCellValueFactory(new PropertyValueFactory<>(cc11));
-        cTwelve.setCellValueFactory(new PropertyValueFactory<>(cc12));
-
-        cFive.setText(cc5);cSix.setText(cc6);
-        cSeven.setText(cc7);cEight.setText(cc8);cNine.setText(cc9);
-        cTen.setText(cc10);cEleven.setText(cc11);cTwelve.setText(cc12);
-
     }
-
 
     private void displayReaderTable(String name) throws SQLException
     {
-        switch (name){
+        switch (name)
+        {
             case "Reader":
-//                cFive.setVisible(true);
-                setCellValuesSettings("id","pib", "password","login","typeRights", "city","street",
-                                        "build", "apartment","workplace", "birthDate", "phoneNum");
+                String[] cellNamesReader = {"id", "pib", "password", "login", "typeRights", "city", "street",
+                        "build", "apartment", "workplace", "birthDate", "phoneNum"};
+                createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN);
+
                 var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
                 mainTableView.setItems(listOfReaders);
+
                 break;
             case "Authorship":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","ISBN", "","","", "","",
-                        "", "","", "", "");
+                String[] cellNamesAuthorship = {"id", "ISBN"};
+                createNewTableColumns(cellNamesAuthorship, Authorship.TYPE_PARAMS_PATTERN);
+
                 var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
                 mainTableView.setItems(listAuthorships);
+
                 break;
             case "Belongs":
-//                cFive.setVisible(false);
-                setCellValuesSettings("isbn","idCatalog", "","","", "","",
-                        "", "","", "", "");
+                String[] cellNamesBelongs = {"isbn", "idCatalog"};
+                createNewTableColumns(cellNamesBelongs, Belongs.TYPE_PARAMS_PATTERN);
+
                 var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
                 mainTableView.setItems(listBelongs);
+
                 break;
             case "Book":
-//                cFive.setVisible(false);
-                setCellValuesSettings("ISBN","name", "publisher","pubCity","pubYear", "pageNum","price",
-                        "", "","", "", "");
+                String[] cellNamesBook = {"ISBN","name", "publisher", "pubCity", "pubYear", "pageNum", "price"};
+                createNewTableColumns(cellNamesBook, Book.TYPE_PARAMS_PATTERN);
+
                 var listBooks = App.sqlOps.getBookRepository().getAllBooks();
                 mainTableView.setItems(listBooks);
+
                 break;
             case "BookInstance":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","shelf", "ISBN","","", "","",
-                        "", "","", "", "");
+                String[] cellNamesBookInstance = {"id", "shelf", "ISBN"};
+                createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN);
+
                 var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
                 mainTableView.setItems(listBooksInstances);
+
                 break;
             case "BookReader":
-//                cFive.setVisible(false);
-                setCellValuesSettings("idReader","idInstance", "dateOut","dateExp","dateReturn", "","",
-                        "", "","", "", "");
+                String[] cellNamesBookReader = {"idReader", "idInstance", "dateOut", "dateExp", "dateReturn"};
+                createNewTableColumns(cellNamesBookReader, BookReader.TYPE_PARAMS_PATTERN);
+
                 var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
                 mainTableView.setItems(listBookReaders);
+
                 break;
             case "Catalog":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","name", "","","", "","",
-                        "", "","", "", "");
+                String[] cellNamesCatalog = {"id", "name"};
+                createNewTableColumns(cellNamesCatalog, Catalog.TYPE_PARAMS_PATTERN);
+
                 var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
                 mainTableView.setItems(listCatalogs);
+
                 break;
             case "Author":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","name", "","","", "","",
-                        "", "","", "", "");
+                String[] cellNamesAuthor = {"id", "name"};
+                createNewTableColumns(cellNamesAuthor, Author.TYPE_PARAMS_PATTERN);
+
                 var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
                 mainTableView.setItems(listAuthors);
 
@@ -359,7 +232,8 @@ public class MainController
     }
 
     @FXML
-    public void exit(javafx.scene.input.MouseEvent event){
+    public void exit(javafx.scene.input.MouseEvent event)
+    {
         Platform.exit();
     }
 
@@ -373,11 +247,14 @@ public class MainController
         MainController.currentAuthorizedReader = currentAuthorizedReader;
     }
 
-    private static boolean isDigit(String s) throws NumberFormatException {
-        try {
+    private static boolean isDigit(String s) throws NumberFormatException
+    {
+        try
+        {
             Integer.parseInt(s);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e)
+        {
             return false;
         }
     }

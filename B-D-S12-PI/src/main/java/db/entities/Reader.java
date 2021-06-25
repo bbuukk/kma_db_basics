@@ -18,6 +18,8 @@ public class Reader implements Entity{
     private LocalDate birthDate;
     private String phoneNum;
 
+    public static final String TYPE_PARAMS_PATTERN  = "100010000020";
+
     public Reader(Integer id, String pib, String password, String login, Integer typeRights, String city, String street, String build, String apartment, String workplace, LocalDate birthDate, String phoneNum) {
         this.id = id;
         this.pib = pib;

@@ -13,6 +13,8 @@ public class Book implements Entity{
     private Integer pageNum;
     private String price;
 
+    public static final String TYPE_PARAMS_PATTERN  = "1000210";
+
     public Book(Integer ISBN, String name, String publisher, String pubCity, LocalDate pubYear, Integer pageNum, String price) {
         this.ISBN = ISBN;
         this.name = name;

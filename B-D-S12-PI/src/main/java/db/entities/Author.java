@@ -8,6 +8,8 @@ public class Author implements Entity {
     private Integer id;
     private String name;
 
+    public static final String TYPE_PARAMS_PATTERN  = "10";
+
     public Author(Integer id, String name) {
         this.id = id;
         this.name = name;

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 public class Authorship implements Entity {
     private Integer id;
     private Integer ISBN;
+    public static final String TYPE_PARAMS_PATTERN  = "11";
 
     public Authorship(Integer id, Integer ISBN) {
         this.id = id;

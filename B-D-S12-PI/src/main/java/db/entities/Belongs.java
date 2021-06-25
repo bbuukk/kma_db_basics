@@ -6,6 +6,7 @@ import java.sql.SQLException;
 public class Belongs implements Entity {
     private Integer isbn;
     private Integer idCatalog;
+    public static final String TYPE_PARAMS_PATTERN  = "11";
 
     public Belongs(Integer isbn, Integer idCatalog) {
         this.isbn = isbn;

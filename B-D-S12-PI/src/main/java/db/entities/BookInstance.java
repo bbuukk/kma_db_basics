@@ -9,6 +9,8 @@ public class BookInstance implements Entity {
     private Integer shelf;
     private Integer ISBN;
 
+    public static final String TYPE_PARAMS_PATTERN  = "111";
+
     public BookInstance(Integer id, Integer shelf, Integer ISBN) {
         this.id = id;
         this.shelf = shelf;
