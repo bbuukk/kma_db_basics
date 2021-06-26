@@ -40,9 +40,11 @@ public class AddNewInstanceBookController {
     }
 
     public void createNewBookInstance(javafx.scene.input.MouseEvent event) {
-        if(!bookTitleField.getText().equals("") &&
+        if(
+                !bookTitleField.getText().equals("") &&
                 !ShelfField.getText().equals("") &&
-        !amountField.getText().equals("")){
+                !amountField.getText().equals("")
+        ){
             BookInstance bookInstance = new BookInstance(
                     Integer.parseInt(bookTitleField.getText()),
                     Integer.parseInt(ShelfField.getText())
