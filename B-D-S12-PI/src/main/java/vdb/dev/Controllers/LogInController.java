@@ -76,8 +76,8 @@ public class LogInController
                 {
                    if (PasswordAuthentication.authenticate(password.toCharArray(), reader.getPassword())){
                        authorizedReader = reader;
-                       App.setRoot(MainController.PATH);
                        MainController.setCurrentAuthorizedReader(authorizedReader);
+                       App.setRoot(MainController.PATH);
                        break;
                    }
                 }

@@ -42,6 +42,24 @@ public class BookReaderRepository {
         }
     }
 
+    public ObservableList<Entity> getBookReadersByReader(Integer idReader) {
+        if (idReader == null ) throw new IllegalArgumentException();
+        String sql = "SELECT * FROM mydb.BookReader WHERE id_r = " + idReader;
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql)
+        ) {
+            ObservableList<Entity> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new BookReader(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+//            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
     public boolean delete(BookReader bookReader) {
         if (bookReader.getIdReader() == null || bookReader.getIdInstance() == null)
             throw new IllegalArgumentException();

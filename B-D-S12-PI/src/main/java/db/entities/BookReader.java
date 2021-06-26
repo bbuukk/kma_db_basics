@@ -11,7 +11,8 @@ public class BookReader implements Entity {
     private LocalDate dateExp;
     private LocalDate dateReturn;
 
-    public static final String TYPE_PARAMS_PATTERN  = "11222";
+    public static final String TYPE_PARAMS_PATTERN = "11222";
+
 
     public BookReader(Integer idReader, Integer idInstance, LocalDate dateOut, LocalDate dateExp, LocalDate dateReturn) {
         this.idReader = idReader;

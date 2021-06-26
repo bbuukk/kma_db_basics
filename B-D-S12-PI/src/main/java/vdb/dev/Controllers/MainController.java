@@ -3,19 +3,13 @@ package vdb.dev.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import com.sun.javafx.scene.control.IntegerField;
 import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,7 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.DateStringConverter;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import vdb.dev.App;
@@ -32,11 +27,13 @@ import vdb.dev.Controllers.addMenu.AddMenuController;
 
 public class MainController
 {
-    ObservableList<String> tableNames;
+
     private static db.entities.Reader currentAuthorizedReader;
     //TODO IF ID OF CREATED ENTITY == NUll, JUST INSERT SUCH ENTITY
     ObservableList<Entity> listEntitiesToChange;
-    ObservableList<Entity>listEntitiesToDelete;
+    ObservableList<Entity> listEntitiesToDelete;
+
+    private static boolean isAdmin;
 
     public static final String PATH = "Fxmls/Main/Main";
 
@@ -79,11 +76,8 @@ public class MainController
     @FXML
     void initialize()
     {
-        tableNames = FXCollections.observableArrayList("Author", "Authorship", "Belongs", "Book",
-                "BookInstance", "BookReader", "Catalog", "Reader");
-        chooseTableComboBox.setItems(tableNames);
-        listEntitiesToChange = FXCollections.observableArrayList();
-        listEntitiesToDelete = FXCollections.observableArrayList();
+        isAdmin = isAdminRightsSet();
+        setRightsConfigurations(isAdmin);
     }
 
     @FXML
@@ -95,9 +89,9 @@ public class MainController
 
     private void createNewTableColumns(String[] columnsToCreate, String patterInt, int amoutColumnsEditBlock)
     {
-        mainTableView.getColumns().clear();
-        listEntitiesToChange.clear();
         TableColumn column = null;
+        mainTableView.getColumns().clear();
+
         char dataTypeCurrent;
         String COLUMN_NAME;
 
@@ -105,162 +99,23 @@ public class MainController
         {
             COLUMN_NAME = columnsToCreate[i];
             dataTypeCurrent = patterInt.charAt(i);
-            switch (dataTypeCurrent)
-            {
-                case '0':
-                    column = new TableColumn<Entity, String>();
-                    column.setCellFactory(TextFieldTableCell.forTableColumn());
-                    break;
-                case '1':
-                    column = new TableColumn<Entity, Integer>();
-                    column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-                    break;
-                case '2':
-                    column = new TableColumn<Entity, Date>();
-                    column.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
-                    break;
-            }
+
+            column = getValidColumn(dataTypeCurrent);
             column.setText(COLUMN_NAME);
             column.setCellValueFactory(new PropertyValueFactory<>(COLUMN_NAME));
 
-            if (amoutColumnsEditBlock != 0){
-                column.setEditable(false);
-                --amoutColumnsEditBlock;
-            }
-            String fCOLUMN_NAME = COLUMN_NAME;
-            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>()
+
+            if (isAdmin)
             {
-                @Override
-                public void handle(TableColumn.CellEditEvent event)
+                setEditableColumn(column);
+
+                if (amoutColumnsEditBlock != 0)
                 {
-                    String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
-
-                    switch (nameOfCurrentSelectedEntity)
-                    {
-                        case "Reader":
-                            Reader readerToChange = (Reader) event.getRowValue();
-//
-                            listEntitiesToChange.add(readerToChange.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "Authorship":
-                            Authorship authorship = (Authorship) event.getRowValue();
-//
-                            listEntitiesToDelete.add(authorship);
-                            listEntitiesToChange.add(authorship.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "Belongs":
-                            Belongs belongs = (Belongs) event.getRowValue();
-//
-                            listEntitiesToDelete.add(belongs);
-                            listEntitiesToChange.add(belongs.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "Book":
-                            Book book = (Book) event.getRowValue();
-//                            App.sqlOps.getBookRepository().update(book);
-                            listEntitiesToChange.add(book.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "BookInstance":
-                            BookInstance bookInstance = (BookInstance) event.getRowValue();
-//                            App.sqlOps.getBookInstanceRepository().update(bookInstance);
-                            listEntitiesToChange.add(bookInstance.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "BookReader":
-                            BookReader bookReader = (BookReader) event.getRowValue();
-//                            App.sqlOps.getBookReaderRepository().update(bookReader);
-                            listEntitiesToDelete.add(bookReader);
-                            listEntitiesToChange.add(bookReader.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "Catalog":
-                            Catalog catalog = (Catalog) event.getRowValue();
-//                            App.sqlOps.getBookReaderRepository().update(catalog);
-                            listEntitiesToChange.add(catalog.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-                        case "Author":
-                            Author author = (Author) event.getRowValue();
-//                            App.sqlOps.getBookReaderRepository().update(catalog);
-                            listEntitiesToChange.add(author.change(fCOLUMN_NAME, event.getNewValue()));
-                            break;
-
-                        default:
-
-                    }
+                    column.setEditable(false);
+                    --amoutColumnsEditBlock;
                 }
-            });
-
+            }
             mainTableView.getColumns().add(column);
-        }
-    }
-
-
-    private void displayReaderTable(String name) throws SQLException
-    {
-        switch (name)
-        {
-            case "Reader":
-                String[] cellNamesReader = {"id", "pib", "password", "login", "typeRights", "city", "street",
-                        "build", "apartment", "workplace", "birthDate", "phoneNum"};
-                createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN, 1);
-
-                var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
-                mainTableView.setItems(listOfReaders);
-
-                break;
-            case "Authorship":
-                String[] cellNamesAuthorship = {"id", "ISBN"};
-                createNewTableColumns(cellNamesAuthorship, Authorship.TYPE_PARAMS_PATTERN,0);
-
-                var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
-                mainTableView.setItems(listAuthorships);
-
-                break;
-            case "Belongs":
-                String[] cellNamesBelongs = {"isbn", "idCatalog"};
-                createNewTableColumns(cellNamesBelongs, Belongs.TYPE_PARAMS_PATTERN,0);
-
-                var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
-                mainTableView.setItems(listBelongs);
-
-                break;
-            case "Book":
-                String[] cellNamesBook = {"ISBN", "name", "publisher", "pubCity", "pubYear", "pageNum", "price"};
-                createNewTableColumns(cellNamesBook, Book.TYPE_PARAMS_PATTERN,1);
-
-                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
-                mainTableView.setItems(listBooks);
-
-                break;
-            case "BookInstance":
-                String[] cellNamesBookInstance = {"id", "shelf", "ISBN"};
-                createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
-
-                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
-                mainTableView.setItems(listBooksInstances);
-
-                break;
-            case "BookReader":
-                String[] cellNamesBookReader = {"idReader", "idInstance", "dateOut", "dateExp", "dateReturn"};
-                createNewTableColumns(cellNamesBookReader, BookReader.TYPE_PARAMS_PATTERN,2);
-
-                var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
-                mainTableView.setItems(listBookReaders);
-
-                break;
-            case "Catalog":
-                String[] cellNamesCatalog = {"id", "name"};
-                createNewTableColumns(cellNamesCatalog, Catalog.TYPE_PARAMS_PATTERN,1);
-
-                var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
-                mainTableView.setItems(listCatalogs);
-
-                break;
-            case "Author":
-                String[] cellNamesAuthor = {"id", "name"};
-                createNewTableColumns(cellNamesAuthor, Author.TYPE_PARAMS_PATTERN,1);
-
-                var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
-                mainTableView.setItems(listAuthors);
-
-                break;
         }
     }
 
@@ -272,15 +127,20 @@ public class MainController
         switch (nameOfCurrentSelectedEntity)
         {
             case "Reader":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getReaderRepository().delete((Reader) entity);
+                }
                 for (Entity entity : listEntitiesToChange)
                 {
-                    Reader reader = (Reader) entity;
-                    App.sqlOps.getReaderRepository().update(reader);
+                    App.sqlOps.getReaderRepository().update((Reader) entity);
                 }
-                break;
 
+                break;
             case "Authorship":
-                for (Entity entity :listEntitiesToDelete)
+
+                for (Entity entity : listEntitiesToDelete)
                 {
                     App.sqlOps.getAuthorshipRepository().delete((Authorship) entity);
                 }
@@ -288,10 +148,11 @@ public class MainController
                 {
                     App.sqlOps.getAuthorshipRepository().insert((Authorship) entity);
                 }
-                break;
 
+                break;
             case "Belongs":
-                for (Entity entity :listEntitiesToDelete)
+
+                for (Entity entity : listEntitiesToDelete)
                 {
                     App.sqlOps.getBelongsRepository().delete((Belongs) entity);
                 }
@@ -299,50 +160,67 @@ public class MainController
                 {
                     App.sqlOps.getBelongsRepository().insert((Belongs) entity);
                 }
-                break;
 
+                break;
             case "Book":
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBookRepository().delete((Book) entity);
+                }
                 for (Entity entity : listEntitiesToChange)
                 {
-                    Book book = (Book) entity;
-                    App.sqlOps.getBookRepository().update(book);
+                    App.sqlOps.getBookRepository().update((Book) entity);
                 }
-                break;
 
+                break;
             case "BookInstance":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBookInstanceRepository().delete((BookInstance) entity);
+                }
                 for (Entity entity : listEntitiesToChange)
                 {
-                    BookInstance bookInstance = (BookInstance) entity;
-                    App.sqlOps.getBookInstanceRepository().update(bookInstance);
+                    App.sqlOps.getBookInstanceRepository().update((BookInstance) entity);
                 }
-                break;
 
+                break;
             case "BookReader":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBookReaderRepository().delete((BookReader) entity);
+                }
                 for (Entity entity : listEntitiesToChange)
                 {
-                    BookReader bookReader = (BookReader) entity;
-                    App.sqlOps.getBookReaderRepository().update(bookReader);
+                    App.sqlOps.getBookReaderRepository().update((BookReader) entity);
                 }
-                break;
 
+                break;
             case "Catalog":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getCatalogRepository().delete((Catalog) entity);
+                }
                 for (Entity entity : listEntitiesToChange)
                 {
-                    Catalog catalog = (Catalog) entity;
-                    App.sqlOps.getCatalogRepository().update(catalog);
+                    App.sqlOps.getCatalogRepository().update((Catalog) entity);
                 }
-                break;
 
+                break;
             case "Author":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getAuthorRepository().delete((Author) entity);
+                }
                 for (Entity entity : listEntitiesToChange)
                 {
-                    Author author = (Author) entity;
-                    App.sqlOps.getAuthorRepository().update(author);
+                    App.sqlOps.getAuthorRepository().update((Author) entity);
                 }
+
                 break;
-
-            default:
-
         }
     }
 
@@ -361,11 +239,6 @@ public class MainController
     }
 
     @FXML
-    public void showMenu(javafx.scene.input.MouseEvent event) throws IOException
-    {
-    }
-
-    @FXML
     public void defaultQueriesMenu(javafx.scene.input.MouseEvent event) throws IOException
     {
 
@@ -374,6 +247,7 @@ public class MainController
     @FXML
     public void logOut(javafx.scene.input.MouseEvent event) throws IOException
     {
+//        App.scene.removeEventHandler(EventHandler, this);
         MainController.currentAuthorizedReader = null;
         App.setRoot(LogInController.PATH);
     }
@@ -393,5 +267,237 @@ public class MainController
     {
         MainController.currentAuthorizedReader = currentAuthorizedReader;
     }
+
+
+    private boolean isAdminRightsSet()
+    {
+        if (currentAuthorizedReader.getTypeRights() == 0)
+            return false;
+        else
+            return true;
+    }
+
+    private void setRightsConfigurations(boolean admin)
+    {
+        if (admin)
+        {
+            var tableNames = FXCollections.observableArrayList(
+                    "Author", "Authorship", "Belongs", "Book",
+                    "BookInstance", "BookReader", "Catalog", "Reader");
+
+            chooseTableComboBox.setItems(tableNames);
+
+            listEntitiesToChange = FXCollections.observableArrayList();
+            listEntitiesToDelete = FXCollections.observableArrayList();
+
+            App.scene.setOnKeyPressed(new EventHandler<KeyEvent>()
+            {
+                @Override
+                public void handle(KeyEvent keyEvent)
+                {
+                    try
+                    {
+                        if(keyEvent.getCode() == KeyCode.DELETE)
+                        {
+                            var allData = mainTableView.getItems();
+                            var selectedData = mainTableView.getSelectionModel().getSelectedItems();
+                            listEntitiesToDelete.addAll(selectedData);
+
+                            selectedData.forEach(allData::remove);
+                        }
+                    }
+                    catch (Exception e)
+                    { }
+                }
+            });
+
+        } else
+        {
+            var tableNames = FXCollections.observableArrayList(
+                    "Author", "Authorship", "Belongs", "Book",
+                    "BookInstance", "BookReader", "Catalog");
+
+            chooseTableComboBox.setItems(tableNames);
+
+        }
+
+    }
+
+    //returns column with appropriate for us data type and makes it editable
+    private TableColumn getValidColumn(char dataTypeCurrent)
+    {
+        TableColumn column = null;
+        switch (dataTypeCurrent)
+        {
+            case '0':
+                column = new TableColumn<Entity, String>();
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+                return column;
+            case '1':
+                column = new TableColumn<Entity, Integer>();
+                column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+                return column;
+            case '2':
+                column = new TableColumn<Entity, Date>();
+                column.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
+                return column;
+            default:
+                return null;
+        }
+    }
+
+    private void setEditableColumn(TableColumn userColumn)
+    {
+
+        listEntitiesToChange.clear();
+        listEntitiesToDelete.clear();
+
+        String fCOLUMN_NAME = userColumn.getText();
+
+        userColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>()
+        {
+            @Override
+            public void handle(TableColumn.CellEditEvent event)
+            {
+                String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+
+                switch (nameOfCurrentSelectedEntity)
+                {
+                    case "Reader":
+                        Reader readerToChange = (Reader) event.getRowValue();
+                        listEntitiesToChange.add(readerToChange.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Authorship":
+                        Authorship authorship = (Authorship) event.getRowValue();
+                        listEntitiesToDelete.add(authorship);
+                        listEntitiesToChange.add(authorship.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Belongs":
+                        Belongs belongs = (Belongs) event.getRowValue();
+                        listEntitiesToDelete.add(belongs);
+                        listEntitiesToChange.add(belongs.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Book":
+                        Book book = (Book) event.getRowValue();
+                        listEntitiesToChange.add(book.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "BookInstance":
+                        BookInstance bookInstance = (BookInstance) event.getRowValue();
+                        listEntitiesToChange.add(bookInstance.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "BookReader":
+                        BookReader bookReader = (BookReader) event.getRowValue();
+                        listEntitiesToDelete.add(bookReader);
+                        listEntitiesToChange.add(bookReader.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Catalog":
+                        Catalog catalog = (Catalog) event.getRowValue();
+                        listEntitiesToChange.add(catalog.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Author":
+                        Author author = (Author) event.getRowValue();
+                        listEntitiesToChange.add(author.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+
+                    default:
+
+                }
+            }
+        });
+    }
+
+    private void displayReaderTable(String name) throws SQLException
+    {
+        switch (name)
+        {
+            case "Reader":
+
+                String[] cellNamesReader = {"id", "pib", "password", "login",
+                        "typeRights", "city", "street", "build",
+                        "apartment", "workplace", "birthDate", "phoneNum"};
+
+                createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN, 1);
+
+                var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
+                mainTableView.setItems(listOfReaders);
+
+                break;
+            case "Authorship":
+
+                String[] cellNamesAuthorship = {"id", "ISBN"};
+
+                createNewTableColumns(cellNamesAuthorship, Authorship.TYPE_PARAMS_PATTERN, 0);
+
+                var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
+                mainTableView.setItems(listAuthorships);
+
+                break;
+            case "Belongs":
+
+                String[] cellNamesBelongs = {"isbn", "idCatalog"};
+
+                createNewTableColumns(cellNamesBelongs, Belongs.TYPE_PARAMS_PATTERN, 0);
+
+                var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
+                mainTableView.setItems(listBelongs);
+
+                break;
+            case "Book":
+
+                String[] cellNamesBook = {"ISBN", "name", "publisher", "pubCity", "pubYear", "pageNum", "price"};
+
+                createNewTableColumns(cellNamesBook, Book.TYPE_PARAMS_PATTERN, 1);
+
+                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
+                mainTableView.setItems(listBooks);
+
+                break;
+            case "BookInstance":
+
+                String[] cellNamesBookInstance = {"id", "shelf", "ISBN"};
+
+                createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
+
+                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
+                mainTableView.setItems(listBooksInstances);
+
+                break;
+            case "BookReader":
+
+                String[] cellNamesBookReader = {"idReader", "idInstance", "dateOut",
+                        "dateExp", "dateReturn"};
+
+                createNewTableColumns(cellNamesBookReader, BookReader.TYPE_PARAMS_PATTERN, 2);
+
+                var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
+                mainTableView.setItems(listBookReaders);
+
+                if (!isAdmin)
+                    mainTableView.getColumns().get(0).setVisible(false);
+
+                break;
+            case "Catalog":
+
+                String[] cellNamesCatalog = {"id", "name"};
+
+                createNewTableColumns(cellNamesCatalog, Catalog.TYPE_PARAMS_PATTERN, 1);
+
+                var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
+                mainTableView.setItems(listCatalogs);
+
+                break;
+            case "Author":
+
+                String[] cellNamesAuthor = {"id", "name"};
+
+                createNewTableColumns(cellNamesAuthor, Author.TYPE_PARAMS_PATTERN, 1);
+
+                var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
+                mainTableView.setItems(listAuthors);
+
+                break;
+        }
+    }
+
 }
 
