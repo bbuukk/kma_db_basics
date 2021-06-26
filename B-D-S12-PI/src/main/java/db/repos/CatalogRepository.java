@@ -95,7 +95,7 @@ public class CatalogRepository {
     }
 
     public boolean insert(Catalog catalog) {
-        if (catalog.getId() == null) throw new IllegalArgumentException();
+        //if (catalog.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO mydb.Catalog(name_c)" +
                         "values (?)")) {

@@ -21,7 +21,7 @@
                         <Font name="Lucida Sans Italic" size="24.0" />
                     </font>
                 </Label>
-            <Button fx:id="createCatalog" layoutX="322.0" layoutY="109.0" prefHeight="19.0" prefWidth="196.0" style="-fx-background-color: #5DADE2;" text="Create catalog">
+            <Button fx:id="createCatalog" layoutX="322.0" layoutY="109.0" onMouseClicked="#createNewCatalog" prefHeight="19.0" prefWidth="196.0" style="-fx-background-color: #5DADE2;" text="Create catalog">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>

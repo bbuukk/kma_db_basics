@@ -1,16 +1,23 @@
 package vdb.dev.Controllers.addMenu;
 
+
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import db.SqlOps;
+import db.entities.Catalog;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 public class AddCatalogController {
 
     public static final String PATH = "Fxmls/Main/AddCatalog";
 
+    SqlOps sqlOps;
+    Catalog catalog;
     @FXML
     private ResourceBundle resources;
 
@@ -26,13 +33,15 @@ public class AddCatalogController {
     @FXML
     void initialize() {
 
+        sqlOps = new SqlOps();
+        catalog = new Catalog();
     }
 
-    //todo create method for creating new catalog
 
-    public void createNewCatalog(DialogEvent event){
-        String newCatalogName = catalogNameField.getText();
-
+    public void createNewCatalog(MouseEvent event){
+        if(!catalogNameField.equals(""))
+            catalog = new Catalog(catalogNameField.getText());
+        sqlOps.getCatalogRepository().insert(catalog);
 
     }
 
