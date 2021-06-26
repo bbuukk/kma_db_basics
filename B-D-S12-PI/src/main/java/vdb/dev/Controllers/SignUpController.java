@@ -121,7 +121,7 @@ public class SignUpController
                         city, street, build, apartament, dateOfBirth);
             }
         }
-        App.setRoot(MainController.PATH);
+        App.setRoot(LogInController.PATH);
     }
 }
 

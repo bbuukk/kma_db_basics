@@ -293,7 +293,8 @@ public class MainController
             listEntitiesToChange = FXCollections.observableArrayList();
             listEntitiesToDelete = FXCollections.observableArrayList();
 
-            deleteHandler = new EventHandler<KeyEvent>() {
+            deleteHandler = new EventHandler<KeyEvent>()
+            {
                 @Override
                 public void handle(KeyEvent keyEvent)
                 {
@@ -319,10 +320,13 @@ public class MainController
         } else
         {
             var tableNames = FXCollections.observableArrayList(
-                    "Author", "Authorship", "Belongs", "Book",
-                    "BookInstance", "BookReader", "Catalog");
+                    "Author", "Authorship", "Belongs",
+                    "Book", "BookReader", "Catalog");
 
             chooseTableComboBox.setItems(tableNames);
+
+            addMenuButton.setDisable(true);
+            changeButton.setDisable(true);
 
         }
 
@@ -474,7 +478,18 @@ public class MainController
 
                 createNewTableColumns(cellNamesBookReader, BookReader.TYPE_PARAMS_PATTERN, 2);
 
-                var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
+                ObservableList<Entity> listBookReaders;
+
+                if (isAdmin)
+                {
+                    listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
+                }
+                else
+                {
+                    int userId = currentAuthorizedReader.getId();
+                    listBookReaders = App.sqlOps.getBookReaderRepository().getBookReadersByReader(userId);
+                }
+
                 mainTableView.setItems(listBookReaders);
 
                 if (!isAdmin)
