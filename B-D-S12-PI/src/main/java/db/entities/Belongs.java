@@ -22,20 +22,21 @@ public class Belongs implements Entity {
         this.idCatalog = resultSet.getInt("id_c");
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> Belongs change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
             case "isbn":
                 //TODO IF ID ALREADY EXISTS
                 setIsbn((Integer) value);
-                break;
+                return this;
             case "isCatalog":
                 setIdCatalog((Integer) value);
-                break;
+                return this;
 
             default:
                 System.out.println("ReaderDefault");
+                return this;
         }
     }
 

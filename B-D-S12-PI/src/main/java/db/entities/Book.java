@@ -44,7 +44,7 @@ public class Book implements Entity{
         this.price = resultSet.getString("price");
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> Book change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
@@ -52,28 +52,29 @@ public class Book implements Entity{
             case "ISBN":
                 //TODO IF ID ALREADY EXISTS
                 setISBN((Integer) value);
-                break;
+                return this;
             case "name":
                 setName((String) value);
-                break;
+                return this;
             case "publisher":
                 setPublisher((String) value);
-                break;
+                return this;
             case "pubCity":
                 setPubCity((String) value);
-                break;
+                return this;
             case "pubYear":
                 setPubYear((LocalDate) value);
-                break;
+                return this;
             case "pageNum":
                 setPageNum((Integer) value);
-                break;
+                return this;
             case "price":
                 setPrice((String) value);
-                break;
+                return this;
 
             default:
                 System.out.println("ReaderDefault");
+                return this;
         }
     }
 

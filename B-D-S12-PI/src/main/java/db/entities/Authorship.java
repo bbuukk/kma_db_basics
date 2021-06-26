@@ -16,20 +16,21 @@ public class Authorship implements Entity {
     public Authorship() {
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> Authorship change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
             case "id":
                 //TODO IF ID ALREADY EXISTS
                 setId((Integer) value);
-                break;
+                return this;
             case "ISBN":
                 setISBN((Integer) value);
-                break;
+                return this;
 
             default:
                 System.out.println("Default");
+                return this;
         }
     }
 

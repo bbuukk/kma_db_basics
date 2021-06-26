@@ -53,20 +53,21 @@ public class Catalog implements Entity{
                 '}';
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> Catalog change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
             case "id":
                 //TODO IF ID ALREADY EXISTS
                 setId((Integer) value);
-                break;
+                return this;
             case "name":
                 setName((String) value);
-                break;
+                return this;
 
             default:
                 System.out.println("Default");
+                return this;
         }
     }
 }

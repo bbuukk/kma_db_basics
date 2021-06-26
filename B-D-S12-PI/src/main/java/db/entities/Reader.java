@@ -75,7 +75,7 @@ public class Reader implements Entity
         this.phoneNum = resultSet.getString("phone_num_r");
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> Reader change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
@@ -83,44 +83,49 @@ public class Reader implements Entity
             case "id":
                 //TODO IF ID ALREADY EXISTS
                 setId((Integer) value);
-                break;
+                return this;
             case "pib":
                 setPib((String) value);
-                break;
+                return this;
             case "password":
                 setPassword((String) value);
-                break;
+                return this;
             case "login":
                 setLogin((String) value);
-                break;
+                return this;
             case "typeRights":
                 setTypeRights((Integer) value);
-                break;
+                return this;
             case "city":
                 setCity((String) value);
-                break;
+                return this;
             case "street":
                 setStreet((String) value);
-                break;
+                return this;
             case "build":
                 setBuild((String) value);
-                break;
+                return this;
             case "apartment":
                 setApartment((String) value);
-                break;
+                return this;
+
             case "workplace":
                 setWorkplace((String) value);
-                break;
+                return this;
+
             case "birthDate":
                 setBirthDate((LocalDate) value);
-                break;
+                return this;
+
             case "phoneNum":
                 setPhoneNum((String) value);
-                break;
+                return this;
 
             default:
                 System.out.println("ReaderDefault");
+                return this;
         }
+        //return null;
     }
 
     public Integer getId()

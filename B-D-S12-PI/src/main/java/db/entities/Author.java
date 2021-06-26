@@ -15,20 +15,20 @@ public class Author implements Entity {
         this.name = name;
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> Author change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
             case "id":
                 //TODO IF ID ALREADY EXISTS
                 setId((Integer) value);
-                break;
+                return this;
             case "ISBN":
                 setName((String) value);
-                break;
-
+                return this;
             default:
                 System.out.println("Default");
+                return this;
         }
     }
 

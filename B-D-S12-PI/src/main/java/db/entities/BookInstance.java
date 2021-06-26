@@ -19,23 +19,24 @@ public class BookInstance implements Entity {
         this.ISBN = ISBN;
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> BookInstance change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
             case "id":
                 //TODO IF ID ALREADY EXISTS
                 setId((Integer) value);
-                break;
+                return this;
             case "shelf":
                 setShelf((Integer) value);
-                break;
+                return this;
             case "ISBN":
                 setISBN((Integer) value);
-                break;
+                return this;
 
             default:
                 System.out.println("Default");
+                return this;
         }
     }
 

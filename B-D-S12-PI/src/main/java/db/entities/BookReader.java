@@ -21,29 +21,31 @@ public class BookReader implements Entity {
         this.dateReturn = dateReturn;
     }
 
-    public <T> void change(String innerVarName, T value)
+    public <T> BookReader change(String innerVarName, T value)
     {
         switch (innerVarName)
         {
             case "idReader":
                 //TODO IF ID ALREADY EXISTS
                 setIdReader((Integer) value);
-                break;
+                return this;
             case "idInstance":
                 setIdInstance((Integer) value);
-                break;
+                return this;
             case "dateOut":
                 setDateOut((LocalDate) value);
-                break;
+                return this;
             case "dateExp":
                 setDateExp((LocalDate) value);
-                break;
+                return this;
             case "dateReturn":
                 setDateReturn((LocalDate) value);
-                break;
+                return this;
 
             default:
                 System.out.println("Default");
+                return this;
+
         }
     }
 

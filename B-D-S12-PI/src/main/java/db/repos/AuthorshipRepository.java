@@ -67,7 +67,7 @@ public class AuthorshipRepository {
                         "values (?, ?)")) {
 
             statement.setInt(1, authorship.getId());
-            statement.setInt(1, authorship.getISBN());
+            statement.setInt(2, authorship.getISBN());
 
             statement.executeUpdate();
             return true;
