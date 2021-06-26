@@ -20,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import vdb.dev.App;
@@ -32,6 +33,8 @@ public class MainController
     //TODO IF ID OF CREATED ENTITY == NUll, JUST INSERT SUCH ENTITY
     ObservableList<Entity> listEntitiesToChange;
     ObservableList<Entity> listEntitiesToDelete;
+
+    EventHandler<KeyEvent> deleteHandler;
 
     private static boolean isAdmin;
 
@@ -247,7 +250,7 @@ public class MainController
     @FXML
     public void logOut(javafx.scene.input.MouseEvent event) throws IOException
     {
-//        App.scene.removeEventHandler(EventHandler, this);
+        App.scene.setOnKeyPressed(null);
         MainController.currentAuthorizedReader = null;
         App.setRoot(LogInController.PATH);
     }
@@ -290,14 +293,13 @@ public class MainController
             listEntitiesToChange = FXCollections.observableArrayList();
             listEntitiesToDelete = FXCollections.observableArrayList();
 
-            App.scene.setOnKeyPressed(new EventHandler<KeyEvent>()
-            {
+            deleteHandler = new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent)
                 {
                     try
                     {
-                        if(keyEvent.getCode() == KeyCode.DELETE)
+                        if (keyEvent.getCode() == KeyCode.DELETE)
                         {
                             var allData = mainTableView.getItems();
                             var selectedData = mainTableView.getSelectionModel().getSelectedItems();
@@ -305,11 +307,14 @@ public class MainController
 
                             selectedData.forEach(allData::remove);
                         }
+                    } catch (Exception e)
+                    {
                     }
-                    catch (Exception e)
-                    { }
                 }
-            });
+            };
+
+            App.scene.setOnKeyPressed(deleteHandler);
+
 
         } else
         {
