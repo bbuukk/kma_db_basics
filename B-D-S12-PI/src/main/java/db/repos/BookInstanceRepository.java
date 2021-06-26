@@ -78,7 +78,7 @@ public class BookInstanceRepository {
     }
 
     public boolean insert(BookInstance bookInstance) {
-        if (bookInstance.getId() == null) throw new IllegalArgumentException();
+       // if (bookInstance.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO mydb.BookInstance(shelf, ISBN) " +
                         "values (?,?)")) {

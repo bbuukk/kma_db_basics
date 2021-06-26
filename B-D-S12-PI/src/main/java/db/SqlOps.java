@@ -114,6 +114,21 @@ public class SqlOps {
         return readerRepository;
     }
 
+//    public List<Reader> getAllReadersNotReadAuthor(){
+//        try (Statement st = connection.createStatement();
+//        ResultSet resultSet = st.executeQuery(
+//                "Select * from mybd.Reader" +
+//                "where id_r in (" +
+//                        "Select id_r from BookReader" +
+//                        "where date_return is null OR date_out > date_return);"
+//        )){
+//
+//        }catch (SQLException e) {
+//            System.out.println("Не вірний SQL запит");
+//            e.printStackTrace();
+//
+//        }
+//    }
 
     public List<Reader> getAllReadersNotReadAuthor(String authorName) {
         if (authorName.isEmpty()) throw new IllegalArgumentException();

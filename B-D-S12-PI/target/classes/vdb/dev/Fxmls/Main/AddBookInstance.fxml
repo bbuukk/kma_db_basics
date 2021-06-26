@@ -31,7 +31,7 @@
                     <Font name="Lucida Sans Italic" size="15.0" />
                 </font>
             </TextField>
-            <Button fx:id="createNewBookInstanceButton" layoutX="276.0" layoutY="206.0" prefHeight="22.0" prefWidth="279.0" style="-fx-background-color: #5DADE2;" text="Create New Instance of a Book">
+            <Button fx:id="createNewBookInstanceButton" layoutX="276.0" layoutY="206.0" onMouseClicked="#createNewBookInstance" prefHeight="22.0" prefWidth="279.0" style="-fx-background-color: #5DADE2;" text="Create New Instance of a Book">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
