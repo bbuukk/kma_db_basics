@@ -107,35 +107,6 @@ public class ReaderRepository
         }
     }
 
-    public boolean createReader(String PIB, String password, String login,
-                                boolean type_rights, String city_r, String stree_r,
-                                String build_r, String apartament_r, Date birth_date_r) {
-
-        var query = "INSERT INTO 'Reader' (PIB, password, login, type_rights, city_r," +
-                " stree_r,build_r,apartament_r, birth_date_r) VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
-        if (login == null) throw new IllegalArgumentException();
-        try
-        {
-            var st = connection.prepareStatement(query);
-            st.setString(1, PIB);
-            st.setString(2, password);
-            st.setString(3, login);
-            st.setBoolean(4, type_rights);
-            st.setString(5, city_r);
-            st.setString(6, stree_r);
-            st.setString(7, build_r);
-            st.setString(8, apartament_r);
-            st.setDate(9, birth_date_r);
-
-            var result = st.executeQuery();
-
-            return result.next();
-        } catch (SQLException e)
-        {
-            return false;
-        }
-    }
-
     public ObservableList<Entity> getAllReaders()
     {
         try (Statement st = connection.createStatement();

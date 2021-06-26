@@ -104,7 +104,7 @@ public class SignUpController
                 city = cityField.getText(), build = buildField.getText(),
                 apartament = apartamentField.getText(), street = streetField.getText(),
                 password = passwordField.getText(), confirmationPass = confirmPasswrodField.getText();
-        Date dateOfBirth = Date.valueOf(dateOfBirthDatePicker.getValue());
+        LocalDate dateOfBirth = dateOfBirthDatePicker.getValue();
 
         if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
                 !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
@@ -113,12 +113,16 @@ public class SignUpController
             password = new PasswordAuthentication().hash(password.toCharArray());
             if (adminCodeField.getText().equals(ADMIN_CODE))
             {
-                App.sqlOps.getReaderRepository().createReader(pib, password, login, true,
-                        city, street, build, apartament, dateOfBirth);
+                Reader reader = new Reader(pib, password, login, 1,
+                        city, street, build, apartament,null, dateOfBirth, null);
+
+                App.sqlOps.getReaderRepository().insert(reader);
             } else
             {
-                App.sqlOps.getReaderRepository().createReader(pib, password, login, false,
-                        city, street, build, apartament, dateOfBirth);
+                Reader reader = new Reader(pib, password, login, 0,
+                        city, street, build, apartament,null, dateOfBirth, null);
+
+                App.sqlOps.getReaderRepository().insert(reader);
             }
         }
         App.setRoot(LogInController.PATH);
