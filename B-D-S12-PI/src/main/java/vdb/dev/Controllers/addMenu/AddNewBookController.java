@@ -2,6 +2,12 @@ package vdb.dev.Controllers.addMenu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import db.SqlOps;
+import db.entities.Catalog;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -10,10 +16,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
-public class AddNewBookController {
+public class AddNewBookController   {
 
     public static final String PATH = "Fxmls/Main/AddBook";
+    ObservableList<String> langs;
+    Catalog catalog;
 
+    SqlOps sqlOps;
     @FXML
     private ResourceBundle resources;
 
@@ -42,7 +51,7 @@ public class AddNewBookController {
     private DatePicker dateOfPublishingPicker;
 
     @FXML
-    private ComboBox<?> chooseCatalogComboBox;
+    private ComboBox<String> chooseCatalogComboBox;
 
     @FXML
     private Button addToCatalogButton;
@@ -62,7 +71,13 @@ public class AddNewBookController {
     @FXML
     void initialize() {
 
-
+        langs = FXCollections.observableArrayList();
+        catalog = new Catalog();
+        sqlOps = new SqlOps();
+        for (int i = 0; i<6; i++){
+            langs.add(sqlOps.getCatalogRepository().getCatalog(i+1).getName().toString());
+        }
+        chooseCatalogComboBox.setItems(langs);
     }
 
     //todo method for creating a new book
@@ -71,4 +86,13 @@ public class AddNewBookController {
 
     }
 
+    public void selectCatalog(ActionEvent actionEvent) {
+
+        String a = chooseCatalogComboBox.getSelectionModel().getSelectedItem().toString();
+
+    }
+
+    public void selectAuthor(ActionEvent actionEvent) {
+
+    }
 }
