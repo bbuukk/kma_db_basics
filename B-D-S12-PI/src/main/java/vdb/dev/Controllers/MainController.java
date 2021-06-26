@@ -328,6 +328,8 @@ public class MainController
             addMenuButton.setDisable(true);
             changeButton.setDisable(true);
 
+            mainTableView.setEditable(false);
+
         }
 
     }

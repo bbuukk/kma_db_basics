@@ -3,6 +3,7 @@ package vdb.dev.Controllers.addMenu;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import db.PasswordAuthentication;
@@ -90,7 +91,7 @@ public class AddReaderController {
                     city = cityField.getText(), build = buildField.getText(),
                     apartament = apartamentField.getText(), street = streetField.getText(),
                     password = passwordField.getText(), confirmationPass = confirmPassField.getText();
-            Date dateOfBirth = Date.valueOf(dateOfBirthDatePicker.getValue());
+            LocalDate dateOfBirth = dateOfBirthDatePicker.getValue();
 
             if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
                     !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
@@ -98,8 +99,10 @@ public class AddReaderController {
             {
                     password = new PasswordAuthentication().hash(password.toCharArray());
 
-                    App.sqlOps.getReaderRepository().createReader(pib, password, login, false,
-                            city, street, build, apartament, dateOfBirth);
+                Reader reader = new Reader(pib, password, login, 0,
+                        city, street, build, apartament,null, dateOfBirth, null);
+
+                App.sqlOps.getReaderRepository().insert(reader);
             }else{
                 new Alert(Alert.AlertType.INFORMATION, "Not all data fields are entered!").showAndWait();
         }
