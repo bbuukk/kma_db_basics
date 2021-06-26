@@ -15,6 +15,23 @@ public class Author implements Entity {
         this.name = name;
     }
 
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                break;
+            case "ISBN":
+                setName((String) value);
+                break;
+
+            default:
+                System.out.println("Default");
+        }
+    }
+
     public Author() {
 
     }
@@ -50,5 +67,10 @@ public class Author implements Entity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public void change(String value, String nameOfInnerVariable ){
+//        switch ()
+        //make properties file
     }
 }

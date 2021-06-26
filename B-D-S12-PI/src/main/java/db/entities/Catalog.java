@@ -2,6 +2,7 @@ package db.entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Catalog implements Entity{
     private Integer id;
@@ -50,5 +51,22 @@ public class Catalog implements Entity{
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                break;
+            case "name":
+                setName((String) value);
+                break;
+
+            default:
+                System.out.println("Default");
+        }
     }
 }

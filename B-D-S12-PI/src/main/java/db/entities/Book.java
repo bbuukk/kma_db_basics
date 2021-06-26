@@ -43,6 +43,40 @@ public class Book implements Entity{
         this.pageNum = resultSet.getInt("page_num");
         this.price = resultSet.getString("price");
     }
+
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            //TODO WHO CAN CHANGE LOGIN AND PASSWORD
+            case "ISBN":
+                //TODO IF ID ALREADY EXISTS
+                setISBN((Integer) value);
+                break;
+            case "name":
+                setName((String) value);
+                break;
+            case "publisher":
+                setPublisher((String) value);
+                break;
+            case "pubCity":
+                setPubCity((String) value);
+                break;
+            case "pubYear":
+                setPubYear((LocalDate) value);
+                break;
+            case "pageNum":
+                setPageNum((Integer) value);
+                break;
+            case "price":
+                setPrice((String) value);
+                break;
+
+            default:
+                System.out.println("ReaderDefault");
+        }
+    }
+
     public Book() {
     }
 

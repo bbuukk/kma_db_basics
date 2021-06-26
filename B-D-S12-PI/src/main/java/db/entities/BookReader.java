@@ -21,6 +21,32 @@ public class BookReader implements Entity {
         this.dateReturn = dateReturn;
     }
 
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "idReader":
+                //TODO IF ID ALREADY EXISTS
+                setIdReader((Integer) value);
+                break;
+            case "idInstance":
+                setIdInstance((Integer) value);
+                break;
+            case "dateOut":
+                setDateOut((LocalDate) value);
+                break;
+            case "dateExp":
+                setDateExp((LocalDate) value);
+                break;
+            case "dateReturn":
+                setDateReturn((LocalDate) value);
+                break;
+
+            default:
+                System.out.println("Default");
+        }
+    }
+
     public BookReader(ResultSet resultSet) throws SQLException {
         this.idReader = resultSet.getInt("id_r");
         this.idInstance = resultSet.getInt("id_i");

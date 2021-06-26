@@ -2,6 +2,7 @@ package db.entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Belongs implements Entity {
     private Integer isbn;
@@ -19,6 +20,23 @@ public class Belongs implements Entity {
     public Belongs(ResultSet resultSet) throws SQLException {
         this.isbn = resultSet.getInt("ISBN");
         this.idCatalog = resultSet.getInt("id_c");
+    }
+
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "isbn":
+                //TODO IF ID ALREADY EXISTS
+                setIsbn((Integer) value);
+                break;
+            case "isCatalog":
+                setIdCatalog((Integer) value);
+                break;
+
+            default:
+                System.out.println("ReaderDefault");
+        }
     }
 
     public Integer getIsbn() {

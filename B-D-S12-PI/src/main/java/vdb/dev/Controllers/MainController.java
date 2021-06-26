@@ -94,12 +94,15 @@ public class MainController
     {
         mainTableView.getColumns().clear();
         TableColumn column = null;
-        char dataType;
+        char dataTypeCurrent;
+        String COLUMN_NAME;
+
 
         for (int i = 0; i < columnsToCreate.length; i++)
         {
-            dataType = patterInt.charAt(i);
-            switch (dataType)
+            COLUMN_NAME = columnsToCreate[i];
+            dataTypeCurrent = patterInt.charAt(i);
+            switch (dataTypeCurrent)
             {
                 case '0':
                     column = new TableColumn<Entity, String>();
@@ -114,19 +117,63 @@ public class MainController
                     column.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
                     break;
             }
-            column.setText(columnsToCreate[i]);
-            column.setCellValueFactory(new PropertyValueFactory<>(columnsToCreate[i]));
+            column.setText(COLUMN_NAME);
+            column.setCellValueFactory(new PropertyValueFactory<>(COLUMN_NAME));
 
+            String fCOLUMN_NAME = COLUMN_NAME;
             column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>()
             {
                 @Override
                 public void handle(TableColumn.CellEditEvent event)
                 {
                     String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
-                    Entity entity = getEntityByName(nameOfCurrentSelectedEntity);
 
+                    switch (nameOfCurrentSelectedEntity)
+                    {
+                        case "Reader":
+                            Reader reader = (Reader) event.getRowValue();
+//                            App.sqlOps.getReaderRepository().update(reader);
+                            reader.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "Authorship":
+                            Authorship authorship = (Authorship) event.getRowValue();
+//                            App.sqlOps.getAuthorshipRepository().update(authorship);
+                            authorship.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "Belongs":
+                            Belongs belongs = (Belongs) event.getRowValue();
+//                            App.sqlOps.getBelongsRepository().update(belongs);
+                            belongs.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "Book":
+                            Book book = (Book) event.getRowValue();
+//                            App.sqlOps.getBookRepository().update(book);
+                            book.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "BookInstance":
+                            BookInstance bookInstance = (BookInstance) event.getRowValue();
+//                            App.sqlOps.getBookInstanceRepository().update(bookInstance);
+                            bookInstance.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "BookReader":
+                            BookReader bookReader = (BookReader) event.getRowValue();
+//                            App.sqlOps.getBookReaderRepository().update(bookReader);
+                            bookReader.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "Catalog":
+                            Catalog catalog = (Catalog) event.getRowValue();
+//                            App.sqlOps.getBookReaderRepository().update(catalog);
+                            catalog.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
+                        case "Author":
+                            Author author = (Author) event.getRowValue();
+//                            App.sqlOps.getBookReaderRepository().update(catalog);
+                            author.change( fCOLUMN_NAME, event.getNewValue());
+                            break;
 
+                        default:
 
+                    }
                 }
             });
 
@@ -134,29 +181,6 @@ public class MainController
         }
     }
 
-    private Entity getEntityByName(String name){
-        switch (name)
-        {
-            case "Reader":
-                return new Reader();
-            case "Authorship":
-                return new Authorship();
-            case "Belongs":
-                return new Belongs();
-            case "Book":
-                return new Authorship();
-            case "BookInstance":
-                return new BookInstance();
-            case "BookReader":
-                return new BookReader();
-            case "Catalog":
-                return new Catalog();
-            case "Author":
-                return new Author();
-            default:
-                return null;
-        }
-    }
 
     private void displayReaderTable(String name) throws SQLException
     {

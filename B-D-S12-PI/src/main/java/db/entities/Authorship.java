@@ -16,6 +16,23 @@ public class Authorship implements Entity {
     public Authorship() {
     }
 
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                break;
+            case "ISBN":
+                setISBN((Integer) value);
+                break;
+
+            default:
+                System.out.println("Default");
+        }
+    }
+
     public Authorship(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id_a");
         this.ISBN = resultSet.getInt("ISBN");

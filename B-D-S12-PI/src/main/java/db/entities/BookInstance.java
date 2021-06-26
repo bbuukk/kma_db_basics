@@ -2,6 +2,7 @@ package db.entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 public class BookInstance implements Entity {
@@ -16,6 +17,26 @@ public class BookInstance implements Entity {
         this.shelf = shelf;
 
         this.ISBN = ISBN;
+    }
+
+    public <T> void change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                break;
+            case "shelf":
+                setShelf((Integer) value);
+                break;
+            case "ISBN":
+                setISBN((Integer) value);
+                break;
+
+            default:
+                System.out.println("Default");
+        }
     }
 
     public BookInstance() {
