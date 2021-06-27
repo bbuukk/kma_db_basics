@@ -1,17 +1,21 @@
 package db.repos;
 
+import db.entities.BookReader;
 import db.entities.Entity;
 import db.entities.Reader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReaderRepository
 {
     Connection connection;
+    public static final double PENYA_PER_DAY = 5;
 
     public ReaderRepository(Connection connection)
     {
@@ -234,8 +238,7 @@ public class ReaderRepository
 
             statement.executeUpdate();
             return true;
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на delete");
             e.printStackTrace();
             return false;
@@ -243,4 +246,33 @@ public class ReaderRepository
     }
 
 
+    public double penya(String login) {
+        if (login == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * from mydb.BookReader\n" +
+                        "where date_return is null and id_r in(\n" +
+                        "    select id_r from mydb.Reader\n" +
+                        "    where login = ? \n" +
+                        "    )")
+        ) {
+            statement.setString(1, login);
+            ResultSet res = statement.executeQuery();
+            List<BookReader> list = new ArrayList<>();
+            while (res.next()) {
+                list.add(new BookReader(res));
+            }
+            double accum = 0;
+            for (BookReader br : list) {
+                LocalDate now = LocalDate.now();
+                LocalDate exp = br.getDateExp();
+                accum += PENYA_PER_DAY * ChronoUnit.DAYS.between(exp, now);
+            }
+            return accum;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
 }
+
