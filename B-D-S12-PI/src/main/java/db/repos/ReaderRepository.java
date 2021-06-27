@@ -274,5 +274,27 @@ public class ReaderRepository
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
+
+    //returns readers with book debts
+    public ObservableList<Reader> getDebtors() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT * from mydb.Reader \n" +
+                     "where id_r in (\n" +
+                     "    SELECT BookReader.id_r from mydb.BookReader \n" +
+                     "    where date_return is null and DATEDIFF(CURDATE(), date_exp)>0 \n" +
+                     ")")
+        ) {
+            ObservableList<Reader> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Reader(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
 }
 
