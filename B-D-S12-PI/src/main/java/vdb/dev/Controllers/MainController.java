@@ -10,6 +10,7 @@ import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -39,6 +40,7 @@ public class MainController
     private static boolean isAdmin;
 
     public static final String PATH = "Fxmls/Main/Main";
+    FilteredList<Entity> filteredList;
 
     @FXML
     private ResourceBundle resources;
@@ -81,6 +83,7 @@ public class MainController
     {
         isAdmin = isAdminRightsSet();
         setRightsConfigurations(isAdmin);
+       // filteredList = new FilteredList<Entity>();
     }
 
     @FXML
