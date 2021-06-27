@@ -142,4 +142,149 @@ public class BookRepository {
     }
 
 
+    //returns books, which reader has ever taken from library
+    public ObservableList<Book> getAnyBooksOfReader(String login) {
+        if (login == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "select * from mydb.Book " +
+                        "where ISBN in( " +
+                        "    select ISBN from mydb.BookInstance " +
+                        "    where id_i in( " +
+                        "        select id_i from mydb.BookReader " +
+                        "        where id_r in( " +
+                        "            Select id_r from mydb.Reader " +
+                        "            where login = ?" +
+                        "            ) " +
+                        "        ) " +
+                        "    )")
+        ) {
+            statement.setString(1, login);
+            ResultSet res = statement.executeQuery();
+            ObservableList<Book> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Book(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
+    //returns books which reader hasnt returned yet
+    public ObservableList<Book> getBooksWhichReaderHasntReturned(String login) {
+        if (login == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "select * from mydb.Book\n" +
+                        "where ISBN in(\n" +
+                        "    select ISBN from mydb.BookInstance\n" +
+                        "    where id_i in(\n" +
+                        "        select id_i from mydb.BookReader\n" +
+                        "        where id_r in(\n" +
+                        "            Select id_r from mydb.Reader\n" +
+                        "            where login = ?\n" +
+                        "            ) and date_return is null\n" +
+                        "        )\n" +
+                        "    )")
+        ) {
+            statement.setString(1, login);
+            ResultSet res = statement.executeQuery();
+            ObservableList<Book> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Book(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
+    //returns list of books with available instances
+    public ObservableList<Book> getAvailableBooks() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(
+                     "select * from mydb.Book " +
+                             "where ISBN in( " +
+                             "    select ISBN from mydb.BookInstance " +
+                             "    where id_i in( " +
+                             "        select id_i from mydb.BookReader " +
+                             "        where date_return is not null " +
+                             "        ) " +
+                             "    )")
+        ) {
+            ObservableList<Book> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Book(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
+    public ObservableList<Book> getAllBooksOfAuthor(String name) {
+        if (name == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "select * from mydb.Book\n" +
+                        "where ISBN in (\n" +
+                        "    select ISBN\n" +
+                        "    from mydb.Authorship\n" +
+                        "    where id_a in (\n" +
+                        "        select id_a\n" +
+                        "        from mydb.Author\n" +
+                        "        where name_a = ?\n" +
+                        "    )\n" +
+                        ")")
+        ) {
+            statement.setString(1, name);
+            ResultSet res = statement.executeQuery();
+            ObservableList<Book> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Book(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
+    public ObservableList<Book> getBooksOfCategory(String name) {
+        if (name == null) throw new IllegalArgumentException();
+        try (PreparedStatement statement = connection.prepareStatement(
+                "select * from mydb.Book\n" +
+                        "where ISBN in (\n" +
+                        "    select ISBN\n" +
+                        "    from mydb.Belongs\n" +
+                        "    where id_c in (\n" +
+                        "        select id_c\n" +
+                        "        from mydb.Catalog\n" +
+                        "        where name_c = ?\n" +
+                        "    )\n" +
+                        ")")
+        ) {
+            statement.setString(1, name);
+            ResultSet res = statement.executeQuery();
+            ObservableList<Book> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Book(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
 }

@@ -1,11 +1,13 @@
 package db;
 
+import db.entities.BookInstance;
+
+import java.sql.SQLException;
+
 public class SqlTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         SqlOps sqlOps = new SqlOps();
-        System.out.println(sqlOps.getAllReadersNotReadAuthor("shevchenko"));
-        System.out.println(sqlOps.getNumReadersByCityWIthPrice(" > 10"));
-        System.out.println(sqlOps.getNumBooksByAuthorForCategory("Novel"));
-        System.out.println(sqlOps.getAllReadersbyReaderAndCategory("Chervonenko Pavliv Yurich", "Science fiction"));
+        sqlOps.getBookInstanceRepository().insert(new BookInstance(12, 7));
     }
+
 }

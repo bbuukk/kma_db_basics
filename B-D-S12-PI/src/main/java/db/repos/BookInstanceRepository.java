@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookInstanceRepository {
     Connection connection;
@@ -62,7 +60,7 @@ public class BookInstanceRepository {
     }
 
     public boolean delete(BookInstance bookInstance) {
-        if (bookInstance.getId() == null) throw new IllegalArgumentException();
+        //if (bookInstance.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "DELETE FROM mydb.BookInstance WHERE id_i=?")) {
 
@@ -112,5 +110,6 @@ public class BookInstanceRepository {
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
 
 }

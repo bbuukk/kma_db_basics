@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ReaderRepository
@@ -64,35 +63,33 @@ public class ReaderRepository
                 list.add(new Reader(res));
             }
             return list;
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }
 
-    public boolean doCredentialsMatch(String login, String password)
-    {
-        var query = "SELECT * FROM 'Reader' WHERE login = ? AND password = ?";
+
+    //obviously won`t work
+    public boolean doCredentialsMatch(String login, String password) {
+        var query = "SELECT * FROM mydb.Reader WHERE login = ? AND password = ?";
         if (login == null || password == null) throw new IllegalArgumentException();
-        try
-        {
+        try {
             var st = connection.prepareStatement(query);
             st.setString(1, login);
             st.setString(2, password);
             var result = st.executeQuery();
 
             return result.next();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             return false;
         }
     }
 
     public boolean isAdmin(String login)
     {
-        var query = "SELECT type_rights FROM 'Reader' WHERE login = ? AND password = ?";
+        var query = "SELECT type_rights FROM mydb.Reader WHERE login = ? AND password = ?";
         if (login == null) throw new IllegalArgumentException();
         try
         {
@@ -244,4 +241,6 @@ public class ReaderRepository
             return false;
         }
     }
+
+
 }
