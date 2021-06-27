@@ -2,13 +2,10 @@ package db.repos;
 
 import db.entities.Authorship;
 import db.entities.Entity;
-import db.entities.Reader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AuthorshipRepository {
 
@@ -92,6 +89,22 @@ public class AuthorshipRepository {
                 list.add(new Authorship(res));
             }
             return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+    public int authorshipNumber() {
+        String sql = "SELECT Count(*) as num FROM mydb.Authorship";
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql)
+        ) {
+            if (res.next()) {
+                return res.getInt("num");
+            }
+            return 0;
         } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();

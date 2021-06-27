@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BelongsRepository {
     Connection connection;
@@ -91,6 +89,22 @@ public class BelongsRepository {
                 list.add(new Belongs(res));
             }
             return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+    public int belongsNumber() {
+        String sql = "SELECT Count(*) as num FROM mydb.Belongs";
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql)
+        ) {
+            if (res.next()) {
+                return res.getInt("num");
+            }
+            return 0;
         } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();

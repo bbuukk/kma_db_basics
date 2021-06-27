@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookReaderRepository {
     Connection connection;
@@ -82,7 +80,7 @@ public class BookReaderRepository {
         if (bookReader.getIdReader() == null || bookReader.getIdInstance() == null)
             throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO mydb.BookReader(id_r, id_i, date_out, date_exp, dare_return) " +
+                "INSERT INTO mydb.BookReader(id_r, id_i, date_out, date_exp, date_return) " +
                         "values (?, ?, ?, ?, ?)"))  {
 
             statement.setInt(1, bookReader.getIdReader());
@@ -105,7 +103,7 @@ public class BookReaderRepository {
         if (bookReader.getIdReader() == null || bookReader.getIdInstance() == null)
             throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE mydb.BookReader SET date_out = ?, date_exp=?, dare_return=?" +
+                "UPDATE mydb.BookReader SET date_out = ?, date_exp=?, date_return=?" +
                         " WHERE id_i=? and id_r=?")) {
             //statement.setInt(1, 1);
             statement.setDate(1, Date.valueOf(bookReader.getDateOut()));
@@ -136,6 +134,22 @@ public class BookReaderRepository {
         } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
 //            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+    public int bookReaderNumber() {
+        String sql = "SELECT Count(*) as num FROM mydb.BookReader";
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql)
+        ) {
+            if (res.next()) {
+                return res.getInt("num");
+            }
+            return 0;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }
