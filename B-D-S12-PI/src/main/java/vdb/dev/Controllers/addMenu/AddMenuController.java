@@ -119,15 +119,43 @@ public class AddMenuController
 //        String[] belongsAuthors = belongToAuthor.split(",");
 //        belongsAuthors[0] = belongsAuthors[0].substring(belonggToCatalog.indexOf("Authors:"));
 //TODO CHECK FOR SUCH AUTHROS AND CATALOGS
+//        var catalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
+//        boolean newCatalog = false;
+//        String cName;
 
 //        for (String s : belongsCatalogs)
 //        {
-//            App.sqlOps.getCatalogRepository().insert(new Catalog(s));
+//            for (Entity e: catalogs)
+//            {
+//                Catalog catalog = (Catalog) e;
+//                 cName = ((Catalog) e).getName();
+//                if (cName.equals(s)){
+//                    newCatalog = true;
+//                    break;
+//                }
+//            }
+//            if (newCatalog)
+//                App.sqlOps.getCatalogRepository().insert(new Catalog(s));
+//           var createdCatalog = App.sqlOps.getCatalogRepository().getCatalog(s);
+//          int idCatalog = createdCatalog.get(0).getId();
+//          App.sqlOps.getBelongsRepository().insert(new Belongs(idCatalog,))
+//            newCatalog= false;
 //        }
 //
-//        for (String s : belongsAuthors)
+//        for (String s : belongsCatalogs)
 //        {
-//            App.sqlOps.getAuthorRepository().insert(new Author(s));
+//            for (Entity e: catalogs)
+//            {
+//                Catalog catalog = (Catalog) e;
+//                cName = ((Catalog) e).getName();
+//                if (cName.equals(s)){
+//                    newCatalog = true;
+//                    break;
+//                }
+//            }
+//            if (newCatalog)
+//                App.sqlOps.getCatalogRepository().insert(new Catalog(s));
+//            newCatalog= false;
 //        }
 
 
@@ -273,81 +301,81 @@ public class AddMenuController
 
     private void configureNewBookSectionAuthorComboBox()
     {
-        ObservableList<String> entitiesNames = FXCollections.observableArrayList();
-        var catalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
-
-        for (Entity ent : catalogs)
-        {
-            Catalog c = (Catalog) ent;
-            entitiesNames.add(c.getName());
-        }
-
-        mainController.chooseCatalogComboBox.setItems(entitiesNames);
+//        ObservableList<String> entitiesNames = FXCollections.observableArrayList();
+//        var catalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
+//
+//        for (Entity ent : catalogs)
+//        {
+//            Catalog c = (Catalog) ent;
+//            entitiesNames.add(c.getName());
+//        }
+//
+//        mainController.chooseCatalogComboBox.setItems(entitiesNames);
     }
 
     private void configureNewBookInstanceSectionBookTitlesComboBox()
     {
-        ObservableList<String> entitiesNames = FXCollections.observableArrayList();
-        var books = App.sqlOps.getBookRepository().getAllBooks();
-
-        for (Entity ent : books)
-        {
-            Book b = (Book) ent;
-            entitiesNames.add(b.getName());
-        }
-
-        mainController.chooseBookTitles.setItems(entitiesNames);
+//        ObservableList<String> entitiesNames = FXCollections.observableArrayList();
+//        var books = App.sqlOps.getBookRepository().getAllBooks();
+//
+//        for (Entity ent : books)
+//        {
+//            Book b = (Book) ent;
+//            entitiesNames.add(b.getName());
+//        }
+//
+//        mainController.chooseBookTitles.setItems(entitiesNames);
     }
 
     int catalogNum = 0;
 
     public void configureAddToCatalogNewBookSectionLabelsLabel()
     {
-        try
-        {
-            if (catalogNum < 5)
-            {
-                String alreadyBelongs = mainController.belongsToLable.getText();
-                String chosenCatalog = mainController.chooseCatalogComboBox.getSelectionModel().getSelectedItem().toString();
-                alreadyBelongs += chosenCatalog + ",";
-                if (catalogNum == 2)
-                    alreadyBelongs += "\n";
-                mainController.belongsToLable.setText(alreadyBelongs);
-
-                ++catalogNum;
-            } else
-            {
-                new Alert(Alert.AlertType.WARNING, "Limit of catalogs for a book").showAndWait();
-            }
-        } catch (NullPointerException e)
-        {
-            new Alert(Alert.AlertType.WARNING, "Problem with data input").showAndWait();
-        }
+//        try
+//        {
+//            if (catalogNum < 5)
+//            {
+//                String alreadyBelongs = mainController.belongsToLable.getText();
+//                String chosenCatalog = mainController.chooseCatalogComboBox.getSelectionModel().getSelectedItem().toString();
+//                alreadyBelongs += chosenCatalog + ",";
+//                if (catalogNum == 2)
+//                    alreadyBelongs += "\n";
+//                mainController.belongsToLable.setText(alreadyBelongs);
+//
+//                ++catalogNum;
+//            } else
+//            {
+//                new Alert(Alert.AlertType.WARNING, "Limit of catalogs for a book").showAndWait();
+//            }
+//        } catch (NullPointerException e)
+//        {
+//            new Alert(Alert.AlertType.WARNING, "Problem with data input").showAndWait();
+//        }
     }
 
     int authorNum = 0;
 
     public void configureAddToAuthorNewBookSectionLabelsLabels()
     {
-        try
-        {
-            if (authorNum < 5)
-            {
-                String alreadyBelongs = mainController.belongToAuthor.getText();
-                String chosenAuthor = mainController.chooseAuthorComboBox.getSelectionModel().getSelectedItem().toString();
-                alreadyBelongs += chosenAuthor + ",";
-                if (authorNum == 2)
-                    alreadyBelongs += "\n";
-                mainController.belongToAuthor.setText(alreadyBelongs);
-                ++authorNum;
-            } else
-            {
-                new Alert(Alert.AlertType.WARNING, "Limit of authors for a book").showAndWait();
-            }
-        } catch (NullPointerException e)
-        {
-            new Alert(Alert.AlertType.WARNING, "Problem with data input").showAndWait();
-        }
+//        try
+//        {
+//            if (authorNum < 5)
+//            {
+//                String alreadyBelongs = mainController.belongToAuthor.getText();
+//                String chosenAuthor = mainController.chooseAuthorComboBox.getSelectionModel().getSelectedItem().toString();
+//                alreadyBelongs += chosenAuthor + ",";
+//                if (authorNum == 2)
+//                    alreadyBelongs += "\n";
+//                mainController.belongToAuthor.setText(alreadyBelongs);
+//                ++authorNum;
+//            } else
+//            {
+//                new Alert(Alert.AlertType.WARNING, "Limit of authors for a book").showAndWait();
+//            }
+//        } catch (NullPointerException e)
+//        {
+//            new Alert(Alert.AlertType.WARNING, "Problem with data input").showAndWait();
+//        }
     }
 
 }

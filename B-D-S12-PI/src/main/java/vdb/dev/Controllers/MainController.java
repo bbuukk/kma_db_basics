@@ -1,11 +1,13 @@
 package vdb.dev.Controllers;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import com.itextpdf.text.DocumentException;
 import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -51,7 +53,8 @@ public class MainController
         App.stage.setWidth(970);
         App.stage.setHeight(634);
 
-        mainTableView.setPrefWidth(900);
+        turnOffSearchWidgets();
+        turnOffSection();
 
         rightsType = isAdminRightsSet();
         setRightsConfigurations(rightsType);
@@ -111,6 +114,11 @@ public class MainController
         addMenuController.createNewReader();
     }
 
+    @FXML
+    void report(javafx.scene.input.MouseEvent event) throws DocumentException, FileNotFoundException
+    {
+        App.sqlOps.formReport("Report.pdf");
+    }
     @FXML
     void createCatalog(javafx.scene.input.MouseEvent event) throws IOException
     {
@@ -269,6 +277,22 @@ public class MainController
         }
     }
 
+    public boolean turnOffSearchWidgets()
+    {
+        try
+        {
+            findAllDebtorsButton.setVisible(false);
+            findBooksByAuthorBox.setVisible(false);
+            findBookByCatalogBox.setVisible(false);
+            findAvailBooksButton.setVisible(false);
+            return true;
+        }
+        catch (NullPointerException exception){
+            System.out.println( exception.getMessage());
+            return false;
+        }
+    }
+
     public boolean turnOffSection(){
         try
         {
@@ -295,7 +319,7 @@ public class MainController
     @FXML
     void findQueries(javafx.scene.input.MouseEvent event)
     {
-        mainTableView.setPrefWidth(572);
+//
     }
 
     private void setRightsConfigurations(int rightsType)
@@ -370,9 +394,11 @@ public class MainController
                     "Author", "Book", "Catalog", "BookReader");
 
             chooseTableComboBox.setItems(tableNames);
-
+            System.out.println("USER");
             addMenuButton.setDisable(true);
             changeButton.setDisable(true);
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Can't authorize!").showAndWait();
         }
 
     }
@@ -480,6 +506,7 @@ public class MainController
     {
         if (!name.equals(lastTableDisplayed)){
             turnOffSection();
+            turnOffSearchWidgets();
         }
 
         switch (name)
@@ -496,6 +523,8 @@ public class MainController
 
                 var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
                 mainTableView.setItems(listOfReaders);
+
+                findAllDebtorsButton.setVisible(true);
 
                 break;
             case "Authorship":
@@ -530,6 +559,10 @@ public class MainController
                 var listBooks = App.sqlOps.getBookRepository().getAllBooks();
 
                 mainTableView.setItems(listBooks);
+
+                findBooksByAuthorBox.setVisible(true);
+                findBookByCatalogBox.setVisible(true);
+                findAvailBooksButton.setVisible(true);
 
                 break;
             case "BookInstance":
@@ -845,6 +878,18 @@ public class MainController
     @FXML
     private Button createNewBookButton;
 
+    @FXML
+    private Button findAvailBooksButton;
+
+    @FXML
+    private Button findAllDebtorsButton;
+
+    @FXML
+    private ComboBox<String> findBooksByAuthorBox;
+
+    @FXML
+    private ComboBox<String> findBookByCatalogBox;
+
     public ObservableList<Entity> getListEntitiesToChange()
     {
         return listEntitiesToChange;
@@ -1016,7 +1061,7 @@ public class MainController
     {
         if (currentAuthorizedReader.getTypeRights() == Rights.ADMIN.getValue())
             return 1;
-        else if (currentAuthorizedReader.getTypeRights() == Rights.ADMIN.getValue())
+        else if (currentAuthorizedReader.getTypeRights() == Rights.LIBRARIAN.getValue())
             return 2;
         else return 0;
     }

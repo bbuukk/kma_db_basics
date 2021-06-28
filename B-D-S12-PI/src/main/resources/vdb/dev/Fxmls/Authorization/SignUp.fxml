@@ -4,9 +4,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -30,7 +28,7 @@
             </Button>
          </children>
       </Pane>
-      <Button fx:id="signUpButton" ellipsisString="" layoutX="518.0" layoutY="411.0" onMouseClicked="#signUp" prefHeight="46.0" prefWidth="196.0" style="-fx-background-color: #AED6F1;" text="Sign Up">
+      <Button fx:id="signUpButton" ellipsisString="" layoutX="325.0" layoutY="411.0" onMouseClicked="#signUp" prefHeight="46.0" prefWidth="196.0" style="-fx-background-color: #AED6F1;" text="Sign Up">
          <font>
             <Font name="Lucida Sans Regular" size="16.0" />
          </font>
@@ -96,14 +94,11 @@
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </PasswordField>
-      <RadioButton fx:id="adminRadioButton" layoutX="583.0" layoutY="221.0" prefHeight="21.0" prefWidth="56.0" text="." />
-      <Label fx:id="showLable" layoutX="574.0" layoutY="197.0" prefHeight="21.0" prefWidth="44.0" text="Show" />
       <PasswordField fx:id="adminCodeField" layoutX="108.0" layoutY="363.0" prefHeight="31.0" prefWidth="409.0" promptText="Admin code">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </PasswordField>
-      <ToggleButton fx:id="adminRightsTogButton" layoutX="566.0" layoutY="366.0" mnemonicParsing="false" text="Admin rights" />
       <TextField fx:id="streetField" layoutX="276.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Street">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
