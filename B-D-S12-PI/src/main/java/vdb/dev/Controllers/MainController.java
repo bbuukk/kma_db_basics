@@ -86,8 +86,7 @@ public class MainController
     private TableView<Entity> mainTableView;
 
     @FXML
-    void initialize()
-    {
+    void initialize() throws SQLException {
         sqlOps = new SqlOps();
         searchRes.addAll(sqlOps.getBookRepository().getAllBooks());
         filteredData = new FilteredList(searchRes, s -> true);
@@ -118,6 +117,7 @@ public class MainController
 
         sortedList = new SortedList<Entity>(filteredData);
         sortedList.comparatorProperty().bind(mainTableView.comparatorProperty());
+        displayReaderTable("Book");
         mainTableView.setItems(sortedList);
     }
 
