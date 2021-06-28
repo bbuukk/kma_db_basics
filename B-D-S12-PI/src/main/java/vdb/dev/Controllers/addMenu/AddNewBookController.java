@@ -73,10 +73,6 @@ public class AddNewBookController   {
 
         catalog = new Catalog();
         sqlOps = new SqlOps();
-//        for (int i = 1; i <= sqlOps.getCatalogRepository().catalogNumber(); i++){
-//            langs.add(sqlOps.getCatalogRepository().getCatalog(i).getName().toString());
-//
-//        }
         chooseCatalogComboBox.setItems(sqlOps.getCatalogRepository().getAllCatalogs());
     }
 
@@ -94,5 +90,8 @@ public class AddNewBookController   {
 
     public void selectAuthor(ActionEvent actionEvent) {
 
+    }
+
+    public void createNewCatalog(ActionEvent actionEvent) {
     }
 }

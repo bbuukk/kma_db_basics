@@ -75,6 +75,6 @@
         </Label>
       <TableView fx:id="mainTableView" editable="true" layoutX="48.0" layoutY="84.0" prefHeight="386.0" prefWidth="636.0" />
       <TextField fx:id="SearchField" layoutX="78.0" layoutY="40.0" promptText="Search Here!" />
-      <ComboBox layoutX="237.0" layoutY="40.0" prefHeight="25.0" prefWidth="118.0" promptText="Choose" />
+      <ComboBox fx:id="comboboxDorDebtors" layoutX="237.0" layoutY="40.0" onAction="#selectOtherQuieries" prefHeight="25.0" prefWidth="118.0" promptText="Choose" />
     </children>
 </AnchorPane>

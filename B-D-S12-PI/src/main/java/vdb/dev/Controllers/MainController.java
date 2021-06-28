@@ -6,17 +6,17 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import db.SqlOps;
 import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
@@ -31,6 +31,7 @@ public class MainController
 {
 
     private static db.entities.Reader currentAuthorizedReader;
+    public ComboBox comboboxDorDebtors;
     //TODO IF ID OF CREATED ENTITY == NUll, JUST INSERT SUCH ENTITY
     ObservableList<Entity> listEntitiesToChange;
     ObservableList<Entity> listEntitiesToDelete;
@@ -40,13 +41,19 @@ public class MainController
     private static boolean isAdmin;
 
     public static final String PATH = "Fxmls/Main/Main";
-    FilteredList<Entity> filteredList;
+    FilteredList<Book> filteredData;
+    ObservableList<Entity> searchRes = FXCollections.observableArrayList();
+    SortedList<Entity> sortedList;
 
+    SqlOps sqlOps;
     @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
+
+    @FXML
+    private TextField SearchField;
 
     @FXML
     private Button changeButton;
@@ -81,9 +88,37 @@ public class MainController
     @FXML
     void initialize()
     {
+        sqlOps = new SqlOps();
+        searchRes.addAll(sqlOps.getBookRepository().getAllBooks());
+        filteredData = new FilteredList(searchRes, s -> true);
         isAdmin = isAdminRightsSet();
         setRightsConfigurations(isAdmin);
-       // filteredList = new FilteredList<Entity>();
+        SearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+
+            filteredData.setPredicate(smth -> {
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (smth.getName().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                            return true;
+                        } else if (smth.getPublisher().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                            return true;
+                        }
+                        else if (String.valueOf(smth.getISBN()).indexOf(lowerCaseFilter)!=-1)
+                            return true;
+                        else
+                            return false;
+                    }
+                    );
+        });
+
+
+        sortedList = new SortedList<Entity>(filteredData);
+        sortedList.comparatorProperty().bind(mainTableView.comparatorProperty());
+        mainTableView.setItems(sortedList);
     }
 
     @FXML
@@ -293,6 +328,9 @@ public class MainController
 
             chooseTableComboBox.setItems(tableNames);
 
+            var tableNamesForDebtors = FXCollections.observableArrayList("Debtors");
+            comboboxDorDebtors.setItems(tableNamesForDebtors);
+
             listEntitiesToChange = FXCollections.observableArrayList();
             listEntitiesToDelete = FXCollections.observableArrayList();
 
@@ -422,6 +460,15 @@ public class MainController
     {
         switch (name)
         {
+            case "Debtors":
+                String[] cellNamesReaderDebtor = {"id", "pib", "password", "login",
+                        "typeRights", "city", "street", "build",
+                        "apartment", "workplace", "birthDate", "phoneNum"};
+                createNewTableColumns(cellNamesReaderDebtor, Reader.TYPE_PARAMS_PATTERN, 1);
+
+                var listOfDebtors = sqlOps.getReaderRepository().getDebtors();
+                mainTableView.setItems(listOfDebtors);
+
             case "Reader":
 
                 String[] cellNamesReader = {"id", "pib", "password", "login",
@@ -430,7 +477,7 @@ public class MainController
 
                 createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN, 1);
 
-                var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
+                var listOfReaders = sqlOps.getReaderRepository().getAllReaders();
                 mainTableView.setItems(listOfReaders);
 
                 break;
@@ -485,12 +532,12 @@ public class MainController
 
                 if (isAdmin)
                 {
-                    listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
+                    listBookReaders = sqlOps.getBookReaderRepository().getAllBookReaders();
                 }
                 else
                 {
                     int userId = currentAuthorizedReader.getId();
-                    listBookReaders = App.sqlOps.getBookReaderRepository().getBookReadersByReader(userId);
+                    listBookReaders = sqlOps.getBookReaderRepository().getBookReadersByReader(userId);
                 }
 
                 mainTableView.setItems(listBookReaders);
@@ -522,5 +569,9 @@ public class MainController
         }
     }
 
+    public void selectOtherQuieries(ActionEvent actionEvent) throws SQLException {
+        String nameOfSelectedTable = comboboxDorDebtors.getSelectionModel().getSelectedItem().toString();
+        displayReaderTable(nameOfSelectedTable);
+    }
 }
 
