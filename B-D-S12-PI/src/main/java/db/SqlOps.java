@@ -1,10 +1,17 @@
 package db;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import db.entities.Reader;
 import db.repos.*;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -265,5 +272,38 @@ public class SqlOps {
         }
     }
 
+
+    public void formReport(String filename) throws DocumentException, FileNotFoundException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filename));
+
+        document.open();
+
+        document.addHeader("Full Report", "Full Report for tables");
+        document.add(new Paragraph("Full Report"));
+        document.add(new Phrase(" "));
+
+        document.add(new Paragraph("Readers"));
+        document.add(new Phrase(" "));
+        document.add(getReaderRepository().getTablePDF());
+
+        document.add(new Paragraph("Books"));
+        document.add(new Phrase(" "));
+        document.add(getBookRepository().getTablePDF());
+
+        document.add(new Paragraph("Authors"));
+        document.add(new Phrase(" "));
+        document.add(getAuthorRepository().getTablePDF());
+
+        document.add(new Paragraph("Catalogs"));
+        document.add(new Phrase(" "));
+        document.add(getCatalogRepository().getTablePDF());
+
+        document.add(new Paragraph("Instances"));
+        document.add(new Phrase(" "));
+        document.add(getBookInstanceRepository().getTablePDF());
+
+        document.close();
+    }
 
 }

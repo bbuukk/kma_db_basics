@@ -1,16 +1,23 @@
 package db.repos;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import db.entities.BookReader;
 import db.entities.Entity;
 import db.entities.Reader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ReaderRepository
 {
@@ -120,25 +127,36 @@ public class ReaderRepository
                 list.add(new Reader(res));
             }
             return list;
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }
 
+    public List<Reader> getReaders() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT * FROM mydb.Reader")
+        ) {
+            List<Reader> list = new ArrayList<>();
+            while (res.next()) {
+                list.add(new Reader(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
 
-
-    public boolean update(Reader reader)
-    {
+    public boolean update(Reader reader) {
         if (reader.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "UPDATE mydb.Reader SET PIB=?, password=?, login=?," +
                         " type_rights=?, city_r=?, street_r=?, build_r=?," +
                         " apartment_r=?, workplace=?, birth_date_r=?, phone_num_r=?" +
-                        " WHERE id_r=?"))
-        {
+                        " WHERE id_r=?")) {
             //statement.setInt(1, 1);
             statement.setString(1, reader.getPib());
             statement.setString(2, reader.getPassword());
@@ -320,5 +338,59 @@ public class ReaderRepository
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
+    public Document formReport(String filename) throws DocumentException, FileNotFoundException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filename));
+
+        document.open();
+
+        document.addHeader("Readers", "Readers");
+        document.add(new Paragraph("Readers"));
+        document.add(new Phrase(" "));
+        PdfPTable table = new PdfPTable(9);
+        addHeaders(table, Stream.of("id_reader", "PIB", "city", "street", "build", "apartment", "workplace", "birth_date", "phone_num"));
+        addReaders(table, getReaders());
+        table.setWidthPercentage(100);
+        document.add(table);
+
+        document.close();
+        return document;
+    }
+
+    public PdfPTable getTablePDF() {
+
+        PdfPTable table = new PdfPTable(9);
+        addHeaders(table, Stream.of("id_reader  ", "PIB", "city", "street", "build", "apartment", "workplace", "birth_date", "phone_num"));
+        addReaders(table, getReaders());
+        table.setWidthPercentage(100);
+        return table;
+    }
+
+
+    private void addHeaders(PdfPTable table, Stream<String> headers) {
+        headers.forEach(columnTitle -> {
+            PdfPCell header = new PdfPCell();
+            header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            header.setBorderWidth(2);
+            header.setPhrase(new Phrase(columnTitle));
+            table.addCell(header);
+        });
+    }
+
+    private void addReaders(PdfPTable table, List<Reader> readers) {
+        for (Reader reader : readers) {
+            table.addCell(new Phrase(reader.getId().toString()));
+            table.addCell(new Phrase(reader.getPib()));
+            table.addCell(new Phrase(reader.getCity()));
+            table.addCell(new Phrase(reader.getStreet()));
+            table.addCell(new Phrase(reader.getBuild()));
+            table.addCell(new Phrase(reader.getApartment()));
+            table.addCell(new Phrase(reader.getWorkplace()));
+            table.addCell(new Phrase(reader.getBirthDate().toString()));
+            table.addCell(new Phrase(reader.getPhoneNum()));
+        }
+    }
+
 }
 

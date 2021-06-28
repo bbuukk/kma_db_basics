@@ -1,13 +1,20 @@
 package db.repos;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import db.entities.Book;
 import db.entities.Entity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class BookRepository {
     Connection connection;
@@ -66,6 +73,23 @@ public class BookRepository {
              ResultSet res = st.executeQuery("SELECT * FROM mydb.Book")
         ) {
             ObservableList<Entity> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Book(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
+    public List<Book> getBooks() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT * FROM mydb.Book")
+        ) {
+            List<Book> list = FXCollections.observableArrayList();
             while (res.next()) {
                 list.add(new Book(res));
             }
@@ -300,6 +324,58 @@ public class BookRepository {
             System.out.println("Не вірний SQL запит на вибірку даних");
             e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
+    public Document formReport(String filename) throws DocumentException, FileNotFoundException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filename));
+
+        document.open();
+
+
+        document.addHeader("Books", "Books");
+        document.add(new Paragraph("Books"));
+        document.add(new Phrase(" "));
+        PdfPTable table = new PdfPTable(7);
+        addHeaders(table, Stream.of("ISBN", "name", "publisher", "pub_city", "pub_year", "page_num", "price"));
+        addBooks(table, getBooks());
+        table.setWidthPercentage(100);
+        document.add(table);
+        document.close();
+        return document;
+    }
+
+    public PdfPTable getTablePDF() {
+
+        PdfPTable table = new PdfPTable(7);
+        addHeaders(table, Stream.of("ISBN", "name", "publisher", "pub_city", "pub_year", "page_num", "price"));
+        addBooks(table, getBooks());
+        table.setWidthPercentage(100);
+        return table;
+    }
+
+
+    private void addHeaders(PdfPTable table, Stream<String> headers) {
+        headers.forEach(columnTitle -> {
+            PdfPCell header = new PdfPCell();
+            header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            header.setBorderWidth(2);
+            header.setPhrase(new Phrase(columnTitle));
+            table.addCell(header);
+        });
+    }
+
+    private void addBooks(PdfPTable table, List<Book> books) {
+        for (Book book : books) {
+            table.addCell(new Phrase(book.getISBN().toString()));
+            table.addCell(new Phrase(book.getName()));
+            table.addCell(new Phrase(book.getPublisher()));
+            table.addCell(new Phrase(book.getPubCity()));
+            table.addCell(new Phrase(book.getPubYear().toString()));
+            table.addCell(new Phrase(book.getPageNum().toString()));
+            table.addCell(new Phrase(book.getPrice()));
         }
     }
 }
