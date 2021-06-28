@@ -24,7 +24,7 @@
                 <Image url="@../../../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
             </image>
         </ImageView>
-      <HBox layoutX="24.0" layoutY="66.0" prefHeight="36.0" prefWidth="390.0" style="-fx-background-color: #E5E7E9;">
+      <HBox layoutX="24.0" layoutY="66.0" prefHeight="36.0" prefWidth="572.0" style="-fx-background-color: #E5E7E9;">
          <children>
             <Button fx:id="addMenuButton" onMouseClicked="#addMenu" prefHeight="18.0" prefWidth="78.0" style="-fx-background-color: #F4D03F;" text="Add " textAlignment="CENTER">
                <effect>
@@ -71,9 +71,14 @@
                   </InnerShadow>
                </effect>
                <HBox.margin>
-                  <Insets left="5.0" top="5.0" />
+                  <Insets left="5.0" right="11.0" top="5.0" />
                </HBox.margin>
             </Button>
+            <TextField promptText="Search">
+               <HBox.margin>
+                  <Insets left="3.0" right="3.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
             <Button fx:id="findButton" onMouseClicked="#findQueries" prefHeight="18.0" prefWidth="70.0" style="-fx-background-color: #F4D03F;" text="Find">
                <effect>
                   <InnerShadow>
@@ -83,7 +88,7 @@
                   </InnerShadow>
                </effect>
                <HBox.margin>
-                  <Insets left="5.0" top="5.0" />
+                  <Insets left="8.0" top="5.0" />
                </HBox.margin>
             </Button>
          </children>
@@ -118,13 +123,10 @@
                   <InnerShadow />
                </effect>
                 </Button>
+            <ComboBox fx:id="findBooksByAuthorBox" layoutX="322.0" layoutY="-1.0" prefHeight="25.0" prefWidth="185.0" promptText="Display books by author:" />
+            <ComboBox fx:id="findBookByCatalogBox" layoutX="507.0" layoutY="-1.0" prefHeight="25.0" prefWidth="178.0" promptText="Display books by catalog:" />
             </children>
         </Pane>
-        <Label layoutY="585.0" text="B-D-S12-PI 1.0">
-            <font>
-                <Font size="12.0" />
-            </font>
-        </Label>
       <TableView fx:id="mainTableView" editable="true" layoutX="24.0" layoutY="102.0" prefHeight="462.0" prefWidth="572.0" />
       <Pane fx:id="addReaderMenuPane" layoutX="608.0" layoutY="101.0" prefHeight="462.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;" visible="false">
          <children>
@@ -294,6 +296,33 @@
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
+            </Button>
+         </children>
+      </Pane>
+      <Pane layoutY="580.0" prefHeight="23.0" prefWidth="958.0" style="-fx-background-color: #E5E7E9;">
+         <children>
+              <Label layoutY="3.0" text="B-D-S12-PI 1.0">
+                  <font>
+                      <Font size="12.0" />
+                  </font>
+              </Label>
+            <Button fx:id="findAvailBooksButton" layoutX="171.0" layoutY="-1.0" onMouseClicked="#findQueries" prefHeight="26.0" prefWidth="229.0" style="-fx-background-color: #F4D03F;" text="Find available books">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </Button>
+            <Button fx:id="findAllDebtorsButton" layoutX="400.0" layoutY="-1.0" onMouseClicked="#findQueries" prefHeight="26.0" prefWidth="122.0" style="-fx-background-color: #F4D03F;" text="Find All Debtors">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
             </Button>
          </children>
       </Pane>

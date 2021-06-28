@@ -453,14 +453,6 @@ public class MainController
 
         switch (name)
         {
-//            case "Debtors":
-//                String[] cellNamesReaderDebtor = {"id", "pib", "password", "login",
-//                        "typeRights", "city", "street", "build",
-//                        "apartment", "workplace", "birthDate", "phoneNum"};
-//                createNewTableColumns(cellNamesReaderDebtor, Reader.TYPE_PARAMS_PATTERN, 1);
-//
-//                var listOfDebtors = App.sqlOps.getReaderRepository().getDebtors();
-//                mainTableView.setItems(listOfDebtors);
             case "Reader":
 
                 lastTabledisplayed = name;
