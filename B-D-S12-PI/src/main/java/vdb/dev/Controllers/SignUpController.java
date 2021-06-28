@@ -21,6 +21,8 @@ public class SignUpController
 
     public static final String PATH = "Fxmls/Authorization/SignUp";
     public static final String ADMIN_CODE = "Secret";
+    public static final String LIBRARIAN_CODE = "LibSecret";
+
     private PasswordAuthentication passwordAuthentication;
 
     @FXML
@@ -104,7 +106,7 @@ public class SignUpController
                 city = cityField.getText(), build = buildField.getText(),
                 apartament = apartamentField.getText(), street = streetField.getText(),
                 password = passwordField.getText(), confirmationPass = confirmPasswrodField.getText();
-        Date dateOfBirth = Date.valueOf(dateOfBirthDatePicker.getValue());
+        LocalDate dateOfBirth = dateOfBirthDatePicker.getValue();
 
         if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
                 !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
@@ -113,15 +115,24 @@ public class SignUpController
             password = new PasswordAuthentication().hash(password.toCharArray());
             if (adminCodeField.getText().equals(ADMIN_CODE))
             {
-                App.sqlOps.getReaderRepository().createReader(pib, password, login, true,
-                        city, street, build, apartament, dateOfBirth);
-            } else
+                Reader reader = new Reader(pib, password, login, 1,
+                        city, street, build, apartament,null, dateOfBirth, null);
+
+                App.sqlOps.getReaderRepository().insert(reader);
+            } else if (adminCodeField.getText().equals(LIBRARIAN_CODE))
             {
-                App.sqlOps.getReaderRepository().createReader(pib, password, login, false,
-                        city, street, build, apartament, dateOfBirth);
-            }
+                Reader reader = new Reader(pib, password, login, 2,
+                        city, street, build, apartament,null, dateOfBirth, null);
+
+                App.sqlOps.getReaderRepository().insert(reader);
+            }{
+            Reader reader = new Reader(pib, password, login, 0,
+                    city, street, build, apartament,null, dateOfBirth, null);
+
+            App.sqlOps.getReaderRepository().insert(reader);
         }
-        App.setRoot(MainController.PATH);
+        }
+        App.setRoot(LogInController.PATH);
     }
 }
 

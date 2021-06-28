@@ -2,10 +2,12 @@ package db.entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Belongs implements Entity {
     private Integer isbn;
     private Integer idCatalog;
+    public static final String TYPE_PARAMS_PATTERN  = "11";
 
     public Belongs(Integer isbn, Integer idCatalog) {
         this.isbn = isbn;
@@ -18,6 +20,24 @@ public class Belongs implements Entity {
     public Belongs(ResultSet resultSet) throws SQLException {
         this.isbn = resultSet.getInt("ISBN");
         this.idCatalog = resultSet.getInt("id_c");
+    }
+
+    public <T> Belongs change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "isbn":
+                //TODO IF ID ALREADY EXISTS
+                setIsbn((Integer) value);
+                return this;
+            case "isCatalog":
+                setIdCatalog((Integer) value);
+                return this;
+
+            default:
+                System.out.println("ReaderDefault");
+                return this;
+        }
     }
 
     public Integer getIsbn() {

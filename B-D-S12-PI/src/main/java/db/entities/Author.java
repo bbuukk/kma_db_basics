@@ -8,9 +8,32 @@ public class Author implements Entity {
     private Integer id;
     private String name;
 
+    public static final String TYPE_PARAMS_PATTERN  = "10";
+
     public Author(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public <T> Author change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                return this;
+            case "ISBN":
+                setName((String) value);
+                return this;
+            default:
+                System.out.println("Default");
+                return this;
+        }
+    }
+
+    public Author() {
+
     }
 
     public Author(String name) {
@@ -44,5 +67,10 @@ public class Author implements Entity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public void change(String value, String nameOfInnerVariable ){
+//        switch ()
+        //make properties file
     }
 }

@@ -3,67 +3,604 @@ package vdb.dev.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import db.entities.Authorship;
-import db.entities.Entity;
-import db.entities.Reader;
+import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalDateStringConverter;
 import vdb.dev.App;
 import vdb.dev.Controllers.addMenu.AddMenuController;
 
 public class MainController
 {
-    ObservableList<String> tableNames;
-    private static db.entities.Reader currentAuthorizedReader;
 
-    Entity entity;
+    private static db.entities.Reader currentAuthorizedReader;
+    private static int rightsType;
+
+    ObservableList<Entity> listEntitiesToChange;
+    ObservableList<Entity> listEntitiesToDelete;
 
     public static final String PATH = "Fxmls/Main/Main";
 
-    @FXML
-    private ResourceBundle resources;
+    String lastTableDisplayed;
+
+    FilteredList<Book> filteredData;
+    ObservableList<Entity> searchRes = FXCollections.observableArrayList();
+    SortedList<Entity> sortedList;
+    public ComboBox comboboxDorDebtors;
+
 
     @FXML
-    private URL location;
+    void initialize()
+    {
+        App.stage.setWidth(970);
+        App.stage.setHeight(634);
+
+        mainTableView.setPrefWidth(900);
+
+        rightsType = isAdminRightsSet();
+        setRightsConfigurations(rightsType);
+    }
+
 
     @FXML
-    private Button changeButton;
+    public void selectOtherQuieries(javafx.event.ActionEvent event) throws SQLException
+    {
+        String nameOfSelectedTable = comboboxDorDebtors.getSelectionModel().getSelectedItem().toString();
+        displayReaderTable(nameOfSelectedTable);
+    }
 
     @FXML
-    private Button updateButton;
+    public void selectTabel(javafx.event.ActionEvent event) throws SQLException
+    {
+        String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+        displayReaderTable(nameOfSelectedTable);
+    }
+
+    private void createNewTableColumns(String[] columnsToCreate, String patterInt, int amoutColumnsEditBlock)
+    {
+        TableColumn column = null;
+        mainTableView.getColumns().clear();
+
+        char dataTypeCurrent;
+        String COLUMN_NAME;
+
+        for (int i = 0; i < columnsToCreate.length; i++)
+        {
+            COLUMN_NAME = columnsToCreate[i];
+            dataTypeCurrent = patterInt.charAt(i);
+
+            column = getValidColumn(dataTypeCurrent);
+            column.setText(COLUMN_NAME);
+            column.setCellValueFactory(new PropertyValueFactory<>(COLUMN_NAME));
+
+
+            if (rightsType == Rights.ADMIN.getValue() ||
+                    rightsType == Rights.LIBRARIAN.getValue())
+            {
+                setEditableColumn(column);
+
+                if (amoutColumnsEditBlock != 0)
+                {
+                    column.setEditable(false);
+                    --amoutColumnsEditBlock;
+                }
+            }
+            mainTableView.getColumns().add(column);
+        }
+    }
 
     @FXML
-    private Button addMenuButton;
+    void createReader(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        addMenuController.createNewReader();
+    }
 
     @FXML
-    private Button showMenuButton;
+    void createCatalog(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        addMenuController.createNewCatalog();
+    }
 
     @FXML
-    private Button ChangeMenuButton;
+    void createNIB(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        addMenuController.createNewBookInstance();
+    }
 
     @FXML
-    private Button DefaultMenuButton;
+    void createBook(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        addMenuController.createNewBook();
+    }
+    @FXML
+    void addToCatalogNewBookSection(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        addMenuController.configureAddToCatalogNewBookSectionLabelsLabel();
+    }
+    @FXML
+    void addToAuthorNewBookSection(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        addMenuController.configureAddToAuthorNewBookSectionLabelsLabels();
+    }
 
     @FXML
-    private Button exitButton;
+    void updateTable(javafx.scene.input.MouseEvent event) throws SQLException
+    {
+        try
+        {
+            String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+            displayReaderTable(nameOfSelectedTable);
+        }catch (NullPointerException e){
+            new Alert(Alert.AlertType.ERROR, "You didn't chose the table").showAndWait();
+        }
+    }
 
     @FXML
-    private Button logOutButton;
+    public void changeCurrentTable(javafx.scene.input.MouseEvent event)
+    {
+        String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+
+        switch (nameOfCurrentSelectedEntity)
+        {
+            case "Reader":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getReaderRepository().delete((Reader) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getReaderRepository().update((Reader) entity);
+                }
+
+                break;
+            case "Authorship":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getAuthorshipRepository().delete((Authorship) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getAuthorshipRepository().insert((Authorship) entity);
+                }
+
+                break;
+            case "Belongs":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBelongsRepository().delete((Belongs) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getBelongsRepository().insert((Belongs) entity);
+                }
+
+                break;
+            case "Book":
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBookRepository().delete((Book) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getBookRepository().update((Book) entity);
+                }
+
+                break;
+            case "BookInstance":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBookInstanceRepository().delete((BookInstance) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getBookInstanceRepository().update((BookInstance) entity);
+                }
+
+                break;
+            case "BookReader":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getBookReaderRepository().delete((BookReader) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getBookReaderRepository().update((BookReader) entity);
+                }
+
+                break;
+            case "Catalog":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getCatalogRepository().delete((Catalog) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getCatalogRepository().update((Catalog) entity);
+                }
+
+                break;
+            case "Author":
+
+                for (Entity entity : listEntitiesToDelete)
+                {
+                    App.sqlOps.getAuthorRepository().delete((Author) entity);
+                }
+                for (Entity entity : listEntitiesToChange)
+                {
+                    App.sqlOps.getAuthorRepository().update((Author) entity);
+                }
+
+                break;
+        }
+    }
+
+    AddMenuController addMenuController = new AddMenuController(this);
+    @FXML
+    public void addMenu(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        try
+        {
+            String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+            addMenuController.openRequestedAddMenu(nameOfCurrentSelectedEntity);
+        }catch (NullPointerException e){
+            new Alert(Alert.AlertType.ERROR, "You didn't chose the table").showAndWait();
+        }
+    }
+
+    public boolean turnOffSection(){
+        try
+        {
+            addMenuController.iteratorOfClickAddMenu = 0;
+            mainTableView.setPrefWidth(900);
+            addReaderMenuPane.setVisible(false);
+            addCatalogMenuPane.setVisible(false);
+            addNIBPaneMenu.setVisible(false);
+            addBookMenuPane.setVisible(false);
+            return true;
+        }
+        catch (NullPointerException exception){
+            System.out.println( exception.getMessage());
+            return false;
+        }
+    }
+
+    @FXML
+    public void defaultQueriesMenu(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        mainTableView.setPrefWidth(572);
+    }
+
+    @FXML
+    void findQueries(javafx.scene.input.MouseEvent event)
+    {
+        mainTableView.setPrefWidth(572);
+    }
+
+    private void setRightsConfigurations(int rightsType)
+    {
+        if (rightsType == Rights.ADMIN.getValue())
+        {
+            var tableNames = FXCollections.observableArrayList(
+                    "Author", "Authorship", "Belongs", "Book",
+                    "BookInstance", "BookReader", "Catalog", "Reader");
+
+            chooseTableComboBox.setItems(tableNames);
+
+            listEntitiesToChange = FXCollections.observableArrayList();
+            listEntitiesToDelete = FXCollections.observableArrayList();
+
+            EventHandler<KeyEvent> deleteHandler = new EventHandler<KeyEvent>()
+            {
+                @Override
+                public void handle(KeyEvent keyEvent)
+                {
+                    try
+                    {
+                        if (keyEvent.getCode() == KeyCode.DELETE)
+                        {
+                            var allData = mainTableView.getItems();
+                            var selectedData = mainTableView.getSelectionModel().getSelectedItems();
+                            listEntitiesToDelete.addAll(selectedData);
+
+                            selectedData.forEach(allData::remove);
+                        }
+                    } catch (Exception e)
+                    {
+                    }
+                }
+            };
+
+            App.scene.setOnKeyPressed(deleteHandler);
+
+        }else if (rightsType == Rights.LIBRARIAN.getValue()){
+            var tableNames = FXCollections.observableArrayList(
+                    "Author", "Book", "Catalog", "Reader","BookInstance");
+
+            listEntitiesToChange = FXCollections.observableArrayList();
+            listEntitiesToDelete = FXCollections.observableArrayList();
+
+            EventHandler<KeyEvent> deleteHandler = new EventHandler<KeyEvent>()
+            {
+                @Override
+                public void handle(KeyEvent keyEvent)
+                {
+                    try
+                    {
+                        if (keyEvent.getCode() == KeyCode.DELETE)
+                        {
+                            var allData = mainTableView.getItems();
+                            var selectedData = mainTableView.getSelectionModel().getSelectedItems();
+                            listEntitiesToDelete.addAll(selectedData);
+
+                            selectedData.forEach(allData::remove);
+                        }
+                    } catch (Exception e)
+                    {
+                    }
+                }
+            };
+
+            chooseTableComboBox.setItems(tableNames);
+
+        } else if (rightsType == Rights.USER.getValue())
+        {
+            var tableNames = FXCollections.observableArrayList(
+                    "Author", "Book", "Catalog", "BookReader");
+
+            chooseTableComboBox.setItems(tableNames);
+
+            addMenuButton.setDisable(true);
+            changeButton.setDisable(true);
+        }
+
+    }
+
+    @FXML
+    public void logOut(javafx.scene.input.MouseEvent event) throws IOException
+    {
+        App.scene.setOnKeyPressed(null);
+        App.stage.setWidth(816);
+        App.stage.setHeight(509);
+        MainController.currentAuthorizedReader = null;
+        App.setRoot(LogInController.PATH);
+    }
+
+    @FXML
+    public void exit(javafx.scene.input.MouseEvent event)
+    {
+        Platform.exit();
+    }
+
+    //returns column with appropriate for us data type and makes it editable
+    private TableColumn getValidColumn(char dataTypeCurrent)
+    {
+        TableColumn column = null;
+        switch (dataTypeCurrent)
+        {
+            case '0':
+                column = new TableColumn<Entity, String>();
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+                return column;
+            case '1':
+                column = new TableColumn<Entity, Integer>();
+                column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+                return column;
+            case '2':
+                column = new TableColumn<Entity, Date>();
+                column.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
+                return column;
+            default:
+                return null;
+        }
+    }
+
+    private void setEditableColumn(TableColumn userColumn)
+    {
+
+        listEntitiesToChange.clear();
+        listEntitiesToDelete.clear();
+
+        String fCOLUMN_NAME = userColumn.getText();
+
+        userColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>()
+        {
+            @Override
+            public void handle(TableColumn.CellEditEvent event)
+            {
+                String nameOfCurrentSelectedEntity = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+
+                switch (nameOfCurrentSelectedEntity)
+                {
+                    case "Reader":
+                        Reader readerToChange = (Reader) event.getRowValue();
+                        listEntitiesToChange.add(readerToChange.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Authorship":
+                        Authorship authorship = (Authorship) event.getRowValue();
+                        listEntitiesToDelete.add(authorship);
+                        listEntitiesToChange.add(authorship.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Belongs":
+                        Belongs belongs = (Belongs) event.getRowValue();
+                        listEntitiesToDelete.add(belongs);
+                        listEntitiesToChange.add(belongs.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Book":
+                        Book book = (Book) event.getRowValue();
+                        listEntitiesToChange.add(book.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "BookInstance":
+                        BookInstance bookInstance = (BookInstance) event.getRowValue();
+                        listEntitiesToChange.add(bookInstance.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "BookReader":
+                        BookReader bookReader = (BookReader) event.getRowValue();
+                        listEntitiesToDelete.add(bookReader);
+                        listEntitiesToChange.add(bookReader.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Catalog":
+                        Catalog catalog = (Catalog) event.getRowValue();
+                        listEntitiesToChange.add(catalog.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+                    case "Author":
+                        Author author = (Author) event.getRowValue();
+                        listEntitiesToChange.add(author.change(fCOLUMN_NAME, event.getNewValue()));
+                        break;
+
+                    default:
+
+                }
+            }
+        });
+    }
+
+    private void displayReaderTable(String name) throws SQLException
+    {
+        if (!name.equals(lastTableDisplayed)){
+            turnOffSection();
+        }
+
+        switch (name)
+        {
+            case "Reader":
+
+                lastTableDisplayed = name;
+
+                String[] cellNamesReader = {"id", "pib", "password", "login",
+                        "typeRights", "city", "street", "build",
+                        "apartment", "workplace", "birthDate", "phoneNum"};
+
+                createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN, 1);
+
+                var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
+                mainTableView.setItems(listOfReaders);
+
+                break;
+            case "Authorship":
+
+                lastTableDisplayed = name;
+                String[] cellNamesAuthorship = {"id", "ISBN"};
+
+                createNewTableColumns(cellNamesAuthorship, Authorship.TYPE_PARAMS_PATTERN, 0);
+
+                var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
+                mainTableView.setItems(listAuthorships);
+
+                break;
+            case "Belongs":
+
+                lastTableDisplayed = name;
+                String[] cellNamesBelongs = {"isbn", "idCatalog"};
+
+                createNewTableColumns(cellNamesBelongs, Belongs.TYPE_PARAMS_PATTERN, 0);
+
+                var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
+                mainTableView.setItems(listBelongs);
+
+                break;
+            case "Book":
+
+                lastTableDisplayed = name;
+                String[] cellNamesBook = {"ISBN", "name", "publisher", "pubCity", "pubYear", "pageNum", "price"};
+
+                createNewTableColumns(cellNamesBook, Book.TYPE_PARAMS_PATTERN, 1);
+
+                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
+
+                mainTableView.setItems(listBooks);
+
+                break;
+            case "BookInstance":
+
+                lastTableDisplayed = name;
+                String[] cellNamesBookInstance = {"id", "shelf", "ISBN"};
+
+                createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
+
+                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
+                mainTableView.setItems(listBooksInstances);
+
+//                lastTableDisplayed = name;
+//                String[] cellNamesBookInstance = {"id", "shelf", "name"};
+//
+//                createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
+//
+//                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
+//                mainTableView.setItems(listBooksInstances);
+
+                break;
+            case "BookReader":
+
+                lastTableDisplayed = name;
+                String[] cellNamesBookReader = {"idReader", "idInstance", "dateOut",
+                        "dateExp", "dateReturn"};
+
+                createNewTableColumns(cellNamesBookReader, BookReader.TYPE_PARAMS_PATTERN, 2);
+
+                ObservableList<Entity> listBookReaders;
+
+                if (rightsType == Rights.USER.getValue())
+                {
+                    int userId = currentAuthorizedReader.getId();
+                    listBookReaders = App.sqlOps.getBookReaderRepository().getBookReadersByReader(userId);
+                } else
+                {
+                    listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
+                }
+
+                mainTableView.setItems(listBookReaders);
+
+                if (rightsType == Rights.USER.getValue())
+                    mainTableView.getColumns().get(0).setVisible(false);
+
+                break;
+            case "Catalog":
+
+                lastTableDisplayed = name;
+                String[] cellNamesCatalog = {"id", "name"};
+
+                createNewTableColumns(cellNamesCatalog, Catalog.TYPE_PARAMS_PATTERN, 1);
+
+                var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
+                mainTableView.setItems(listCatalogs);
+
+                break;
+            case "Author":
+
+                lastTableDisplayed = name;
+                String[] cellNamesAuthor = {"id", "name"};
+
+                createNewTableColumns(cellNamesAuthor, Author.TYPE_PARAMS_PATTERN, 1);
+
+                var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
+                mainTableView.setItems(listAuthors);
+
+                break;
+        }
+    }
+
 
     @FXML
     private ComboBox<String> chooseTableComboBox;
@@ -72,314 +609,436 @@ public class MainController
     private TableView<Entity> mainTableView;
 
     @FXML
-    //id
-    private TableColumn<Entity, String> cOne;
+    private ResourceBundle resources;
 
     @FXML
-    //id
-    private TableColumn<Entity, Integer> cOneInt;
+    private URL location;
 
     @FXML
-    //pib
-    private TableColumn<Entity, String > cTwo;
+    private Button addMenuButton;
 
     @FXML
-    //pib
-    private TableColumn<Entity, Integer> cTwoInt;
+    private Button changeButton;
 
     @FXML
-    //password
-    private TableColumn<Entity, String> cThree;
+    private Button updateButton;
 
     @FXML
-    //password
-    private TableColumn<Entity, Integer> cThreeInt;
+    private Button DefaultMenuButton;
 
     @FXML
-    //login
-    private TableColumn<Entity, String> cFour;
+    private Button findButton;
 
     @FXML
-    //password
-    private TableColumn<Entity, Integer> cFourInt;
+    private Button logOutButton;
 
     @FXML
-    //typeRights
-    private TableColumn<Entity, String> cFive;
+    private Button exitButton;
 
     @FXML
-    //city
-    private TableColumn<Entity, String> cSix;
+    private Pane addReaderMenuPane;
 
     @FXML
-    //street
-    private TableColumn<Entity, String> cSeven;
+    private TextField pibField;
 
     @FXML
-    //build
-    private TableColumn<Entity, String> cEight;
+    private TextField loginField;
 
     @FXML
-    //apartament
-    private TableColumn<Entity, String> cNine;
+    private TextField cityField;
 
     @FXML
-    //birth Date
-    private TableColumn<Entity, String> cTen;
+    private TextField workplaceField;
 
     @FXML
-    //phoneNum
-    private TableColumn<Entity, String> cEleven;
-
+    private TextField buildField;
 
     @FXML
-    private TableColumn<Entity, String> cTwelve;
-
-//    c1 = new TableColumn<Reader, Integer>();c2 = new TableColumn<Reader, String>();c3 = new TableColumn<Reader, String>();
-//    с4 = new TableColumn<Reader, Integer>();с5 = new TableColumn<Reader, String>();с6 = new TableColumn<Reader, String>();
-//    с7 = new TableColumn<Reader, String>();с8 = new TableColumn<Reader, String>();с9 = new TableColumn<Reader, String>();
-//    с10 = new TableColumn<Reader, String>();с11 = new TableColumn<Reader, Date>(); c2 =
-
+    private TextField apartamentField;
 
     @FXML
-    void initialize()
+    private TextField phoneField;
+
+    @FXML
+    private DatePicker dateOfBirthDatePicker;
+
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private PasswordField confirmPassField;
+
+    @FXML
+    private RadioButton showRadioButton;
+
+    @FXML
+    private Label showLabel;
+
+    @FXML
+    private TextField streetField;
+
+    @FXML
+    private Button createReader;
+
+
+    public TextField getPibField()
     {
-        tableNames = FXCollections.observableArrayList("Author", "Authorship","Belongs", "Book",
-                                                   "BookInstance", "BookReader","Catalog", "Reader");
-        chooseTableComboBox.setItems(tableNames);
-//                editableColumns();
-
+        return pibField;
     }
 
-    private void editableColumns()
+    public TextField getLoginField()
     {
-
-        cTwo.setCellFactory(TextFieldTableCell.forTableColumn());
-        cThree.setCellFactory(TextFieldTableCell.forTableColumn());
-        cFour.setCellFactory(TextFieldTableCell.forTableColumn());
-        cFive.setCellFactory(TextFieldTableCell.forTableColumn());
-        cSix.setCellFactory(TextFieldTableCell.forTableColumn());
-        cSeven.setCellFactory(TextFieldTableCell.forTableColumn());
-        cEight.setCellFactory(TextFieldTableCell.forTableColumn());;
-        cNine.setCellFactory(TextFieldTableCell.forTableColumn());
-        cTen.setCellFactory(TextFieldTableCell.forTableColumn());
-        cEleven.setCellFactory(TextFieldTableCell.forTableColumn());
-        cTwelve.setCellFactory(TextFieldTableCell.forTableColumn());
+        return loginField;
     }
 
-
-
-
-    @FXML
-    public void selectTabel(javafx.event.ActionEvent event) throws SQLException
+    public TextField getCityField()
     {
-        String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
-        displayReaderTable(nameOfSelectedTable);
-
-
+        return cityField;
     }
 
-    private void setCellValuesSettings(String cc1, String cc2,String cc3,String cc4,String cc5,
-                                       String cc6,String cc7,String cc8,String cc9,String cc10,
-                                       String cc11, String cc12){
-
-        if(!isDigit(cc1))
-        {
-            cOne.setVisible(true);
-            cOneInt.setVisible(false);
-            cOne.setCellValueFactory(new PropertyValueFactory<>(cc1));
-            cOne.setText(cc1);
-        }
-        else
-        {
-            cOne.setVisible(false);
-            cOneInt.setVisible(true);
-            cOneInt.setCellValueFactory(new PropertyValueFactory<>(cc1));
-            cOneInt.setText(cc1);
-        }
-        if(!isDigit(cc2))
-        {
-            cTwo.setVisible(true);
-            cTwoInt.setVisible(false);
-            cTwo.setText(cc2);
-            cTwo.setCellValueFactory(new PropertyValueFactory<>(cc2));
-        }
-        else
-        {
-            cTwo.setVisible(false);
-            cTwoInt.setVisible(true);
-            cTwoInt.setText(cc2);
-            cTwoInt.setCellValueFactory(new PropertyValueFactory<>(cc2));
-        }
-        if(!isDigit(cc3))
-        {
-            cThree.setVisible(true);
-            cThreeInt.setVisible(false);
-            cThree.setText(cc3);
-            cThree.setCellValueFactory(new PropertyValueFactory<>(cc3));
-        }
-        else
-        {
-            cThree.setVisible(false);
-            cThreeInt.setVisible(true);
-            cThreeInt.setText(cc3);
-            cThreeInt.setCellValueFactory(new PropertyValueFactory<>(cc3));
-        }
-
-        if(!isDigit(cc4))
-        {
-            cFour.setVisible(true);
-            cFourInt.setVisible(false);
-            cFour.setText(cc4);
-            cFour.setCellValueFactory(new PropertyValueFactory<>(cc4));
-        }
-        else{
-            cFour.setVisible(false);
-            cFourInt.setVisible(true);
-            cFourInt.setText(cc4);
-            cFourInt.setCellValueFactory(new PropertyValueFactory<>(cc4));
-        }
-
-        cFive.setCellValueFactory(new PropertyValueFactory<>(cc5));
-        cSix.setCellValueFactory(new PropertyValueFactory<>(cc6));
-        cSeven.setCellValueFactory(new PropertyValueFactory<>(cc7));
-        cEight.setCellValueFactory(new PropertyValueFactory<>(cc8));
-        cNine.setCellValueFactory(new PropertyValueFactory<>(cc9));
-        cTen.setCellValueFactory(new PropertyValueFactory<>(cc10));
-        cEleven.setCellValueFactory(new PropertyValueFactory<>(cc11));
-        cTwelve.setCellValueFactory(new PropertyValueFactory<>(cc12));
-
-        cFive.setText(cc5);cSix.setText(cc6);
-        cSeven.setText(cc7);cEight.setText(cc8);cNine.setText(cc9);
-        cTen.setText(cc10);cEleven.setText(cc11);cTwelve.setText(cc12);
-
-    }
-
-
-    private void displayReaderTable(String name) throws SQLException
+    public TextField getWorkplaceField()
     {
-        switch (name){
-            case "Reader":
-//                cFive.setVisible(true);
-                setCellValuesSettings("id","pib", "password","login","typeRights", "city","street",
-                                        "build", "apartment","workplace", "birthDate", "phoneNum");
-                var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
-                mainTableView.setItems(listOfReaders);
-                break;
-            case "Authorship":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","ISBN", "","","", "","",
-                        "", "","", "", "");
-                var listAuthorships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
-                mainTableView.setItems(listAuthorships);
-                break;
-            case "Belongs":
-//                cFive.setVisible(false);
-                setCellValuesSettings("isbn","idCatalog", "","","", "","",
-                        "", "","", "", "");
-                var listBelongs = App.sqlOps.getBelongsRepository().getAllBelongs();
-                mainTableView.setItems(listBelongs);
-                break;
-            case "Book":
-//                cFive.setVisible(false);
-                setCellValuesSettings("ISBN","name", "publisher","pubCity","pubYear", "pageNum","price",
-                        "", "","", "", "");
-                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
-                mainTableView.setItems(listBooks);
-                break;
-            case "BookInstance":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","shelf", "ISBN","","", "","",
-                        "", "","", "", "");
-                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
-                mainTableView.setItems(listBooksInstances);
-                break;
-            case "BookReader":
-//                cFive.setVisible(false);
-                setCellValuesSettings("idReader","idInstance", "dateOut","dateExp","dateReturn", "","",
-                        "", "","", "", "");
-                var listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
-                mainTableView.setItems(listBookReaders);
-                break;
-            case "Catalog":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","name", "","","", "","",
-                        "", "","", "", "");
-                var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
-                mainTableView.setItems(listCatalogs);
-                break;
-            case "Author":
-//                cFive.setVisible(false);
-                setCellValuesSettings("id","name", "","","", "","",
-                        "", "","", "", "");
-                var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
-                mainTableView.setItems(listAuthors);
+        return workplaceField;
+    }
 
-                break;
-        }
+    public TextField getBuildField()
+    {
+        return buildField;
+    }
+
+    public TextField getApartamentField()
+    {
+        return apartamentField;
+    }
+
+    public TextField getPhoneField()
+    {
+        return phoneField;
+    }
+
+    public DatePicker getDateOfBirthDatePicker()
+    {
+        return dateOfBirthDatePicker;
+    }
+
+    public PasswordField getPasswordField()
+    {
+        return passwordField;
+    }
+
+    public PasswordField getConfirmPassField()
+    {
+        return confirmPassField;
+    }
+
+    public RadioButton getShowRadioButton()
+    {
+        return showRadioButton;
+    }
+
+    public Label getShowLabel()
+    {
+        return showLabel;
+    }
+
+    public TextField getStreetField()
+    {
+        return streetField;
+    }
+
+    public Button getCreateReader()
+    {
+        return createReader;
     }
 
     @FXML
-    public void changeCurrentTable(javafx.scene.input.MouseEvent event)
-    {
+    private Pane addCatalogMenuPane;
 
+    public TableView<Entity> getMainTableView()
+    {
+        return mainTableView;
     }
 
-
-    @FXML
-    void updateTable(javafx.scene.input.MouseEvent event) throws SQLException
+    public Pane getAddReaderMenuPane()
     {
-        String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
-        displayReaderTable(nameOfSelectedTable);
+        return addReaderMenuPane;
     }
 
-    @FXML
-    public void addMenu(javafx.scene.input.MouseEvent event) throws IOException
+    public Pane getAddCatalogMenuPane()
     {
-        AddMenuController addMenuController = new AddMenuController();
-        addMenuController.openAddMenu();
+        return addCatalogMenuPane;
     }
 
-    @FXML
-    public void showMenu(javafx.scene.input.MouseEvent event) throws IOException
+    public Pane getAddNIBPaneMenu()
     {
+        return addNIBPaneMenu;
     }
 
-    @FXML
-    public void defaultQueriesMenu(javafx.scene.input.MouseEvent event) throws IOException
+    public Pane getAddBookMenuPane()
     {
-
+        return addBookMenuPane;
     }
 
     @FXML
-    public void logOut(javafx.scene.input.MouseEvent event) throws IOException
-    {
-        MainController.currentAuthorizedReader = null;
-        App.setRoot(LogInController.PATH);
-    }
+    private TextField catalogNameField;
 
     @FXML
-    public void exit(javafx.scene.input.MouseEvent event){
-        Platform.exit();
+    private Button createCatalog;
+
+    @FXML
+    private Pane addNIBPaneMenu;
+
+    @FXML
+    private TextField bookInstanceTitleField;
+
+    @FXML
+    private TextField ShelfField;
+
+    @FXML
+    private TextField amountField;
+
+    @FXML
+    private Button createNewBookInstanceButton;
+
+    @FXML
+    public Pane addBookMenuPane;
+
+    @FXML
+    private TextField bookTitleField;
+
+    @FXML
+    private TextField publisherField;
+
+    @FXML
+    private TextField publishersCityField;
+
+    @FXML
+    private DatePicker dateOfPublishingPicker;
+
+    @FXML
+    private TextField priceField;
+
+    @FXML
+    private TextField amountOfPagesField;
+
+    @FXML
+    public ComboBox<String> chooseCatalogComboBox;
+
+    @FXML
+    public ComboBox<String> chooseBookTitles;
+
+    @FXML
+    private Button addToCatalogButton;
+
+    @FXML
+    public ComboBox<String> chooseAuthorComboBox;
+
+    @FXML
+    private Button addAuthorButton;
+
+    @FXML
+    public Label belongsToLable;
+
+    @FXML
+    public Label belongToAuthor;
+
+    @FXML
+    private Button createNewBookButton;
+
+    public ObservableList<Entity> getListEntitiesToChange()
+    {
+        return listEntitiesToChange;
     }
 
-    public static Reader getCurrentAuthorizedReader()
+    public ObservableList<Entity> getListEntitiesToDelete()
     {
-        return currentAuthorizedReader;
+        return listEntitiesToDelete;
     }
+
+    public static String getPATH()
+    {
+        return PATH;
+    }
+
+    public AddMenuController getAddMenuController()
+    {
+        return addMenuController;
+    }
+
+    public ComboBox<String> getChooseTableComboBox()
+    {
+        return chooseTableComboBox;
+    }
+
+    public ResourceBundle getResources()
+    {
+        return resources;
+    }
+
+    public URL getLocation()
+    {
+        return location;
+    }
+
+    public Button getAddMenuButton()
+    {
+        return addMenuButton;
+    }
+
+    public Button getChangeButton()
+    {
+        return changeButton;
+    }
+
+    public Button getUpdateButton()
+    {
+        return updateButton;
+    }
+
+    public Button getDefaultMenuButton()
+    {
+        return DefaultMenuButton;
+    }
+
+    public Button getFindButton()
+    {
+        return findButton;
+    }
+
+    public Button getLogOutButton()
+    {
+        return logOutButton;
+    }
+
+    public Button getExitButton()
+    {
+        return exitButton;
+    }
+
+    public TextField getCatalogNameField()
+    {
+        return catalogNameField;
+    }
+
+    public Button getCreateCatalog()
+    {
+        return createCatalog;
+    }
+
+    public TextField getBookInstanceTitleField()
+    {
+        return bookInstanceTitleField;
+    }
+
+    public TextField getShelfField()
+    {
+        return ShelfField;
+    }
+
+    public TextField getAmountField()
+    {
+        return amountField;
+    }
+
+    public Button getCreateNewBookInstanceButton()
+    {
+        return createNewBookInstanceButton;
+    }
+
+    public TextField getBookTitleField()
+    {
+        return bookTitleField;
+    }
+
+    public TextField getPublisherField()
+    {
+        return publisherField;
+    }
+
+    public TextField getPublishersCityField()
+    {
+        return publishersCityField;
+    }
+
+    public DatePicker getDateOfPublishingPicker()
+    {
+        return dateOfPublishingPicker;
+    }
+
+    public TextField getPriceField()
+    {
+        return priceField;
+    }
+
+    public TextField getAmountOfPagesField()
+    {
+        return amountOfPagesField;
+    }
+
+    public Button getAddToCatalogButton()
+    {
+        return addToCatalogButton;
+    }
+
+    public ComboBox<String> getChooseAuthorComboBox()
+    {
+        return chooseAuthorComboBox;
+    }
+
+    public Button getAddAuthorButton()
+    {
+        return addAuthorButton;
+    }
+
+    public Label getBelongsToLable()
+    {
+        return belongsToLable;
+    }
+
+    public Label getBelongToAuthor()
+    {
+        return belongToAuthor;
+    }
+
+    public Button getCreateNewBookButton()
+    {
+        return createNewBookButton;
+    }
+
 
     public static void setCurrentAuthorizedReader(Reader currentAuthorizedReader)
     {
         MainController.currentAuthorizedReader = currentAuthorizedReader;
     }
 
-    private static boolean isDigit(String s) throws NumberFormatException {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+
+    private int isAdminRightsSet()
+    {
+        if (currentAuthorizedReader.getTypeRights() == Rights.ADMIN.getValue())
+            return 1;
+        else if (currentAuthorizedReader.getTypeRights() == Rights.ADMIN.getValue())
+            return 2;
+        else return 0;
     }
+
+    enum Rights
+    {
+        ADMIN(1),
+        LIBRARIAN(2),
+        USER(0);
+
+         int id;
+         Rights(int id){
+            this.id = id;
+        }
+
+        public int getValue()
+        {
+            return id;
+        }
+
+    }
+
+
 }
 

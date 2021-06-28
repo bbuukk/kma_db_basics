@@ -42,6 +42,24 @@ public class BookReaderRepository {
         }
     }
 
+    public ObservableList<Entity> getBookReadersByReader(Integer idReader) {
+        if (idReader == null ) throw new IllegalArgumentException();
+        String sql = "SELECT * FROM mydb.BookReader WHERE id_r = " + idReader;
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql)
+        ) {
+            ObservableList<Entity> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new BookReader(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+//            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
     public boolean delete(BookReader bookReader) {
         if (bookReader.getIdReader() == null || bookReader.getIdInstance() == null)
             throw new IllegalArgumentException();
@@ -64,7 +82,7 @@ public class BookReaderRepository {
         if (bookReader.getIdReader() == null || bookReader.getIdInstance() == null)
             throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO mydb.BookReader(id_r, id_i, date_out, date_exp, dare_return) " +
+                "INSERT INTO mydb.BookReader(id_r, id_i, date_out, date_exp, date_return) " +
                         "values (?, ?, ?, ?, ?)"))  {
 
             statement.setInt(1, bookReader.getIdReader());
@@ -87,7 +105,7 @@ public class BookReaderRepository {
         if (bookReader.getIdReader() == null || bookReader.getIdInstance() == null)
             throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE mydb.BookReader SET date_out = ?, date_exp=?, dare_return=?" +
+                "UPDATE mydb.BookReader SET date_out = ?, date_exp=?, date_return=?" +
                         " WHERE id_i=? and id_r=?")) {
             //statement.setInt(1, 1);
             statement.setDate(1, Date.valueOf(bookReader.getDateOut()));
@@ -118,6 +136,49 @@ public class BookReaderRepository {
         } catch (SQLException e) {
             System.out.println("Не вірний SQL запит на вибірку даних");
 //            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+    public List<BookReader> getBookReadersForUnavailableInstances(int ISBN) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT *\n" +
+                        "from mydb.BookReader\n" +
+                        "where id_i in(\n" +
+                        "    select id_i\n" +
+                        "    from mydb.BookInstance\n" +
+                        "    where ISBN = ?\n" +
+                        "    ) and date_return is null")) {
+
+            statement.setInt(1, ISBN);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<BookReader> list = new ArrayList<>();
+            while (resultSet.next()) {
+                list.add(new BookReader(resultSet));
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на update");
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
+
+    public int bookReaderNumber() {
+        String sql = "SELECT Count(*) as num FROM mydb.BookReader";
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql)
+        ) {
+            if (res.next()) {
+                return res.getInt("num");
+            }
+            return 0;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
             throw new RuntimeException("Can`t select anything", e);
         }
     }

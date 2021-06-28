@@ -11,6 +11,9 @@ public class BookReader implements Entity {
     private LocalDate dateExp;
     private LocalDate dateReturn;
 
+    public static final String TYPE_PARAMS_PATTERN = "11222";
+
+
     public BookReader(Integer idReader, Integer idInstance, LocalDate dateOut, LocalDate dateExp, LocalDate dateReturn) {
         this.idReader = idReader;
         this.idInstance = idInstance;
@@ -19,6 +22,33 @@ public class BookReader implements Entity {
         this.dateReturn = dateReturn;
     }
 
+    public <T> BookReader change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "idReader":
+                //TODO IF ID ALREADY EXISTS
+                setIdReader((Integer) value);
+                return this;
+            case "idInstance":
+                setIdInstance((Integer) value);
+                return this;
+            case "dateOut":
+                setDateOut((LocalDate) value);
+                return this;
+            case "dateExp":
+                setDateExp((LocalDate) value);
+                return this;
+            case "dateReturn":
+                setDateReturn((LocalDate) value);
+                return this;
+
+            default:
+                System.out.println("Default");
+                return this;
+
+        }
+    }
 
     public BookReader(ResultSet resultSet) throws SQLException {
         this.idReader = resultSet.getInt("id_r");

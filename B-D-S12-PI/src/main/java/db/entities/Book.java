@@ -1,8 +1,14 @@
 package db.entities;
 
+import db.SqlOps;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import vdb.dev.App;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Book implements Entity{
     private Integer ISBN;
@@ -12,6 +18,11 @@ public class Book implements Entity{
     private LocalDate pubYear;
     private Integer pageNum;
     private String price;
+
+    private ObservableList<String> authors = FXCollections.observableArrayList();
+    public static final String TYPE_PARAMS_PATTERN_TEST  = "10002100";
+
+    public static final String TYPE_PARAMS_PATTERN  = "1000210";
 
     public Book(Integer ISBN, String name, String publisher, String pubCity, LocalDate pubYear, Integer pageNum, String price) {
         this.ISBN = ISBN;
@@ -40,6 +51,54 @@ public class Book implements Entity{
         this.pubYear = resultSet.getDate("pub_year").toLocalDate();
         this.pageNum = resultSet.getInt("page_num");
         this.price = resultSet.getString("price");
+
+    }
+
+//    private void getAuthorsOfBook(int ISBN){
+//        var authors = App.sqlOps.getAuthorRepository().getAllAuthors();
+//        var ships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
+//        for (Entity author: authors)
+//        {
+//
+//        }
+//    }
+
+
+    public <T> Book change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            //TODO WHO CAN CHANGE LOGIN AND PASSWORD
+            case "ISBN":
+                //TODO IF ID ALREADY EXISTS
+                setISBN((Integer) value);
+                return this;
+            case "name":
+                setName((String) value);
+                return this;
+            case "publisher":
+                setPublisher((String) value);
+                return this;
+            case "pubCity":
+                setPubCity((String) value);
+                return this;
+            case "pubYear":
+                setPubYear((LocalDate) value);
+                return this;
+            case "pageNum":
+                setPageNum((Integer) value);
+                return this;
+            case "price":
+                setPrice((String) value);
+                return this;
+
+            default:
+                System.out.println("ReaderDefault");
+                return this;
+        }
+    }
+
+    public Book() {
     }
 
     public Integer getISBN() {

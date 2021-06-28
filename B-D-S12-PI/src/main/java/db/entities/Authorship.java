@@ -6,6 +6,7 @@ import java.sql.SQLException;
 public class Authorship implements Entity {
     private Integer id;
     private Integer ISBN;
+    public static final String TYPE_PARAMS_PATTERN  = "11";
 
     public Authorship(Integer id, Integer ISBN) {
         this.id = id;
@@ -13,6 +14,24 @@ public class Authorship implements Entity {
     }
 
     public Authorship() {
+    }
+
+    public <T> Authorship change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                return this;
+            case "ISBN":
+                setISBN((Integer) value);
+                return this;
+
+            default:
+                System.out.println("Default");
+                return this;
+        }
     }
 
     public Authorship(ResultSet resultSet) throws SQLException {

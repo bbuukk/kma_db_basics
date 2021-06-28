@@ -1,10 +1,14 @@
 package db.entities;
 
+import vdb.dev.App;
+
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class Reader implements Entity{
+public class Reader implements Entity
+{
     private Integer id;
     private String pib;
     private String password;
@@ -18,7 +22,10 @@ public class Reader implements Entity{
     private LocalDate birthDate;
     private String phoneNum;
 
-    public Reader(Integer id, String pib, String password, String login, Integer typeRights, String city, String street, String build, String apartment, String workplace, LocalDate birthDate, String phoneNum) {
+    public static final String TYPE_PARAMS_PATTERN = "100010000020";
+
+    public Reader(Integer id, String pib, String password, String login, Integer typeRights, String city, String street, String build, String apartment, String workplace, LocalDate birthDate, String phoneNum)
+    {
         this.id = id;
         this.pib = pib;
         this.password = password;
@@ -33,7 +40,8 @@ public class Reader implements Entity{
         this.phoneNum = phoneNum;
     }
 
-    public Reader(String pib, String password, String login, Integer typeRights, String city, String street, String build, String apartment, String workplace, LocalDate birthDate, String phoneNum) {
+    public Reader(String pib, String password, String login, Integer typeRights, String city, String street, String build, String apartment, String workplace, LocalDate birthDate, String phoneNum)
+    {
         this.pib = pib;
         this.password = password;
         this.login = login;
@@ -47,7 +55,12 @@ public class Reader implements Entity{
         this.phoneNum = phoneNum;
     }
 
-    public Reader(ResultSet resultSet) throws SQLException {
+    public Reader()
+    {
+    }
+
+    public Reader(ResultSet resultSet) throws SQLException
+    {
         this.id = resultSet.getInt("id_r");
         this.pib = resultSet.getString("PIB");
         this.password = resultSet.getString("password");
@@ -62,104 +75,182 @@ public class Reader implements Entity{
         this.phoneNum = resultSet.getString("phone_num_r");
     }
 
-    public Integer getId() {
+    public <T> Reader change(String innerVarName, T value)
+    {
+        switch (innerVarName)
+        {
+            //TODO WHO CAN CHANGE LOGIN AND PASSWORD
+            case "id":
+                //TODO IF ID ALREADY EXISTS
+                setId((Integer) value);
+                return this;
+            case "pib":
+                setPib((String) value);
+                return this;
+            case "password":
+                setPassword((String) value);
+                return this;
+            case "login":
+                setLogin((String) value);
+                return this;
+            case "typeRights":
+                setTypeRights((Integer) value);
+                return this;
+            case "city":
+                setCity((String) value);
+                return this;
+            case "street":
+                setStreet((String) value);
+                return this;
+            case "build":
+                setBuild((String) value);
+                return this;
+            case "apartment":
+                setApartment((String) value);
+                return this;
+
+            case "workplace":
+                setWorkplace((String) value);
+                return this;
+
+            case "birthDate":
+                setBirthDate((LocalDate) value);
+                return this;
+
+            case "phoneNum":
+                setPhoneNum((String) value);
+                return this;
+
+            default:
+                System.out.println("ReaderDefault");
+                return this;
+        }
+        //return null;
+    }
+
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public String getPib() {
+    public String getPib()
+    {
         return pib;
     }
 
-    public void setPib(String pib) {
+    public void setPib(String pib)
+    {
         this.pib = pib;
     }
 
-    public String getPassword() {
+    public String getPassword()
+    {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public String getLogin() {
+    public String getLogin()
+    {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(String login)
+    {
         this.login = login;
     }
 
-    public Integer getTypeRights() {
+    public Integer getTypeRights()
+    {
         return typeRights;
     }
 
-    public void setTypeRights(Integer typeRights) {
+    public void setTypeRights(Integer typeRights)
+    {
         this.typeRights = typeRights;
     }
 
-    public String getCity() {
+    public String getCity()
+    {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(String city)
+    {
         this.city = city;
     }
 
-    public String getStreet() {
+    public String getStreet()
+    {
         return street;
     }
 
-    public void setStreet(String street) {
+    public void setStreet(String street)
+    {
         this.street = street;
     }
 
-    public String getBuild() {
+    public String getBuild()
+    {
         return build;
     }
 
-    public void setBuild(String build) {
+    public void setBuild(String build)
+    {
         this.build = build;
     }
 
-    public String getApartment() {
+    public String getApartment()
+    {
         return apartment;
     }
 
-    public void setApartment(String apartment) {
+    public void setApartment(String apartment)
+    {
         this.apartment = apartment;
     }
 
-    public String getWorkplace() {
+    public String getWorkplace()
+    {
         return workplace;
     }
 
-    public void setWorkplace(String workplace) {
+    public void setWorkplace(String workplace)
+    {
         this.workplace = workplace;
     }
 
-    public LocalDate getBirthDate() {
+    public LocalDate getBirthDate()
+    {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(LocalDate birthDate)
+    {
         this.birthDate = birthDate;
     }
 
-    public String getPhoneNum() {
+    public String getPhoneNum()
+    {
         return phoneNum;
     }
 
-    public void setPhoneNum(String phoneNum) {
+    public void setPhoneNum(String phoneNum)
+    {
         this.phoneNum = phoneNum;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Reader{" +
                 "id=" + id +
                 ", pib='" + pib + '\'' +
