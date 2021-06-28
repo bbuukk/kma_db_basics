@@ -13,10 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -283,9 +280,28 @@ public class SqlOps {
         }
     }
 
-//    public List<BookInstanceExpDate> getIdInstanceExpDateForISBN(int ISBN){
-//
-//    }
+    //list of id_i for free instances of books
+    public List<Integer> getIdInstanceForISBN(int ISBN) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT BI.id_i " +
+                        "from mydb.BookInstance BI left join mydb.BookReader BR on BI.id_i = BR.id_i\n" +
+                        "where (date_exp is null OR date_return is not null) and ISBN = ?")) {
+
+            statement.setInt(1, ISBN);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<Integer> list = new ArrayList<>();
+            while (resultSet.next()) {
+                list.add(resultSet.getInt("BI.id_i"));
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на update");
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
 
 
     public void formReport(String filename) throws DocumentException, FileNotFoundException {
