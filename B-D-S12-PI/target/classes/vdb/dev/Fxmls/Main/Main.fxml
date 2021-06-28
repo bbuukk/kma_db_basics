@@ -86,6 +86,7 @@
                   <Insets left="5.0" top="5.0" />
                </HBox.margin>
             </Button>
+            <ComboBox fx:id="comboboxDorDebtors" layoutX="237.0" layoutY="40.0" onAction="#selectOtherQuieries" prefHeight="25.0" prefWidth="118.0" promptText="Choose" />
          </children>
       </HBox>
         <Pane prefHeight="23.0" prefWidth="957.0" style="-fx-background-color: #E5E7E9;">
