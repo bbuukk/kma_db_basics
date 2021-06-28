@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookReaderRepository {
     Connection connection;
@@ -137,6 +139,33 @@ public class BookReaderRepository {
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
+    public List<BookReader> getBookReadersForUnavailableInstances(int ISBN) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT *\n" +
+                        "from mydb.BookReader\n" +
+                        "where id_i in(\n" +
+                        "    select id_i\n" +
+                        "    from mydb.BookInstance\n" +
+                        "    where ISBN = ?\n" +
+                        "    ) and date_return is null")) {
+
+            statement.setInt(1, ISBN);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<BookReader> list = new ArrayList<>();
+            while (resultSet.next()) {
+                list.add(new BookReader(resultSet));
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на update");
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
 
     public int bookReaderNumber() {
         String sql = "SELECT Count(*) as num FROM mydb.BookReader";
