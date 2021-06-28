@@ -151,6 +151,31 @@ public class AuthorRepository {
         }
     }
 
+    public List<Author> getAuthorsByBookISBN(int ISBN) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT * from mydb.Author\n" +
+                        "where id_a in(\n" +
+                        "    select id_a\n" +
+                        "    from mydb.Authorship\n" +
+                        "    where Authorship.ISBN = ?)")) {
+
+            statement.setInt(1, ISBN);
+
+            ResultSet resultSet = statement.executeQuery();
+            List<Author> list = new ArrayList<>();
+            while (resultSet.next()) {
+                list.add(new Author(resultSet));
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на update");
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
+
     public int authorNumber() {
         String sql = "SELECT Count(*) as num FROM mydb.Author";
         try (Statement st = connection.createStatement();

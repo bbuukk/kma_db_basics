@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -271,6 +272,20 @@ public class SqlOps {
                     '}';
         }
     }
+
+    static class BookInstanceExpDate {
+        int idInstance;
+        LocalDate dateExp;
+
+        public BookInstanceExpDate(ResultSet resultSet) throws SQLException {
+            this.idInstance = resultSet.getInt("id_i");
+            this.dateExp = resultSet.getDate("date_exp").toLocalDate();
+        }
+    }
+
+//    public List<BookInstanceExpDate> getIdInstanceExpDateForISBN(int ISBN){
+//
+//    }
 
 
     public void formReport(String filename) throws DocumentException, FileNotFoundException {
