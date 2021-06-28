@@ -143,7 +143,6 @@ public class BookRepository {
     }
 
     public boolean insert(Book book) {
-        if (book.getISBN() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO mydb.Book(name_b, publisher, pub_city, pub_year, page_num, price) " +
                         "values (?,?,?,?,?,?)")) {

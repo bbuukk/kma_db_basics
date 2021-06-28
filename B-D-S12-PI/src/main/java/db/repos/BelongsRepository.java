@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.util.Set;
 
 public class BelongsRepository {
     Connection connection;
@@ -56,6 +57,8 @@ public class BelongsRepository {
             return false;
         }
     }
+
+
 
     public boolean insert(Belongs belongs) {
         if (belongs.getIdCatalog() == null || belongs.getIsbn() == null) throw new IllegalArgumentException();

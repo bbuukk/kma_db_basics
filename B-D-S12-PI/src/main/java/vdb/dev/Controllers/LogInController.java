@@ -97,11 +97,8 @@ public class LogInController
 
     @FXML
     void about(javafx.scene.input.MouseEvent event) {
-        String aboutProgram = "B-D-S12-PI is a unique program developed by several experts";
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "");
-        alert.setTitle("About B-D-S12-PI");
-        alert.setHeaderText(aboutProgram);
-        alert.showAndWait();
+         new Alert(Alert.AlertType.INFORMATION,
+                "B-D-S12-PI is a unique program developed by several experts").showAndWait();
     }
 
     @FXML

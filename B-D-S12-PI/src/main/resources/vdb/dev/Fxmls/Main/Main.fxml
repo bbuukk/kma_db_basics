@@ -3,78 +3,328 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vdb.dev.Controllers.MainController">
     <children>
-        <ImageView fx:id="chooseAttribute" fitHeight="509.0" fitWidth="851.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="599.0" fitWidth="982.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../../../../../../assets/pictures/png/Circles/backgroundCircles.png" />
             </image>
         </ImageView>
-      <VBox layoutX="717.0" layoutY="65.0" prefHeight="368.0" prefWidth="100.0" style="-fx-background-color: #E5E7E9;">
+      <HBox layoutX="24.0" layoutY="66.0" prefHeight="36.0" prefWidth="572.0" style="-fx-background-color: #E5E7E9;">
          <children>
-            <Button fx:id="addMenuButton" onMouseClicked="#addMenu" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #F4D03F;" text="Add ">
+            <Button fx:id="addMenuButton" onMouseClicked="#addMenu" prefHeight="18.0" prefWidth="78.0" style="-fx-background-color: #F4D03F;" text="Add " textAlignment="CENTER">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+               <HBox.margin>
+                  <Insets left="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="changeButton" onMouseClicked="#changeCurrentTable" prefHeight="23.0" prefWidth="70.0" style="-fx-background-color: #F4D03F;" text="Change">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+               <HBox.margin>
+                  <Insets left="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="updateButton" onMouseClicked="#updateTable" prefHeight="23.0" prefWidth="70.0" style="-fx-background-color: #F4D03F;" text="Update">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+               <HBox.margin>
+                  <Insets left="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="DefaultMenuButton" onMouseClicked="#defaultQueriesMenu" prefHeight="18.0" prefWidth="70.0" style="-fx-background-color: #F4D03F;" text="Default">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+               <HBox.margin>
+                  <Insets left="5.0" right="11.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <TextField promptText="Search">
+               <HBox.margin>
+                  <Insets left="3.0" right="3.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
+            <Button fx:id="findButton" onMouseClicked="#findQueries" prefHeight="18.0" prefWidth="70.0" style="-fx-background-color: #F4D03F;" text="Find">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+               <HBox.margin>
+                  <Insets left="8.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+        <Pane prefHeight="23.0" prefWidth="957.0" style="-fx-background-color: #E5E7E9;">
+            <children>
+            <Button fx:id="logOutButton" layoutX="766.0" layoutY="-6.0" onMouseClicked="#logOut" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #F4D03F;" text="Log Out">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
-               <VBox.margin>
-                  <Insets bottom="18.0" top="60.0" />
-               </VBox.margin>
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
             </Button>
-            <Button fx:id="changeButton" onMouseClicked="#changeCurrentTable" prefHeight="53.0" prefWidth="115.0" style="-fx-background-color: #F4D03F;" text="Change">
+            <ComboBox fx:id="chooseTableComboBox" layoutY="-3.0" onAction="#selectTabel" prefHeight="31.0" prefWidth="251.0" promptText="Choose a table" style="-fx-background-color: #F4D03F;">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect></ComboBox>
+                <Button fx:id="exitButton" layoutX="865.0" layoutY="-4.0" onMouseClicked="#exit" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #EC7063;" text="Exit">
+                    <font>
+                        <Font name="Lucida Sans Regular" size="16.0" />
+                    </font>
+               <effect>
+                  <InnerShadow />
+               </effect>
+                </Button>
+            <ComboBox fx:id="findBooksByAuthorBox" layoutX="322.0" layoutY="-1.0" prefHeight="25.0" prefWidth="185.0" promptText="Display books by author:" />
+            <ComboBox fx:id="findBookByCatalogBox" layoutX="507.0" layoutY="-1.0" prefHeight="25.0" prefWidth="178.0" promptText="Display books by catalog:" />
+            </children>
+        </Pane>
+      <TableView fx:id="mainTableView" editable="true" layoutX="24.0" layoutY="102.0" prefHeight="462.0" prefWidth="572.0" />
+      <Pane fx:id="addReaderMenuPane" layoutX="608.0" layoutY="101.0" prefHeight="462.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;" visible="false">
+         <children>
+            <TextField fx:id="pibField" alignment="TOP_LEFT" layoutX="14.0" layoutY="38.0" prefHeight="31.0" prefWidth="298.0" promptText="PIB">
                <font>
-                  <Font name="Lucida Sans Regular" size="16.0" />
+                  <Font name="Lucida Sans Italic" size="15.0" />
                </font>
-               <VBox.margin>
-                  <Insets bottom="18.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="updateButton" onMouseClicked="#updateTable" prefHeight="53.0" prefWidth="115.0" style="-fx-background-color: #F4D03F;" text="Update">
+            </TextField>
+            <TextField fx:id="loginField" alignment="TOP_LEFT" layoutX="14.0" layoutY="79.0" prefHeight="31.0" prefWidth="298.0" promptText="Login">
                <font>
-                  <Font name="Lucida Sans Regular" size="16.0" />
+                  <Font name="Lucida Sans Italic" size="15.0" />
                </font>
-               <VBox.margin>
-                  <Insets bottom="18.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="DefaultMenuButton" onMouseClicked="#defaultQueriesMenu" prefHeight="53.0" prefWidth="115.0" style="-fx-background-color: #F4D03F;" text="Default">
+            </TextField>
+            <TextField fx:id="cityField" alignment="TOP_LEFT" layoutX="17.0" layoutY="247.0" prefHeight="31.0" prefWidth="185.0" promptText="City">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="workplaceField" alignment="TOP_LEFT" layoutX="15.0" layoutY="329.0" prefHeight="31.0" prefWidth="298.0" promptText="Workplace">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="buildField" alignment="TOP_LEFT" layoutX="17.0" layoutY="287.0" prefHeight="31.0" prefWidth="131.0" promptText="Build">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="apartamentField" alignment="TOP_LEFT" layoutX="151.0" layoutY="287.0" prefHeight="31.0" prefWidth="110.0" promptText="Apartment">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="phoneField" alignment="TOP_LEFT" layoutX="15.0" layoutY="372.0" prefHeight="31.0" prefWidth="298.0" promptText="Phone">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <DatePicker fx:id="dateOfBirthDatePicker" layoutX="14.0" layoutY="121.0" prefHeight="31.0" prefWidth="170.0" promptText="Date of birth" />
+            <Label layoutX="65.0" text="Add new Reader:">
+               <font>
+                  <Font name="Lucida Sans Italic" size="24.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="passwordField" layoutX="17.0" layoutY="168.0" prefHeight="31.0" prefWidth="251.0" promptText="Password">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </PasswordField>
+            <PasswordField fx:id="confirmPassField" layoutX="17.0" layoutY="208.0" prefHeight="31.0" prefWidth="251.0" promptText="Confirm password">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </PasswordField>
+            <TextField fx:id="streetField" alignment="TOP_LEFT" layoutX="204.0" layoutY="247.0" prefHeight="31.0" prefWidth="110.0" promptText="Street">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <Button fx:id="createReader" layoutX="59.0" layoutY="411.0" onMouseClicked="#createReader" prefHeight="37.0" prefWidth="211.0" style="-fx-background-color: #5DADE2;" text="Create New Reader">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
             </Button>
          </children>
-      </VBox>
-        <Pane prefHeight="23.0" prefWidth="816.0" style="-fx-background-color: #E5E7E9;">
-            <children>
-                <Button fx:id="exitButton" layoutX="717.0" layoutY="-2.0" onMouseClicked="#exit" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #EC7063;" text="Exit">
-                    <font>
-                        <Font name="Lucida Sans Regular" size="16.0" />
-                    </font>
-                </Button>
-            <Button fx:id="logOutButton" layoutX="617.0" layoutY="-4.0" onMouseClicked="#logOut" prefHeight="31.0" prefWidth="93.0" style="-fx-background-color: #F4D03F;" text="Log Out">
+      </Pane>
+      <Pane fx:id="addCatalogMenuPane" layoutX="608.0" layoutY="121.0" prefHeight="163.0" prefWidth="322.0" style="-fx-background-color: #EBF5FB;" visible="false">
+         <children>
+            <TextField fx:id="catalogNameField" alignment="TOP_LEFT" layoutX="19.0" layoutY="66.0" prefHeight="31.0" prefWidth="290.0" promptText="Catalog name">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <Label layoutX="89.0" layoutY="14.0" text="Add Catalog:">
+               <font>
+                  <Font name="Lucida Sans Italic" size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="createCatalog" layoutX="66.0" layoutY="112.0" onMouseClicked="#createCatalog" prefHeight="19.0" prefWidth="196.0" style="-fx-background-color: #5DADE2;" text="Create catalog">
                <font>
                   <Font name="Lucida Sans Regular" size="16.0" />
                </font>
             </Button>
-            <ComboBox fx:id="chooseTableComboBox" layoutY="-3.0" onAction="#selectTabel" prefHeight="31.0" prefWidth="251.0" promptText="Choose a table" style="-fx-background-color: #F4D03F;" />
-            </children>
-        </Pane>
-        <Label layoutY="495.0" text="B-D-S12-PI 1.0">
-            <font>
-                <Font size="12.0" />
-            </font>
-        </Label>
-      <TableView fx:id="mainTableView" editable="true" layoutX="48.0" layoutY="84.0" prefHeight="386.0" prefWidth="636.0" />
-      <TextField fx:id="SearchField" layoutX="78.0" layoutY="40.0" promptText="Search Here!" />
-      <ComboBox fx:id="comboboxDorDebtors" layoutX="237.0" layoutY="40.0" onAction="#selectOtherQuieries" prefHeight="25.0" prefWidth="118.0" promptText="Choose" />
+         </children>
+      </Pane>
+      <Pane fx:id="addNIBPaneMenu" layoutX="605.0" layoutY="102.0" prefHeight="232.0" prefWidth="328.0" style="-fx-background-color: #EBF5FB;" visible="false">
+         <children>
+            <TextField fx:id="ShelfField" alignment="TOP_LEFT" layoutX="32.0" layoutY="102.0" prefHeight="31.0" prefWidth="279.0" promptText="Shelf">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <Label layoutX="1.0" layoutY="14.0" prefHeight="28.0" prefWidth="342.0" text="Add new instance of a book:">
+               <font>
+                  <Font name="Lucida Sans Italic" size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="amountField" alignment="TOP_LEFT" layoutX="32.0" layoutY="141.0" prefHeight="31.0" prefWidth="279.0" promptText="Amount">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <Button fx:id="createNewBookInstanceButton" layoutX="50.0" layoutY="181.0" onMouseClicked="#createNIB" prefHeight="36.0" prefWidth="243.0" style="-fx-background-color: #5DADE2;" text="Create New Instance of a Book">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="chooseBookTitles" layoutX="32.0" layoutY="60.0" prefHeight="26.0" prefWidth="279.0" promptText="Choose Book Title" />
+         </children>
+      </Pane>
+      <Pane fx:id="addBookMenuPane" layoutX="605.0" layoutY="101.0" onMouseClicked="#createBook" prefHeight="462.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;" visible="false">
+         <children>
+            <Label layoutX="79.0" layoutY="10.0" text="Add new book:">
+               <font>
+                  <Font name="Lucida Sans Italic" size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="bookTitleField" alignment="TOP_LEFT" layoutX="19.0" layoutY="47.0" prefHeight="31.0" prefWidth="290.0" promptText="Book title">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="publisherField" alignment="TOP_LEFT" layoutX="19.0" layoutY="87.0" prefHeight="31.0" prefWidth="290.0" promptText="Publisher">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="publishersCityField" alignment="TOP_LEFT" layoutX="19.0" layoutY="130.0" prefHeight="31.0" prefWidth="150.0" promptText="Publisher's city">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <DatePicker fx:id="dateOfPublishingPicker" layoutX="178.0" layoutY="130.0" prefHeight="31.0" prefWidth="131.0" promptText="Date of publishing" />
+            <TextField fx:id="priceField" alignment="TOP_LEFT" layoutX="178.0" layoutY="170.0" prefHeight="31.0" prefWidth="131.0" promptText="Price">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="amountOfPagesField" alignment="TOP_LEFT" layoutX="19.0" layoutY="170.0" prefHeight="31.0" prefWidth="150.0" promptText="Amount of pages">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </TextField>
+            <ComboBox fx:id="chooseCatalogComboBox" layoutX="19.0" layoutY="209.0" prefHeight="26.0" prefWidth="150.0" promptText="Choose Catalog" />
+            <Button fx:id="addToCatalogButton" layoutX="183.0" layoutY="207.0" onMouseClicked="#addToCatalogNewBookSection" prefHeight="19.0" prefWidth="122.0" style="-fx-background-color: #5DADE2;" text="Add to Catalog">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="chooseAuthorComboBox" layoutX="19.0" layoutY="244.0" prefHeight="26.0" prefWidth="150.0" promptText="Choose Author" />
+            <Button fx:id="addAuthorButton" layoutX="183.0" layoutY="242.0" onMouseClicked="#addToAuthorNewBookSection" prefHeight="30.0" prefWidth="122.0" style="-fx-background-color: #5DADE2;" text="Add Author">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Label fx:id="belongsToLable" layoutX="19.0" layoutY="281.0" text="Belongs to:">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="belongToAuthor" layoutX="19.0" layoutY="346.0" text="Authors:">
+               <font>
+                  <Font name="Lucida Sans Italic" size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="createNewBookButton" layoutX="85.0" layoutY="411.0" onMouseClicked="#createBook" prefHeight="19.0" prefWidth="196.0" style="-fx-background-color: #5DADE2;" text="Create New Book">
+               <font>
+                  <Font name="Lucida Sans Regular" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+      <Pane layoutY="580.0" prefHeight="23.0" prefWidth="958.0" style="-fx-background-color: #E5E7E9;">
+         <children>
+              <Label layoutY="3.0" text="B-D-S12-PI 1.0">
+                  <font>
+                      <Font size="12.0" />
+                  </font>
+              </Label>
+            <Button fx:id="findAvailBooksButton" layoutX="171.0" layoutY="-1.0" onMouseClicked="#findQueries" prefHeight="26.0" prefWidth="229.0" style="-fx-background-color: #F4D03F;" text="Find available books">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </Button>
+            <Button fx:id="findAllDebtorsButton" layoutX="400.0" layoutY="-1.0" onMouseClicked="#findQueries" prefHeight="26.0" prefWidth="122.0" style="-fx-background-color: #F4D03F;" text="Find All Debtors">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.9254902005195618" green="0.43921568989753723" blue="0.38823530077934265" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </Button>
+         </children>
+      </Pane>
     </children>
 </AnchorPane>
