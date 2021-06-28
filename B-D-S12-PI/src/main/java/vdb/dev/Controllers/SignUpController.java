@@ -21,6 +21,8 @@ public class SignUpController
 
     public static final String PATH = "Fxmls/Authorization/SignUp";
     public static final String ADMIN_CODE = "Secret";
+    public static final String LIBRARIAN_CODE = "LibSecret";
+
     private PasswordAuthentication passwordAuthentication;
 
     @FXML
@@ -117,13 +119,18 @@ public class SignUpController
                         city, street, build, apartament,null, dateOfBirth, null);
 
                 App.sqlOps.getReaderRepository().insert(reader);
-            } else
+            } else if (adminCodeField.getText().equals(LIBRARIAN_CODE))
             {
-                Reader reader = new Reader(pib, password, login, 0,
+                Reader reader = new Reader(pib, password, login, 2,
                         city, street, build, apartament,null, dateOfBirth, null);
 
                 App.sqlOps.getReaderRepository().insert(reader);
-            }
+            }{
+            Reader reader = new Reader(pib, password, login, 0,
+                    city, street, build, apartament,null, dateOfBirth, null);
+
+            App.sqlOps.getReaderRepository().insert(reader);
+        }
         }
         App.setRoot(LogInController.PATH);
     }

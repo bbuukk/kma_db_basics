@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -83,7 +84,6 @@ public class BookRepository {
             throw new RuntimeException("Can`t select anything", e);
         }
     }
-
 
     public List<Book> getBooks() {
         try (Statement st = connection.createStatement();

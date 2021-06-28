@@ -121,22 +121,6 @@ public class BookInstanceRepository {
         }
     }
 
-    private HashMap<Integer, String> getBookNames() {
-        try (Statement st = connection.createStatement();
-             ResultSet res = st.executeQuery("SELECT ISBN, name_b FROM mydb.Book")
-        ) {
-            HashMap<Integer, String> map = new HashMap<>();
-            while (res.next()) {
-                map.put(res.getInt("ISBN"), res.getString("name_b"));
-            }
-            return map;
-        } catch (SQLException e) {
-            System.out.println("Не вірний SQL запит на вибірку даних");
-            e.printStackTrace();
-            throw new RuntimeException("Can`t select anything", e);
-        }
-    }
-
 
     public List<BookInstance> getBookInstances() {
         try (Statement st = connection.createStatement();
@@ -188,6 +172,22 @@ public class BookInstanceRepository {
         document.add(table);
         document.close();
         return document;
+    }
+
+    private HashMap<Integer, String> getBookNames() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT ISBN, name_b FROM mydb.Book")
+        ) {
+            HashMap<Integer, String> map = new HashMap<>();
+            while (res.next()) {
+                map.put(res.getInt("ISBN"), res.getString("name_b"));
+            }
+            return map;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
     }
 
     public PdfPTable getTablePDF() {

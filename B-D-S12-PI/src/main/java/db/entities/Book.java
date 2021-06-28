@@ -1,8 +1,14 @@
 package db.entities;
 
+import db.SqlOps;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import vdb.dev.App;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Book implements Entity{
     private Integer ISBN;
@@ -12,6 +18,9 @@ public class Book implements Entity{
     private LocalDate pubYear;
     private Integer pageNum;
     private String price;
+
+    private ObservableList<String> authors = FXCollections.observableArrayList();
+    public static final String TYPE_PARAMS_PATTERN_TEST  = "10002100";
 
     public static final String TYPE_PARAMS_PATTERN  = "1000210";
 
@@ -42,7 +51,18 @@ public class Book implements Entity{
         this.pubYear = resultSet.getDate("pub_year").toLocalDate();
         this.pageNum = resultSet.getInt("page_num");
         this.price = resultSet.getString("price");
+
     }
+
+//    private void getAuthorsOfBook(int ISBN){
+//        var authors = App.sqlOps.getAuthorRepository().getAllAuthors();
+//        var ships = App.sqlOps.getAuthorshipRepository().getAllAuthorships();
+//        for (Entity author: authors)
+//        {
+//
+//        }
+//    }
+
 
     public <T> Book change(String innerVarName, T value)
     {

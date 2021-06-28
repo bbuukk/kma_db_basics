@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import db.entities.*;
@@ -23,8 +20,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
@@ -35,14 +30,14 @@ public class MainController
 {
 
     private static db.entities.Reader currentAuthorizedReader;
-    private static boolean isAdmin;
+    private static int rightsType;
 
     ObservableList<Entity> listEntitiesToChange;
     ObservableList<Entity> listEntitiesToDelete;
 
     public static final String PATH = "Fxmls/Main/Main";
 
-    String lastTabledisplayed;
+    String lastTableDisplayed;
 
     FilteredList<Book> filteredData;
     ObservableList<Entity> searchRes = FXCollections.observableArrayList();
@@ -58,8 +53,8 @@ public class MainController
 
         mainTableView.setPrefWidth(900);
 
-        isAdmin = isAdminRightsSet();
-        setRightsConfigurations(isAdmin);
+        rightsType = isAdminRightsSet();
+        setRightsConfigurations(rightsType);
     }
 
 
@@ -95,7 +90,8 @@ public class MainController
             column.setCellValueFactory(new PropertyValueFactory<>(COLUMN_NAME));
 
 
-            if (isAdmin)
+            if (rightsType == Rights.ADMIN.getValue() ||
+                    rightsType == Rights.LIBRARIAN.getValue())
             {
                 setEditableColumn(column);
 
@@ -146,8 +142,13 @@ public class MainController
     @FXML
     void updateTable(javafx.scene.input.MouseEvent event) throws SQLException
     {
-        String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
-        displayReaderTable(nameOfSelectedTable);
+        try
+        {
+            String nameOfSelectedTable = chooseTableComboBox.getSelectionModel().getSelectedItem().toString();
+            displayReaderTable(nameOfSelectedTable);
+        }catch (NullPointerException e){
+            new Alert(Alert.AlertType.ERROR, "You didn't chose the table").showAndWait();
+        }
     }
 
     @FXML
@@ -297,9 +298,9 @@ public class MainController
         mainTableView.setPrefWidth(572);
     }
 
-    private void setRightsConfigurations(boolean admin)
+    private void setRightsConfigurations(int rightsType)
     {
-        if (admin)
+        if (rightsType == Rights.ADMIN.getValue())
         {
             var tableNames = FXCollections.observableArrayList(
                     "Author", "Authorship", "Belongs", "Book",
@@ -333,17 +334,45 @@ public class MainController
 
             App.scene.setOnKeyPressed(deleteHandler);
 
-        } else
+        }else if (rightsType == Rights.LIBRARIAN.getValue()){
+            var tableNames = FXCollections.observableArrayList(
+                    "Author", "Book", "Catalog", "Reader","BookInstance");
+
+            listEntitiesToChange = FXCollections.observableArrayList();
+            listEntitiesToDelete = FXCollections.observableArrayList();
+
+            EventHandler<KeyEvent> deleteHandler = new EventHandler<KeyEvent>()
+            {
+                @Override
+                public void handle(KeyEvent keyEvent)
+                {
+                    try
+                    {
+                        if (keyEvent.getCode() == KeyCode.DELETE)
+                        {
+                            var allData = mainTableView.getItems();
+                            var selectedData = mainTableView.getSelectionModel().getSelectedItems();
+                            listEntitiesToDelete.addAll(selectedData);
+
+                            selectedData.forEach(allData::remove);
+                        }
+                    } catch (Exception e)
+                    {
+                    }
+                }
+            };
+
+            chooseTableComboBox.setItems(tableNames);
+
+        } else if (rightsType == Rights.USER.getValue())
         {
             var tableNames = FXCollections.observableArrayList(
-                    "Author", "Authorship", "Belongs",
-                    "Book", "BookReader", "Catalog");
+                    "Author", "Book", "Catalog", "BookReader");
 
             chooseTableComboBox.setItems(tableNames);
 
             addMenuButton.setDisable(true);
             changeButton.setDisable(true);
-
         }
 
     }
@@ -352,6 +381,8 @@ public class MainController
     public void logOut(javafx.scene.input.MouseEvent event) throws IOException
     {
         App.scene.setOnKeyPressed(null);
+        App.stage.setWidth(816);
+        App.stage.setHeight(509);
         MainController.currentAuthorizedReader = null;
         App.setRoot(LogInController.PATH);
     }
@@ -447,7 +478,7 @@ public class MainController
 
     private void displayReaderTable(String name) throws SQLException
     {
-        if (!name.equals(lastTabledisplayed)){
+        if (!name.equals(lastTableDisplayed)){
             turnOffSection();
         }
 
@@ -455,7 +486,8 @@ public class MainController
         {
             case "Reader":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
+
                 String[] cellNamesReader = {"id", "pib", "password", "login",
                         "typeRights", "city", "street", "build",
                         "apartment", "workplace", "birthDate", "phoneNum"};
@@ -468,7 +500,7 @@ public class MainController
                 break;
             case "Authorship":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesAuthorship = {"id", "ISBN"};
 
                 createNewTableColumns(cellNamesAuthorship, Authorship.TYPE_PARAMS_PATTERN, 0);
@@ -479,7 +511,7 @@ public class MainController
                 break;
             case "Belongs":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesBelongs = {"isbn", "idCatalog"};
 
                 createNewTableColumns(cellNamesBelongs, Belongs.TYPE_PARAMS_PATTERN, 0);
@@ -490,18 +522,19 @@ public class MainController
                 break;
             case "Book":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesBook = {"ISBN", "name", "publisher", "pubCity", "pubYear", "pageNum", "price"};
 
                 createNewTableColumns(cellNamesBook, Book.TYPE_PARAMS_PATTERN, 1);
 
                 var listBooks = App.sqlOps.getBookRepository().getAllBooks();
+
                 mainTableView.setItems(listBooks);
 
                 break;
             case "BookInstance":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesBookInstance = {"id", "shelf", "ISBN"};
 
                 createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
@@ -509,10 +542,18 @@ public class MainController
                 var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
                 mainTableView.setItems(listBooksInstances);
 
+//                lastTableDisplayed = name;
+//                String[] cellNamesBookInstance = {"id", "shelf", "name"};
+//
+//                createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
+//
+//                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
+//                mainTableView.setItems(listBooksInstances);
+
                 break;
             case "BookReader":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesBookReader = {"idReader", "idInstance", "dateOut",
                         "dateExp", "dateReturn"};
 
@@ -520,24 +561,24 @@ public class MainController
 
                 ObservableList<Entity> listBookReaders;
 
-                if (isAdmin)
-                {
-                    listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
-                } else
+                if (rightsType == Rights.USER.getValue())
                 {
                     int userId = currentAuthorizedReader.getId();
                     listBookReaders = App.sqlOps.getBookReaderRepository().getBookReadersByReader(userId);
+                } else
+                {
+                    listBookReaders = App.sqlOps.getBookReaderRepository().getAllBookReaders();
                 }
 
                 mainTableView.setItems(listBookReaders);
 
-                if (!isAdmin)
+                if (rightsType == Rights.USER.getValue())
                     mainTableView.getColumns().get(0).setVisible(false);
 
                 break;
             case "Catalog":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesCatalog = {"id", "name"};
 
                 createNewTableColumns(cellNamesCatalog, Catalog.TYPE_PARAMS_PATTERN, 1);
@@ -548,7 +589,7 @@ public class MainController
                 break;
             case "Author":
 
-                lastTabledisplayed = name;
+                lastTableDisplayed = name;
                 String[] cellNamesAuthor = {"id", "name"};
 
                 createNewTableColumns(cellNamesAuthor, Author.TYPE_PARAMS_PATTERN, 1);
@@ -814,11 +855,6 @@ public class MainController
         return listEntitiesToDelete;
     }
 
-    public static boolean isIsAdmin()
-    {
-        return isAdmin;
-    }
-
     public static String getPATH()
     {
         return PATH;
@@ -976,13 +1012,33 @@ public class MainController
     }
 
 
-    private boolean isAdminRightsSet()
+    private int isAdminRightsSet()
     {
-        if (currentAuthorizedReader.getTypeRights() == 0)
-            return false;
-        else
-            return true;
+        if (currentAuthorizedReader.getTypeRights() == Rights.ADMIN.getValue())
+            return 1;
+        else if (currentAuthorizedReader.getTypeRights() == Rights.ADMIN.getValue())
+            return 2;
+        else return 0;
     }
+
+    enum Rights
+    {
+        ADMIN(1),
+        LIBRARIAN(2),
+        USER(0);
+
+         int id;
+         Rights(int id){
+            this.id = id;
+        }
+
+        public int getValue()
+        {
+            return id;
+        }
+
+    }
+
 
 }
 
