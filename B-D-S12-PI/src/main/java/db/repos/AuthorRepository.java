@@ -1,13 +1,20 @@
 package db.repos;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import db.entities.Author;
 import db.entities.Entity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class AuthorRepository {
     Connection connection;
@@ -126,6 +133,22 @@ public class AuthorRepository {
         }
     }
 
+    public List<Author> getAuthors() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT * FROM mydb.Author")
+        ) {
+            List<Author> list = new ArrayList<>();
+            while (res.next()) {
+                list.add(new Author(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
     public int authorNumber() {
         String sql = "SELECT Count(*) as num FROM mydb.Author";
         try (Statement st = connection.createStatement();
@@ -141,5 +164,52 @@ public class AuthorRepository {
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
+
+    public Document formReport(String filename) throws DocumentException, FileNotFoundException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filename));
+
+        document.open();
+
+        document.addHeader("Authors", "Authors");
+        document.add(new Paragraph("Authors"));
+        document.add(new Phrase(" "));
+        PdfPTable table = new PdfPTable(2);
+        addHeaders(table, Stream.of("id_author", "PIB"));
+        addAuthors(table, getAuthors());
+        table.setWidthPercentage(100);
+        document.add(table);
+
+        document.close();
+        return document;
+    }
+
+    public PdfPTable getTablePDF() {
+        PdfPTable table = new PdfPTable(2);
+        addHeaders(table, Stream.of("id_author", "PIB"));
+        addAuthors(table, getAuthors());
+        table.setWidthPercentage(100);
+        return table;
+    }
+
+
+    private void addHeaders(PdfPTable table, Stream<String> headers) {
+        headers.forEach(columnTitle -> {
+            PdfPCell header = new PdfPCell();
+            header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            header.setBorderWidth(2);
+            header.setPhrase(new Phrase(columnTitle));
+            table.addCell(header);
+        });
+    }
+
+    private void addAuthors(PdfPTable table, List<Author> authors) {
+        for (Author author : authors) {
+            table.addCell(new Phrase(author.getId().toString()));
+            table.addCell(new Phrase(author.getName()));
+        }
+    }
+
 
 }

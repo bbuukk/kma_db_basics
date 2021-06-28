@@ -1,10 +1,17 @@
 package db;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import db.entities.Reader;
 import db.repos.*;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -226,38 +233,6 @@ public class SqlOps {
         return list;
     }
 
-    //not working
-    public List<Reader> getAllReadersbyReaderAndCategory(String Pib, String nameCategory) {
-        if (nameCategory.isEmpty() || Pib.isEmpty()) throw new IllegalArgumentException();
-        List<Reader> list = new ArrayList<>();
-        try (Statement st = connection.createStatement();
-             ResultSet resultSet = st.executeQuery("select * from mydb.Reader " +
-                     "where not exists( " +
-                     "select ISBN " +
-                     "from mydb.BookInstance " +
-                     "where ISBN in( Select * from (select `mydb`.`BookInstance`.`ISBN` AS `ISBN`\n " +
-                     "from ((`mydb`.`BookInstance` join `mydb`.`BookReader` on ((`mydb`.`BookReader`.`id_i` = `mydb`.`BookInstance`.`id_i`)))\n" +
-                     "         join `mydb`.`Reader` on ((`mydb`.`BookReader`.`id_r` = `mydb`.`Reader`.`id_r`)))\n" +
-                     "where ((`mydb`.`Reader`.`PIB` = '" + Pib + "') and\n" +
-                     "       `mydb`.`BookInstance`.`ISBN` in (select `mydb`.`Belongs`.`ISBN`, `mydb`.`Belongs`.`id_c`\n" +
-                     "                                        from `mydb`.`Belongs`\n" +
-                     "                                        where (`mydb`.`Belongs`.`id_c` = (select `mydb`.`Catalog`.`id_c`\n" +
-                     "                                                                          from `mydb`.`Catalog`\n" +
-                     "                                                                          where (`mydb`.`Catalog`.`name_c` = '" + nameCategory + "')))));\n" + "))) " +
-                     "and ISBN not in( " +
-                     "Select ISBN From mydb.ALL_BOOKS " +
-                     "where mydb.Reader.id_r = ALL_BOOKS.id_r);")) {
-
-            while (resultSet.next()) {
-                list.add(new Reader(resultSet));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Не вірний SQL запит на update");
-            e.printStackTrace();
-        }
-        return list;
-    }
 
     //requirement = "> 28";
     //or " = 12 ";
@@ -297,5 +272,38 @@ public class SqlOps {
         }
     }
 
+
+    public void formReport(String filename) throws DocumentException, FileNotFoundException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filename));
+
+        document.open();
+
+        document.addHeader("Full Report", "Full Report for tables");
+        document.add(new Paragraph("Full Report"));
+        document.add(new Phrase(" "));
+
+        document.add(new Paragraph("Readers"));
+        document.add(new Phrase(" "));
+        document.add(getReaderRepository().getTablePDF());
+
+        document.add(new Paragraph("Books"));
+        document.add(new Phrase(" "));
+        document.add(getBookRepository().getTablePDF());
+
+        document.add(new Paragraph("Authors"));
+        document.add(new Phrase(" "));
+        document.add(getAuthorRepository().getTablePDF());
+
+        document.add(new Paragraph("Catalogs"));
+        document.add(new Phrase(" "));
+        document.add(getCatalogRepository().getTablePDF());
+
+        document.add(new Paragraph("Instances"));
+        document.add(new Phrase(" "));
+        document.add(getBookInstanceRepository().getTablePDF());
+
+        document.close();
+    }
 
 }
