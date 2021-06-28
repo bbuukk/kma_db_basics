@@ -60,7 +60,6 @@ public class AuthorRepository {
     }
 
     public boolean update(Author author) {
-        if (author.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "UPDATE mydb.Author SET name_a = ?" +
                         " WHERE id_a=?")) {
@@ -95,7 +94,6 @@ public class AuthorRepository {
     }
 
     public boolean insert(Author author) {
-        if (author.getId() == null) throw new IllegalArgumentException();
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO mydb.Author(name_a)" +
                         "values (?)")) {

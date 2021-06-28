@@ -1,5 +1,6 @@
 package vdb.dev;
 
+import com.mysql.cj.log.Log;
 import db.SqlOps;
 import db.entities.Reader;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import vdb.dev.Controllers.LogInController;
+import vdb.dev.Controllers.MainController;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
@@ -69,6 +71,11 @@ public class App extends Application {
         scene.setRoot(loadFxml(fxml));
     }
 
+    static public void setRoot(String fxml, int x, int y) throws IOException
+    {
+        scene.setRoot(loadFxml(fxml));
+    }
+
     static public void setRoot(Parent root) throws IOException
     {
         scene.setRoot(root);
@@ -76,6 +83,7 @@ public class App extends Application {
 
     static public Parent loadFxml(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+
         Parent root = fxmlLoader.load();
         return root;
     }
