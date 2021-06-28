@@ -128,40 +128,6 @@ public class ReaderRepository
         }
     }
 
-//   public boolean updateTable(ObservableList<Entity> entity)
-//    {
-//        if (reader.getId() == null) throw new IllegalArgumentException();
-//        try (PreparedStatement statement = connection.prepareStatement(
-//                "UPDATE mydb.Reader SET PIB=?, password=?, login=?," +
-//                        " type_rights=?, city_r=?, street_r=?, build_r=?," +
-//                        " apartment_r=?, workplace=?, birth_date_r=?, phone_num_r=?" +
-//                        " WHERE id_r=?"))
-//        {
-//            //statement.setInt(1, 1);
-//            statement.setString(1, reader.getPib());
-//            statement.setString(2, reader.getPassword());
-//            statement.setString(3, reader.getLogin());
-//            statement.setInt(4, reader.getTypeRights());
-//            statement.setString(5, reader.getCity());
-//            statement.setString(6, reader.getStreet());
-//            statement.setString(7, reader.getBuild());
-//            statement.setString(8, reader.getApartment());
-//            statement.setString(9, reader.getWorkplace());
-//            statement.setDate(10, Date.valueOf(reader.getBirthDate()));
-//            statement.setString(11, reader.getPhoneNum());
-//            statement.setInt(12, reader.getId());
-//
-//            statement.executeUpdate();
-//            return true;
-//
-//        } catch (SQLException e)
-//        {
-//            System.out.println("Не вірний SQL запит на update");
-//            e.printStackTrace();
-//            return false;
-//        }
-//
-//    }
 
 
     public boolean update(Reader reader)
@@ -276,6 +242,47 @@ public class ReaderRepository
     }
 
 
+    //returns Readers who are reading some books now(at least 1) EXCLUDING debtors
+    public ObservableList<Reader> getActiveReaders() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT * from mydb.Reader\n" +
+                     "where id_r in (\n" +
+                     "    SELECT BookReader.id_r from mydb.BookReader\n" +
+                     "    where date_return is null and DATEDIFF(CURDATE(), date_exp)<0)")
+        ) {
+            ObservableList<Reader> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Reader(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+    //returns Readers who are reading some books now(at least 1) INCLUDING debtors
+    public ObservableList<Reader> getAnyActiveReaders() {
+        try (Statement st = connection.createStatement();
+             ResultSet res = st.executeQuery("SELECT * from mydb.Reader\n" +
+                     "where id_r in (\n" +
+                     "    SELECT BookReader.id_r from mydb.BookReader\n" +
+                     "    where date_return is null)")
+        ) {
+            ObservableList<Reader> list = FXCollections.observableArrayList();
+            while (res.next()) {
+                list.add(new Reader(res));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Не вірний SQL запит на вибірку даних");
+            e.printStackTrace();
+            throw new RuntimeException("Can`t select anything", e);
+        }
+    }
+
+
     //returns readers with book debts
     public ObservableList<Reader> getDebtors() {
         try (Statement st = connection.createStatement();
@@ -296,6 +303,7 @@ public class ReaderRepository
             throw new RuntimeException("Can`t select anything", e);
         }
     }
+
 
     public int readerNumber() {
         String sql = "SELECT Count(*) as num FROM mydb.Reader";

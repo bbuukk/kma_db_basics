@@ -226,38 +226,6 @@ public class SqlOps {
         return list;
     }
 
-    //not working
-    public List<Reader> getAllReadersbyReaderAndCategory(String Pib, String nameCategory) {
-        if (nameCategory.isEmpty() || Pib.isEmpty()) throw new IllegalArgumentException();
-        List<Reader> list = new ArrayList<>();
-        try (Statement st = connection.createStatement();
-             ResultSet resultSet = st.executeQuery("select * from mydb.Reader " +
-                     "where not exists( " +
-                     "select ISBN " +
-                     "from mydb.BookInstance " +
-                     "where ISBN in( Select * from (select `mydb`.`BookInstance`.`ISBN` AS `ISBN`\n " +
-                     "from ((`mydb`.`BookInstance` join `mydb`.`BookReader` on ((`mydb`.`BookReader`.`id_i` = `mydb`.`BookInstance`.`id_i`)))\n" +
-                     "         join `mydb`.`Reader` on ((`mydb`.`BookReader`.`id_r` = `mydb`.`Reader`.`id_r`)))\n" +
-                     "where ((`mydb`.`Reader`.`PIB` = '" + Pib + "') and\n" +
-                     "       `mydb`.`BookInstance`.`ISBN` in (select `mydb`.`Belongs`.`ISBN`, `mydb`.`Belongs`.`id_c`\n" +
-                     "                                        from `mydb`.`Belongs`\n" +
-                     "                                        where (`mydb`.`Belongs`.`id_c` = (select `mydb`.`Catalog`.`id_c`\n" +
-                     "                                                                          from `mydb`.`Catalog`\n" +
-                     "                                                                          where (`mydb`.`Catalog`.`name_c` = '" + nameCategory + "')))));\n" + "))) " +
-                     "and ISBN not in( " +
-                     "Select ISBN From mydb.ALL_BOOKS " +
-                     "where mydb.Reader.id_r = ALL_BOOKS.id_r);")) {
-
-            while (resultSet.next()) {
-                list.add(new Reader(resultSet));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Не вірний SQL запит на update");
-            e.printStackTrace();
-        }
-        return list;
-    }
 
     //requirement = "> 28";
     //or " = 12 ";
