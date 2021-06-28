@@ -47,10 +47,13 @@ public class Catalog implements Entity{
 
     @Override
     public String toString() {
-        return "Catalog{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return
+//                "Catalog{" +
+//                "id=" + id +
+//                ", name='" +
+                name;
+//                + '\'' +
+//                '}';
     }
 
     public <T> Catalog change(String innerVarName, T value)

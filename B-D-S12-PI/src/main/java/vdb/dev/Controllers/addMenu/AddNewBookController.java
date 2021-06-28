@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import db.SqlOps;
 import db.entities.Catalog;
+import db.entities.Entity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +20,6 @@ import javafx.scene.layout.Pane;
 public class AddNewBookController   {
 
     public static final String PATH = "Fxmls/Main/AddBook";
-    ObservableList<String> langs;
     Catalog catalog;
 
     SqlOps sqlOps;
@@ -51,7 +51,7 @@ public class AddNewBookController   {
     private DatePicker dateOfPublishingPicker;
 
     @FXML
-    private ComboBox<String> chooseCatalogComboBox;
+    private ComboBox<Entity> chooseCatalogComboBox;
 
     @FXML
     private Button addToCatalogButton;
@@ -71,13 +71,9 @@ public class AddNewBookController   {
     @FXML
     void initialize() {
 
-        langs = FXCollections.observableArrayList();
         catalog = new Catalog();
         sqlOps = new SqlOps();
-        for (int i = 0; i<6; i++){
-            langs.add(sqlOps.getCatalogRepository().getCatalog(i+1).getName().toString());
-        }
-        chooseCatalogComboBox.setItems(langs);
+        chooseCatalogComboBox.setItems(sqlOps.getCatalogRepository().getAllCatalogs());
     }
 
     //todo method for creating a new book
@@ -88,11 +84,14 @@ public class AddNewBookController   {
 
     public void selectCatalog(ActionEvent actionEvent) {
 
-        String a = chooseCatalogComboBox.getSelectionModel().getSelectedItem().toString();
+       // String a = chooseCatalogComboBox.getSelectionModel().getSelectedItem().toString();
 
     }
 
     public void selectAuthor(ActionEvent actionEvent) {
 
+    }
+
+    public void createNewCatalog(ActionEvent actionEvent) {
     }
 }
