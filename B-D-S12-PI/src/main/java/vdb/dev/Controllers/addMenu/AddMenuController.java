@@ -245,27 +245,36 @@ public class AddMenuController
         mainController.getCatalogNameField().setText(none);
     }
 
-
+    boolean addedUser = false;
     public void createNewReader() throws IOException
     {
-
+        addedUser =false;
         String pib = mainController.getPibField().getText(), login = mainController.getLoginField().getText(),
                 city = mainController.getCityField().getText(), build = mainController.getBuildField().getText(),
                 apartament = mainController.getApartamentField().getText(), street = mainController.getStreetField().getText(),
                 password = mainController.getPasswordField().getText(), confirmationPass = mainController.getConfirmPassField().getText();
         LocalDate dateOfBirth = mainController.getDateOfBirthDatePicker().getValue();
+        LocalDate validDate = LocalDate.now().minusYears(18);
 
         if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
                 !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
                 !confirmationPass.isEmpty() && dateOfBirth != null)
         {
-            password = new PasswordAuthentication().hash(password.toCharArray());
+            if (pib.matches("^.{1,50}$") && city.matches("^.{1,50}$") && build.matches("^\\d{1,15}$")
+                    && apartament.matches("^\\d{1,15}$") && confirmationPass.equals(password) && dateOfBirth.isBefore(validDate))
+            {
+                password = new PasswordAuthentication().hash(password.toCharArray());
 
-            Reader reader = new Reader(pib, password, login, 0,
-                    city, street, build, apartament, null, dateOfBirth, null);
+                Reader reader = new Reader(pib, password, login, 0,
+                        city, street, build, apartament, null, dateOfBirth, null);
 
-            App.sqlOps.getReaderRepository().insert(reader);
-            addReaderMenuClean();
+               addedUser = App.sqlOps.getReaderRepository().insert(reader);
+            }else {
+                new Alert(Alert.AlertType.INFORMATION, "Not correct input!").showAndWait();
+            }
+            if (addedUser){
+                addReaderMenuClean();
+            }
         } else
         {
             new Alert(Alert.AlertType.INFORMATION, "Not all data fields are entered!").showAndWait();

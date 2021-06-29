@@ -1,7 +1,6 @@
 package vdb.dev.Controllers;
 
 import db.PasswordAuthentication;
-import db.SqlOps;
 import db.entities.Reader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -9,10 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import vdb.dev.App;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -90,49 +88,73 @@ public class SignUpController
     {
         passwordAuthentication = new PasswordAuthentication();
     }
+
     @FXML
     public void exit(javafx.scene.input.MouseEvent event)
     {
         Platform.exit();
     }
+
     @FXML
     public void goBack(javafx.scene.input.MouseEvent event) throws IOException
     {
         App.setRoot(LogInController.PATH);
     }
-    public void signUp(javafx.scene.input.MouseEvent event) throws IOException
+
+    boolean addedUser = false;
+    public void signUp(javafx.scene.input.MouseEvent event) throws SQLException
     {
-        String pib = pibField.getText(), login = loginField.getText(),
-                city = cityField.getText(), build = buildField.getText(),
-                apartament = apartamentField.getText(), street = streetField.getText(),
-                password = passwordField.getText(), confirmationPass = confirmPasswrodField.getText();
-        LocalDate dateOfBirth = dateOfBirthDatePicker.getValue();
-
-        if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
-                !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
-                !confirmationPass.isEmpty() && dateOfBirth != null)
+        try
         {
-            password = new PasswordAuthentication().hash(password.toCharArray());
-            if (adminCodeField.getText().equals(ADMIN_CODE))
+            addedUser =false;
+            String pib = pibField.getText(), login = loginField.getText(),
+                    city = cityField.getText(), build = buildField.getText(),
+                    apartament = apartamentField.getText(), street = streetField.getText(),
+                    password = passwordField.getText(), confirmationPass = confirmPasswrodField.getText();
+            LocalDate dateOfBirth = dateOfBirthDatePicker.getValue();
+
+            LocalDate validDate = LocalDate.now().minusYears(18);
+
+            if (!pib.isEmpty() && !login.isEmpty() && !city.isEmpty() && !build.isEmpty() &&
+                    !apartament.isEmpty() && !street.isEmpty() && !password.isEmpty() &&
+                    !confirmationPass.isEmpty() && dateOfBirth != null )
             {
-                Reader reader = new Reader(pib, password, login, 1,
-                        city, street, build, apartament,null, dateOfBirth, null);
+                if(pib.matches("^.{1,50}$") && city.matches("^.{1,50}$") && build.matches("^\\d{1,15}$")
+                        && apartament.matches("^\\d{1,15}$") && confirmationPass.equals(password) && dateOfBirth.isBefore(validDate))
+                {
+                    password = new PasswordAuthentication().hash(password.toCharArray());
+                    if (adminCodeField.getText().equals(ADMIN_CODE))
+                    {
+                        Reader reader = new Reader(pib, password, login, 1,
+                                city, street, build, apartament, null, dateOfBirth, null);
 
-                App.sqlOps.getReaderRepository().insert(reader);
-            } else if (adminCodeField.getText().equals(LIBRARIAN_CODE))
-            {
-                Reader reader = new Reader(pib, password, login, 2,
-                        city, street, build, apartament,null, dateOfBirth, null);
+                        addedUser = App.sqlOps.getReaderRepository().insert(reader);
+                    } else if (adminCodeField.getText().equals(LIBRARIAN_CODE))
+                    {
+                        Reader reader = new Reader(pib, password, login, 2,
+                                city, street, build, apartament, null, dateOfBirth, null);
 
-                App.sqlOps.getReaderRepository().insert(reader);
-            }{
-            Reader reader = new Reader(pib, password, login, 0,
-                    city, street, build, apartament,null, dateOfBirth, null);
+                        addedUser = App.sqlOps.getReaderRepository().insert(reader);
+                    }
+                    {
+                        Reader reader = new Reader(pib, password, login, 0,
+                                city, street, build, apartament, null, dateOfBirth, null);
 
-            App.sqlOps.getReaderRepository().insert(reader);
+                        addedUser = App.sqlOps.getReaderRepository().insert(reader);
+                    }
+                }else {
+                    new Alert(Alert.AlertType.INFORMATION, "Not correct input").showAndWait();
+                }
+                if (addedUser)
+                {
+                    App.setRoot(LogInController.PATH);
+                }
+            }else {
+                new Alert(Alert.AlertType.INFORMATION, "Not all data fields are entered!").showAndWait();
+            }
+        }catch (NullPointerException | IOException e){
+            new Alert(Alert.AlertType.INFORMATION, "Not all data fields are entered!").showAndWait();
         }
-        }
-        App.setRoot(LogInController.PATH);
     }
 }
 

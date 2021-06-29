@@ -9,6 +9,7 @@ import db.entities.Entity;
 import db.entities.Reader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -223,8 +224,7 @@ public class ReaderRepository
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Не вірний SQL запит на delete");
-            e.printStackTrace();
+            new Alert(Alert.AlertType.WARNING, "Such user already exists!").showAndWait();
             return false;
         }
     }

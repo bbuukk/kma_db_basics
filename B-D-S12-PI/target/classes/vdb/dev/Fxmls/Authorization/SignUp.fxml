@@ -48,17 +48,17 @@
             <Font name="Lucida Fax Regular" size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="pibField" layoutX="108.0" layoutY="105.0" prefHeight="31.0" prefWidth="475.0" promptText="PIB">
+      <TextField fx:id="pibField" layoutX="108.0" layoutY="105.0" prefHeight="31.0" prefWidth="475.0" promptText="PIB*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="loginField" layoutX="108.0" layoutY="146.0" prefHeight="31.0" prefWidth="345.0" promptText="Login">
+      <TextField fx:id="loginField" layoutX="108.0" layoutY="146.0" prefHeight="31.0" prefWidth="345.0" promptText="Login*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="cityField" layoutX="108.0" layoutY="271.0" prefHeight="31.0" prefWidth="150.0" promptText="City">
+      <TextField fx:id="cityField" layoutX="108.0" layoutY="271.0" prefHeight="31.0" prefWidth="150.0" promptText="City*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
@@ -68,12 +68,12 @@
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="buildField" layoutX="423.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Build">
+      <TextField fx:id="buildField" layoutX="423.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Build*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="apartamentField" layoutX="565.0" layoutY="271.0" prefHeight="31.0" prefWidth="105.0" promptText="Apartment">
+      <TextField fx:id="apartamentField" layoutX="565.0" layoutY="271.0" prefHeight="31.0" prefWidth="105.0" promptText="Apartment*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
@@ -83,13 +83,13 @@
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </TextField>
-      <DatePicker fx:id="dateOfBirthDatePicker" layoutX="470.0" layoutY="146.0" prefHeight="31.0" prefWidth="132.0" promptText="Date of birth" />
-      <PasswordField fx:id="passwordField" layoutX="108.0" layoutY="192.0" prefHeight="31.0" prefWidth="439.0" promptText="Password">
+      <DatePicker fx:id="dateOfBirthDatePicker" layoutX="470.0" layoutY="146.0" prefHeight="31.0" prefWidth="132.0" promptText="Date of birth*" />
+      <PasswordField fx:id="passwordField" layoutX="108.0" layoutY="192.0" prefHeight="31.0" prefWidth="439.0" promptText="Password*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="confirmPasswrodField" layoutX="108.0" layoutY="232.0" prefHeight="31.0" prefWidth="439.0" promptText="Confirm password">
+      <PasswordField fx:id="confirmPasswrodField" layoutX="108.0" layoutY="232.0" prefHeight="31.0" prefWidth="439.0" promptText="Confirm password*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
@@ -99,7 +99,7 @@
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
       </PasswordField>
-      <TextField fx:id="streetField" layoutX="276.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Street">
+      <TextField fx:id="streetField" layoutX="276.0" layoutY="271.0" prefHeight="31.0" prefWidth="132.0" promptText="Street*">
          <font>
             <Font name="Lucida Sans Italic" size="15.0" />
          </font>
