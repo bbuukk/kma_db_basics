@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import db.SqlOps;
 import db.entities.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -31,7 +32,10 @@ public class MainController
 
     private static db.entities.Reader currentAuthorizedReader;
     private static int rightsType;
+    public Button findAllDebtorsButton;
+    public TextField searchField;
 
+    SqlOps sqlOps;
     ObservableList<Entity> listEntitiesToChange;
     ObservableList<Entity> listEntitiesToDelete;
 
@@ -39,15 +43,18 @@ public class MainController
 
     String lastTableDisplayed;
 
+
+    ObservableList<Entity> observableListForSearch = FXCollections.observableArrayList();
+    SortedList<Entity> sortedData;
     FilteredList<Book> filteredData;
-    ObservableList<Entity> searchRes = FXCollections.observableArrayList();
-    SortedList<Entity> sortedList;
+
+
     public ComboBox comboboxDorDebtors;
 
 
     @FXML
-    void initialize()
-    {
+    void initialize() throws SQLException {
+        sqlOps = new SqlOps();
         App.stage.setWidth(970);
         App.stage.setHeight(634);
 
@@ -295,6 +302,45 @@ public class MainController
     @FXML
     void findQueries(javafx.scene.input.MouseEvent event)
     {
+        String[] cellNamesReader = {"id", "pib", "password", "login",
+                "typeRights", "city", "street", "build",
+                "apartment", "workplace", "birthDate", "phoneNum"};
+
+        createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN, 1);
+
+        ObservableList<Entity> observableListForSearchReader = sqlOps.getReaderRepository().getDebtors();
+        FilteredList<Reader> filteredDataReader = new FilteredList(observableListForSearchReader, b -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredDataReader.setPredicate(employee -> {
+                // If filter text is empty, display all persons.
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (employee.getPib().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                    return true; // Filter matches first name.
+                }
+                else if (employee.getLogin().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true; // Filter matches last name.
+                }
+                else
+                    return false; // Does not match.
+            });
+        });
+        SortedList<Entity> sortedDataReader = new SortedList<>(filteredDataReader);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        // 	  Otherwise, sorting the TableView would have no effect.
+        sortedDataReader.comparatorProperty().bind(mainTableView.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        mainTableView.setItems(sortedDataReader);
+
+        //var listOfReadersDebtors = App.sqlOps.getReaderRepository().getDebtors();
+        //mainTableView.setItems(listOfReadersDebtors);
         mainTableView.setPrefWidth(572);
     }
 
@@ -494,8 +540,39 @@ public class MainController
 
                 createNewTableColumns(cellNamesReader, Reader.TYPE_PARAMS_PATTERN, 1);
 
-                var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
-                mainTableView.setItems(listOfReaders);
+                ObservableList<Entity> observableListForSearchReader = sqlOps.getReaderRepository().getAllReaders();
+                FilteredList<Reader> filteredDataReader = new FilteredList(observableListForSearchReader, b -> true);
+                searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filteredDataReader.setPredicate(employee -> {
+                        // If filter text is empty, display all persons.
+
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (employee.getPib().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                            return true; // Filter matches first name.
+                        }
+                        else if (employee.getLogin().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                            return true; // Filter matches last name.
+                        }
+                        else
+                            return false; // Does not match.
+                    });
+                });
+                SortedList<Entity> sortedDataReader = new SortedList<>(filteredDataReader);
+
+                // 4. Bind the SortedList comparator to the TableView comparator.
+                // 	  Otherwise, sorting the TableView would have no effect.
+                sortedDataReader.comparatorProperty().bind(mainTableView.comparatorProperty());
+
+                // 5. Add sorted (and filtered) data to the table.
+                mainTableView.setItems(sortedDataReader);
+
+                //var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
+                //mainTableView.setItems(listOfReaders);
 
                 break;
             case "Authorship":
@@ -527,9 +604,40 @@ public class MainController
 
                 createNewTableColumns(cellNamesBook, Book.TYPE_PARAMS_PATTERN, 1);
 
-                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
+                observableListForSearch = sqlOps.getBookRepository().getAllBooks();
+                filteredData = new FilteredList(observableListForSearch, b -> true);
+                searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filteredData.setPredicate(employee -> {
+                        // If filter text is empty, display all persons.
 
-                mainTableView.setItems(listBooks);
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (employee.getName().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                            return true; // Filter matches first name.
+                        }
+                        else if (employee.getPublisher().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                            return true; // Filter matches last name.
+                        }
+                        else
+                            return false; // Does not match.
+                    });
+                });
+                sortedData = new SortedList<>(filteredData);
+
+                // 4. Bind the SortedList comparator to the TableView comparator.
+                // 	  Otherwise, sorting the TableView would have no effect.
+                sortedData.comparatorProperty().bind(mainTableView.comparatorProperty());
+
+                // 5. Add sorted (and filtered) data to the table.
+                mainTableView.setItems(sortedData);
+
+//                var listBooks = App.sqlOps.getBookRepository().getAllBooks();
+//
+//                mainTableView.setItems(listBooks);
 
                 break;
             case "BookInstance":
@@ -539,8 +647,38 @@ public class MainController
 
                 createNewTableColumns(cellNamesBookInstance, BookInstance.TYPE_PARAMS_PATTERN, 1);
 
-                var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
-                mainTableView.setItems(listBooksInstances);
+                ObservableList<Entity> observableListForSearchNormal = sqlOps.getBookInstanceRepository().getAllBookInstances();
+                FilteredList<BookInstance> filteredDataNormal = new FilteredList(observableListForSearchNormal, b -> true);
+                searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filteredDataNormal.setPredicate(employee -> {
+                        // If filter text is empty, display all persons.
+
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (String.valueOf(employee.getShelf()).indexOf(lowerCaseFilter) != -1 ) {
+                            return true; // Filter matches first name.
+                        }
+                        else if (String.valueOf(employee.getISBN()).indexOf(lowerCaseFilter) != -1) {
+                            return true; // Filter matches last name.
+                        }
+                        else
+                            return false; // Does not match.
+                    });
+                });
+                SortedList<Entity> sortedDataNormal = new SortedList<>(filteredDataNormal);
+
+                // 4. Bind the SortedList comparator to the TableView comparator.
+                // 	  Otherwise, sorting the TableView would have no effect.
+                sortedDataNormal.comparatorProperty().bind(mainTableView.comparatorProperty());
+
+                // 5. Add sorted (and filtered) data to the table.
+                mainTableView.setItems(sortedDataNormal);
+                //var listBooksInstances = App.sqlOps.getBookInstanceRepository().getAllBookInstances();
+                //mainTableView.setItems(listBooksInstances);
 
 //                lastTableDisplayed = name;
 //                String[] cellNamesBookInstance = {"id", "shelf", "name"};
@@ -583,8 +721,35 @@ public class MainController
 
                 createNewTableColumns(cellNamesCatalog, Catalog.TYPE_PARAMS_PATTERN, 1);
 
-                var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
-                mainTableView.setItems(listCatalogs);
+                ObservableList<Entity> observableListForSearchCatalog = sqlOps.getCatalogRepository().getAllCatalogs();
+                FilteredList<Catalog> filteredDataCatalog = new FilteredList(observableListForSearchCatalog, b -> true);
+                searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filteredDataCatalog.setPredicate(employee -> {
+                        // If filter text is empty, display all persons.
+
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (employee.getName().toLowerCase().indexOf(lowerCaseFilter) != -1  ) {
+                            return true; // Filter matches first name.
+                        }
+                        else
+                            return false; // Does not match.
+                    });
+                });
+                SortedList<Entity> sortedDataCatalog = new SortedList<>(filteredDataCatalog);
+
+                // 4. Bind the SortedList comparator to the TableView comparator.
+                // 	  Otherwise, sorting the TableView would have no effect.
+                sortedDataCatalog.comparatorProperty().bind(mainTableView.comparatorProperty());
+
+                // 5. Add sorted (and filtered) data to the table.
+                mainTableView.setItems(sortedDataCatalog);
+                //var listCatalogs = App.sqlOps.getCatalogRepository().getAllCatalogs();
+                //mainTableView.setItems(listCatalogs);
 
                 break;
             case "Author":
@@ -594,8 +759,35 @@ public class MainController
 
                 createNewTableColumns(cellNamesAuthor, Author.TYPE_PARAMS_PATTERN, 1);
 
-                var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
-                mainTableView.setItems(listAuthors);
+                ObservableList<Entity> observableListForSearchAuthor = sqlOps.getAuthorRepository().getAllAuthors();
+                FilteredList<Author> filteredDataAuthor = new FilteredList(observableListForSearchAuthor, b -> true);
+                searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filteredDataAuthor.setPredicate(employee -> {
+                        // If filter text is empty, display all persons.
+
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+
+                        if (employee.getName().toLowerCase().indexOf(lowerCaseFilter) != -1  ) {
+                            return true; // Filter matches first name.
+                        }
+                        else
+                            return false; // Does not match.
+                    });
+                });
+                SortedList<Entity> sortedDataAuthor = new SortedList<>(filteredDataAuthor);
+
+                // 4. Bind the SortedList comparator to the TableView comparator.
+                // 	  Otherwise, sorting the TableView would have no effect.
+                sortedDataAuthor.comparatorProperty().bind(mainTableView.comparatorProperty());
+
+                // 5. Add sorted (and filtered) data to the table.
+                mainTableView.setItems(sortedDataAuthor);
+                //var listAuthors = App.sqlOps.getAuthorRepository().getAllAuthors();
+                //mainTableView.setItems(listAuthors);
 
                 break;
         }

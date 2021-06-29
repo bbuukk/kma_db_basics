@@ -74,7 +74,7 @@
                   <Insets left="5.0" right="11.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <TextField promptText="Search">
+            <TextField fx:id="searchField" promptText="Search">
                <HBox.margin>
                   <Insets left="3.0" right="3.0" top="5.0" />
                </HBox.margin>
@@ -127,7 +127,7 @@
             <ComboBox fx:id="findBookByCatalogBox" layoutX="507.0" layoutY="-1.0" prefHeight="25.0" prefWidth="178.0" promptText="Display books by catalog:" />
             </children>
         </Pane>
-      <TableView fx:id="mainTableView" editable="true" layoutX="24.0" layoutY="102.0" prefHeight="462.0" prefWidth="572.0" />
+      <TableView fx:id="mainTableView" editable="true" layoutY="180.0" prefHeight="462.0" prefWidth="572.0" />
       <Pane fx:id="addReaderMenuPane" layoutX="608.0" layoutY="101.0" prefHeight="462.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;" visible="false">
          <children>
             <TextField fx:id="pibField" alignment="TOP_LEFT" layoutX="14.0" layoutY="38.0" prefHeight="31.0" prefWidth="298.0" promptText="PIB">
