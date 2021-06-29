@@ -601,8 +601,6 @@ public class MainController
                 //var listOfReaders = App.sqlOps.getReaderRepository().getAllReaders();
                 //mainTableView.setItems(listOfReaders);
 
-                findAllDebtorsButton.setVisible(true);
-
                 break;
             case "Authorship":
 
@@ -671,6 +669,7 @@ public class MainController
                 findBooksByAuthorBox.setVisible(true);
                 findBookByCatalogBox.setVisible(true);
                 findAvailBooksButton.setVisible(true);
+                findAllDebtorsButton.setVisible(true);
 
                 break;
             case "BookInstance":

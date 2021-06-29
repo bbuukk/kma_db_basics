@@ -139,7 +139,7 @@
             </Button>
             </children>
         </Pane>
-      <TableView fx:id="mainTableView" editable="true" layoutY="180.0" prefHeight="462.0" prefWidth="572.0" />
+      <TableView fx:id="mainTableView" editable="true" layoutX="24.0" layoutY="110.0" prefHeight="462.0" prefWidth="900.0" />
       <Pane fx:id="addReaderMenuPane" layoutX="608.0" layoutY="101.0" prefHeight="462.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;" visible="false">
          <children>
             <TextField fx:id="pibField" alignment="TOP_LEFT" layoutX="14.0" layoutY="38.0" prefHeight="31.0" prefWidth="298.0" promptText="PIB">
@@ -249,7 +249,7 @@
             <ComboBox fx:id="chooseBookTitles" layoutX="32.0" layoutY="60.0" prefHeight="26.0" prefWidth="279.0" promptText="Choose Book Title" />
          </children>
       </Pane>
-      <Pane fx:id="addBookMenuPane" layoutX="605.0" layoutY="101.0" onMouseClicked="#createBook" prefHeight="260.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;">
+      <Pane fx:id="addBookMenuPane" layoutX="605.0" layoutY="101.0" onMouseClicked="#createBook" prefHeight="260.0" prefWidth="328.0" style="-fx-background-color: #E5E7E9;" visible="false">
          <children>
             <Label layoutX="79.0" layoutY="10.0" text="Add new book:">
                <font>
